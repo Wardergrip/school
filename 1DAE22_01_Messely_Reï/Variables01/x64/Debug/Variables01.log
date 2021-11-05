@@ -1,4 +1,0 @@
-﻿  pch.cpp
-  Variables01.cpp
-C:\Users\reime\source\repos\1DAE22_01_Messely_Reï\Variables01\Variables01.cpp(58,26): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-  Variables01.vcxproj -> C:\Users\reime\source\repos\1DAE22_01_Messely_Reï\Variables01\x64\Debug\Variables01.exe
