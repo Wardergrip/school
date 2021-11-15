@@ -3,6 +3,15 @@
 #include <chrono>
 #include <string>
 
+struct Point2f
+{
+    Point2f();
+    explicit Point2f(float x, float y);
+
+    float x;
+    float y;
+};
+
 #pragma region 4.1.1
 int Sum(int val1, int val2);
 #pragma endregion
@@ -33,6 +42,10 @@ bool IsEven(int number);
 bool IsLeapYear(int year);
 int GetRand(int minValue, int maxValue);
 float GetRand(float minValue, float maxValue);
+float GetDistance(float x1, float y1, float x2, float y2);
+float GetDistance(Point2f p1, Point2f p2);
+float GetDistance(Point2f p1, float x2, float y2);
+float GetDistance(float x1, float y1, Point2f p2);
 #pragma endregion
 
 int main()
@@ -47,8 +60,9 @@ int main()
     //TestPrintMessage();
     //TestIsEven();
     //TestIsLeap();
-    TestGetIntRand();
-    TestGetFloatRand();
+    //TestGetIntRand();
+    //TestGetFloatRand();
+    TestGetDistance();
 }
 #pragma region 4.1.1
 int Sum(int val1, int val2)
@@ -218,6 +232,22 @@ void TestGetFloatRand()
     std::cout << "In [0,3.14159] " << GetRand(0.0f, float(3.14159)) << std::endl;
     std::cout << "In [-2,3] " << GetRand(-2.0f, 3.0f) << std::endl;
 }
+void TestGetDistance() 
+{
+    std::cout << "~ Function that calculates distance between 2 points ~\n";
+    Point2f p1{ GetRand(0.0f, 1000.0f),GetRand(0.0f, 1000.0f) };
+    Point2f p2{ GetRand(0.0f, 1000.0f),GetRand(0.0f, 1000.0f) };
+    std::cout << "Distance between [" << p1.x << ", " << p1.y << "] and [" << p2.x << ", " << p2.y << "]\n";
+    std::cout << "Calling one version: " << GetDistance(p1,p2) << std::endl;
+    std::cout << "Calling the other version: " << GetDistance(p1.x, p1.y, p2.x, p2.y) << std::endl;
+    std::cout << std::endl;
+    Point2f p3{ GetRand(0.0f, 1000.0f),GetRand(0.0f, 1000.0f) };
+    Point2f p4{ GetRand(0.0f, 1000.0f),GetRand(0.0f, 1000.0f) };
+    std::cout << "Distance between [" << p3.x << ", " << p3.y << "] and [" << p4.x << ", " << p4.y << "]\n";
+    std::cout << "Calling one version: " << GetDistance(p3, p4) << std::endl;
+    std::cout << "Calling the other version: " << GetDistance(p3.x, p3.y, p4.x, p4.y) << std::endl;
+    std::cout << std::endl;
+}
 
 int Multiply(int val1, int val2) 
 {
@@ -285,6 +315,22 @@ float GetRand(float minValue, float maxValue)
     random = (rand() % (max + 1 - min) + min);
     float randomFloat{ random / 100.0f };
     return randomFloat;
+}
+float GetDistance(float x1, float y1, float x2, float y2)
+{
+    return sqrtf(powf(x2 - x1, 2) + powf(y2 - y1, 2));
+}
+float GetDistance(Point2f p1, Point2f p2) 
+{
+    return GetDistance(p1.x, p1.y, p2.x, p2.y);
+}
+float GetDistance(Point2f p1, float x2, float y2) 
+{
+    return GetDistance(p1.x, p1.y, x2, y2);
+}
+float GetDistance(float x1, float y1, Point2f p2) 
+{
+    return GetDistance(x1, y1, p2.x, p2.y);
 }
 #pragma endregion
 
