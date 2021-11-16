@@ -31,7 +31,7 @@ void TestIsLeap();
 void TestGetIntRand();
 void TestGetFloatRand();
 void TestGetDistance();
-void TestCalcCosSin();
+void TestCalcCosSin(); // I can't find the assignment about this exercise
 
 int Multiply(int val1, int val2);
 int Modulo(int number, int divisor);
@@ -50,18 +50,18 @@ float GetDistance(float x1, float y1, Point2f p2);
 
 int main()
 {
-   /* Sum(50, 30);
+    Sum(50, 30);
     Sum(40, 20);
     Sum(70, 100);
     TestPrint();
-    TestMultiply();*/
-    //TestPrintNumbers();
-    //TestCalcElapsedTime();
-    //TestPrintMessage();
-    //TestIsEven();
-    //TestIsLeap();
-    //TestGetIntRand();
-    //TestGetFloatRand();
+    TestMultiply();
+    TestPrintNumbers();
+    TestCalcElapsedTime();
+    TestPrintMessage();
+    TestIsEven();
+    TestIsLeap();
+    TestGetIntRand();
+    TestGetFloatRand();
     TestGetDistance();
 }
 #pragma region 4.1.1
