@@ -13,6 +13,10 @@ float g_WindowHeight{ 300 };
 
 #pragma region ownDeclarations
 // Declare your own global variables here
+
+Point2f g_MousePos{};
+Point2f g_ClickedMousePos{};
+
 enum class Direction
 {
 	up = 1,
@@ -20,16 +24,43 @@ enum class Direction
 	down = -1,
 	left = -1,
 };
-Direction g_LeftRight{ Direction::right };
-Direction g_UpDown{ Direction::up };
 
-const float g_PlatformLength{100};
+#pragma region Colors
+const Color4f g_SoftBlue{ 0.8f, 0.8f, 1, 1 };
+const Color4f g_SoftGreen{ 0.8f, 1, 0.8f,1 };
+const Color4f g_SoftPink{ 1, 0.8f, 0.8f, 1 };
+const Color4f g_SoftYellow{ 1,1,0.8f,1 };
+#pragma endregion
+#pragma region Platform
+const float g_PlatformLength{ 100 };
 const float g_PlatformHeight{ 10 };
 Point2f g_PlatformPos{ g_WindowWidth / 2, 20 };
-
+Rectf g_PlatformRect{};
+#pragma endregion
+#pragma region MainBall
 const float g_MainBallRadius{ 5 };
-const float g_MainBallVelocity{ 100 };
+const float g_MainBallVelocity{ 200 };
 Point2f g_MainBallPos{ g_PlatformPos.x, g_PlatformPos.y + (g_PlatformHeight / 2) + g_MainBallRadius };
+bool g_MainBallFreeze{ true };
+Direction g_MainBallLeftRight{ Direction::right };
+Direction g_MainBallUpDown{ Direction::up };
+#pragma endregion
+#pragma region Blocks
+const unsigned int g_AmountOfBoxes{ 144 };
+struct BreakableBox
+{
+	Rectf rect;
+	bool isVisible;
+};
+BreakableBox g_Boxes[g_AmountOfBoxes];
+#pragma endregion
+
+#pragma region SettingsVars
+bool g_ShowDebugging{ false };
+bool g_IsMainMenuActive{ true };
+int g_Lives{ 3 };
+#pragma endregion
+
 
 // Declare your own functions here
 void DrawPlatform(float x, float y, float totLength, float totHeight);
@@ -37,8 +68,20 @@ void DrawPlatform(const Point2f& midPos, float totLength, float totHeight);
 
 void DrawBall(float x, float y, float r);
 void DrawBall(const Point2f& pos, float r);
-void UpdateBall(float& x, float& y, float r, float velocity, float elapsedSec);
-void UpdateBall(Point2f& pos, float r, float velocity, float elapsedSec);
+
+void UpdateBall(float& x, float& y, float r, float velocity, float elapsedSec, Direction& upDown, Direction& leftRight);
+void UpdateBall(Point2f& pos, float r, float velocity, float elapsedSec, Direction& upDown, Direction& leftRight);
+
+void DestroyBall(float x, float y);
+void DestroyBall(Point2f& pos);
+
+void UpdateBox(Rectf& rect, const Point2f& ballPos, Direction& upDown, Direction& leftRight, bool isPlatform = 0);
+
+void DestroyBox(Rectf& rect);
+
+void InitialiseBoxes();
+
+void DrawMainMenu();
 #pragma endregion ownDeclarations
 
 #pragma region gameFunctions											
