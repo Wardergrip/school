@@ -9,8 +9,6 @@ float g_WindowWidth{ 500 };
 float g_WindowHeight{ 300 };
 #pragma endregion gameInformation
 
-
-
 #pragma region ownDeclarations
 // Declare your own global variables here
 
@@ -59,6 +57,7 @@ BreakableBox g_Boxes[g_AmountOfBoxes];
 bool g_ShowDebugging{ false };
 bool g_IsMainMenuActive{ true };
 int g_Lives{ 3 };
+float g_PassedTime{0};
 #pragma endregion
 
 
@@ -75,14 +74,26 @@ void UpdateBall(Point2f& pos, float r, float velocity, float elapsedSec, Directi
 void DestroyBall(float x, float y);
 void DestroyBall(Point2f& pos);
 
-void UpdateBox(Rectf& rect, const Point2f& ballPos, Direction& upDown, Direction& leftRight, bool isPlatform = 0);
+void UpdatePlatform(Rectf& rect, const Point2f& ballPos, Direction& upDown, Direction& leftRight);
 
-void DestroyBox(Rectf& rect);
+void UpdateBox(BreakableBox& box, const Point2f& ballPos, Direction& upDown, Direction& leftRight);
+
+void HideBox(BreakableBox& box);
+
+void DrawMainMenu();
 
 void InitialiseBoxes();
 
-void DrawMainMenu();
+void ShowInfo();
+
 #pragma endregion ownDeclarations
+
+#pragma region JonasSamynText
+void TextCheckColor(int color);
+void FontLoader(char character, Point2f location, float width, float height, int color);
+void FontLoader(char character, float x, float y, float width, float height, int color);
+void LetterDrawer(int array[], float width, float height, Point2f location);
+#pragma endregion JonasSamynText
 
 #pragma region gameFunctions											
 void Start();
