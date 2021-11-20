@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "Game.h"
 #include <iostream>
-#include <chrono>
 
 //Basic game functions
 #pragma region gameFunctions											
@@ -69,7 +68,19 @@ void Update(float elapsedSec)
 			UpdateBox(g_Boxes[i], g_MainBallPos, g_MainBallUpDown, g_MainBallLeftRight);
 		}
 		g_PassedTime += elapsedSec;
-		// Need to check if there are blocks left
+		if (g_AmountHit >= g_AmountOfBoxes) // If no boxes are left
+		{
+			g_IsMainMenuActive = true;
+			std::cout << "You finished the game with " << g_Lives << " lives and a time of " << g_PassedTime << std::endl;
+			g_Lives = 3;
+			g_PassedTime = 0;
+			g_AmountHit = 0;
+			g_ClickedMousePos.x = -1;
+			for (int i {0}; i < g_AmountOfBoxes; i++) 
+			{
+				g_Boxes[i].isVisible = true;
+			}
+		}
 	}
 }
 
@@ -98,6 +109,9 @@ void OnKeyUpEvent(SDL_Keycode key)
 		if (g_ShowDebugging) std::cout << "DEBUG OFF\n";
 		else std::cout << "DEBUG ON\n";
 		g_ShowDebugging = !g_ShowDebugging;
+		break;
+	case SDLK_i:
+		ShowInfo();
 		break;
 	}
 }
@@ -215,6 +229,15 @@ void DestroyBall(float x, float y)
 		{
 			std::cout << "Game over!\n";
 			g_MainBallFreeze = true;
+			g_IsMainMenuActive = true;
+			g_Lives = 3;
+			g_PassedTime = 0;
+			g_AmountHit = 0;
+			g_ClickedMousePos.x = -1;
+			for (int i{ 0 }; i < g_AmountOfBoxes; i++)
+			{
+				g_Boxes[i].isVisible = true;
+			}
 		}
 	}
 }
@@ -301,14 +324,21 @@ void UpdateBox(BreakableBox& box, const Point2f& ballPos, Direction& upDown, Dir
 void HideBox(BreakableBox& box) 
 {
 	box.isVisible = false;
+	++g_AmountHit;
 }
 
 void DrawMainMenu() 
 {
 #pragma region Title
 	SetColor(g_SoftGreen);
-	const Point2f startingPoint{ 150,200 };
-	FillRect(startingPoint.x, startingPoint.y, 60, 30);
+	const Point2f startingPoint{ 120,200 };
+	FontLoader('B', startingPoint, 7, 7, 2);
+	FontLoader('R', startingPoint.x + 32, startingPoint.y, 7, 7, 2);
+	FontLoader('E', startingPoint.x + 64, startingPoint.y, 7, 7, 2);
+	FontLoader('A', startingPoint.x + 96, startingPoint.y, 7, 7, 2);
+	FontLoader('K', startingPoint.x + 128, startingPoint.y, 7, 7, 2);
+	FontLoader('I', startingPoint.x + 192, startingPoint.y, 7, 7, 2);
+	FontLoader('N', startingPoint.x + 224, startingPoint.y, 7, 7, 2);
 #pragma endregion
 	const float buttonLength{ 150 }, buttonHeight{ 30 };
 #pragma region StartButton
@@ -366,9 +396,12 @@ void ShowInfo()
 {
 	std::cout
 		<< "\n== BREAK IN INFO ==\n"
+		<< "You have 3 balls and need to break all the blocks\n"
 		<< " - Mouse to move platform\n"
 		<< " - Space to launch ball\n"
 		<< " - Space to respawn ball\n"
+		<< " - D to show debugging messages\n"
+		<< " - I to show info\n"
 		<< "\n";
 }
 

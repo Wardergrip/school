@@ -45,6 +45,7 @@ Direction g_MainBallUpDown{ Direction::up };
 #pragma endregion
 #pragma region Blocks
 const unsigned int g_AmountOfBoxes{ 144 };
+unsigned int g_AmountHit{ 0 };
 struct BreakableBox
 {
 	Rectf rect;
