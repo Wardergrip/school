@@ -150,14 +150,14 @@ namespace utils
 	Vector2f Substract(const Vector2f& a, const Vector2f& b);
 
 	float DotProduct(const Vector2f& a, const Vector2f& b);
-	float CrossProduct(const Vector2f& a, const Vector2f& b); // NOT IMPLEMENTED
+	float CrossProduct(const Vector2f& a, const Vector2f& b);
 	
 	float Length(const Vector2f& vector);
 	Vector2f Scale(const Vector2f& vector, float scalar);
 	Vector2f Normalize(const Vector2f& vector);
 
 	float AngleBetween(const Vector2f& a, const Vector2f& b);
-	bool AreEqual();
+	bool AreEqual(const Vector2f& a, const Vector2f& b);
 #pragma endregion Vector
 
 }

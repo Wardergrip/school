@@ -57,7 +57,7 @@ BreakableBox g_Boxes[g_AmountOfBoxes];
 #pragma region SettingsVars
 bool g_ShowDebugging{ false };
 bool g_IsMainMenuActive{ true };
-int g_Lives{ 3 };
+int g_Lives{ 5 };
 float g_PassedTime{0};
 #pragma endregion
 

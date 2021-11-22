@@ -792,13 +792,15 @@ namespace utils
 	float CrossProduct(const Vector2f& a, const Vector2f& b)
 	{
 		// a crossProduct b = length a *  length b * sin(angleBetween) * n
-		// n = unitvector
-		return 0;
+		const float n{ 1 }; // n = unitvector
+		const float angleBetween{ acos(DotProduct(a,b) / (Length(a) * Length(b))) };
+		return (Length(a) * Length(b) * sin(angleBetween) * n);
+		// Negative angles do not compute well
 	}
 
 	float Length(const Vector2f& vector)
 	{
-		return float((sqrt(pow(vector.x,2)+pow(vector.y,2))));
+		return float((sqrt(pow(vector.x, 2) + pow(vector.y, 2))));
 	}
 	Vector2f Scale(const Vector2f& vector, float scalar)
 	{
@@ -809,6 +811,20 @@ namespace utils
 	{
 		const Vector2f result{ vector.x / Length(vector),vector.y / Length(vector) };
 		return result;
+	}
+
+	float AngleBetween(const Vector2f& a, const Vector2f& b)
+	{
+		return (atan2(CrossProduct(a, b), DotProduct(a, b)));
+	}
+	bool AreEqual(const Vector2f& a, const Vector2f& b)
+	{
+		const float margin{ 0.001f };
+		if ((a.x <= (b.x - margin)) && (a.x >= (b.x + margin)))
+		{
+			if ((a.y <= (b.y - margin)) && (a.y >= (b.y + margin))) return true;
+		}
+		return false;
 	}
 #pragma endregion Vector
 

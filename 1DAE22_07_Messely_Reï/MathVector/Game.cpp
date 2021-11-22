@@ -17,8 +17,22 @@ void Start()
 		std::cout << "E1: " << ToString(example1) << " E2: " << ToString(example2) << " DotProduct: " << DotProduct(example1, example2) << std::endl;
 		std::cout << "E1: " << ToString(example2) << " E2: " << ToString(example3) << " DotProduct: " << DotProduct(example2, example3) << std::endl;
 	}
-
-
+	// Cross Product test
+	if (true)
+	{
+		const Vector2f example1{ 80,0 };
+		const Vector2f example2{ 0,50 };
+		const Vector2f example3{ 0,25 };
+		std::cout << "E1: " << ToString(example1) << " E2: " << ToString(example2) << " CrossProduct: " << CrossProduct(example1, example2) << std::endl;
+		std::cout << "E1: " << ToString(example2) << " E2: " << ToString(example1) << " CrossProduct: " << CrossProduct(example2, example1) << std::endl;
+	}
+	// Angle Between test
+	if (true) 
+	{
+		const Vector2f example1{ 10,0 };
+		const Vector2f example2{ 0,10 };
+		std::cout << "E1: " << ToString(example1) << " E2: " << ToString(example2) << " AngleBetween: " << AngleBetween(example1, example2) <<  "rad" << " or " << AngleBetween(example1, example2) * (180.0f / g_Pi) << "deg" << std::endl;
+	}
 }
 
 void Draw()
@@ -34,6 +48,17 @@ void Draw()
 	DrawVector(g_VectorA);
 	DrawVector(g_VectorB);
 	DrawVector(Substract(g_VectorA, g_VectorB), VectorToPoint(g_VectorB));
+	// 
+	// Scalar projection 
+	//
+	SetColor(1, 0, 1, 1);
+	DrawVector(g_VectorC, g_MiddleOfScreen); // Rotating vector
+	SetColor(1, 1, 1, 1);
+	//DrawVector(Normalize(g_VectorA), g_MiddleOfScreen); // Normalized Vector
+	SetColor(1, 0, 0, 1);
+	float dotProduct{DotProduct(g_VectorC, Normalize(g_VectorA))};
+	Vector2f vectorD{ Normalize(g_VectorA).x * dotProduct,Normalize(g_VectorA).y * dotProduct };
+	DrawVector(vectorD, g_MiddleOfScreen);
 }
 
 void Update(float elapsedSec)
@@ -50,6 +75,10 @@ void Update(float elapsedSec)
 	//{
 	//	std::cout << "Left and up arrow keys are down\n";
 	//}
+
+	g_Angle += elapsedSec;
+	g_VectorC.x = 100 * cos(g_Angle);
+	g_VectorC.y = 100 * sin(g_Angle);
 }
 
 void End()
