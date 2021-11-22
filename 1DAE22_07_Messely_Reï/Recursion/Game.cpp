@@ -110,11 +110,11 @@ void DrawSierpinskiTriangle(const Point2f& left, const Point2f& top, const Point
 	DrawTriangle(rg, top, gb); // green
 	SetColor(0, 0, 1, 1);
 	DrawTriangle(rb, gb, right); // blue
-	if ((((left.x + right.x) / 2) > 300)) 
+	if ((((right.x - left.x) / 2) > 10)) 
 	{
-		DrawSierpinskiTriangle(left, rg, rb); // Works
-		DrawSierpinskiTriangle(rg, top, gb);  // Stack overflow
-		DrawSierpinskiTriangle(rb, gb, right); // stack overflow
+		DrawSierpinskiTriangle(left, rg, rb); 
+		DrawSierpinskiTriangle(rg, top, gb);
+		DrawSierpinskiTriangle(rb, gb, right);
 	}
 }
 #pragma endregion ownDefinitions
