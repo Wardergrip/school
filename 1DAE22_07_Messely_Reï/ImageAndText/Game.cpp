@@ -1,11 +1,18 @@
 #include "pch.h"
 #include "Game.h"
+#include <iostream>
 
 //Basic game functions
 #pragma region gameFunctions											
 void Start()
 {
 	// initialize game resources here
+	bool succes{ TextureFromFile("Resources/DAE.png", g_DAELogo) };
+	if (!succes) std::cout << "Loading image failed.\n";
+	
+	succes = TextureFromString("Hello World!", "Resources/DIN-Light.otf", 34, Color4f{ 1,0,0,1 }, g_HelloTexture) ;
+	if (!succes) std::cout << "Loading font failed.\n";
+
 }
 
 void Draw()
@@ -13,7 +20,14 @@ void Draw()
 	ClearBackground();
 
 	// Put your own draw statements here
-	
+	DrawTexture(g_DAELogo, g_DAEPoint);
+	DrawTexture(g_HelloTexture, g_DAEPoint);
+
+	// Scaled texture
+	float border{10};
+	//Rectf destRect{ border,border,70,20 };
+	Rectf destRect{ border,border,g_Scale * g_DAELogo.width,g_Scale * g_DAELogo.height };
+	DrawTexture(g_DAELogo, destRect);
 }
 
 void Update(float elapsedSec)
@@ -35,6 +49,8 @@ void Update(float elapsedSec)
 void End()
 {
 	// free game resources here
+	DeleteTexture(g_DAELogo);
+	DeleteTexture(g_HelloTexture);
 }
 #pragma endregion gameFunctions
 
@@ -47,19 +63,21 @@ void OnKeyDownEvent(SDL_Keycode key)
 
 void OnKeyUpEvent(SDL_Keycode key)
 {
-	//switch (key)
-	//{
-	//case SDLK_LEFT:
-	//	//std::cout << "Left arrow key released\n";
-	//	break;
-	//case SDLK_RIGHT:
-	//	//std::cout << "Right arrow key released\n";
-	//	break;
-	//case SDLK_1:
-	//case SDLK_KP_1:
-	//	//std::cout << "Key 1 released\n";
-	//	break;
-	//}
+	switch (key)
+	{
+	case SDLK_LEFT:
+		std::cout << "Left arrow key released\n";
+		g_Scale *= 0.8f;
+		break;
+	case SDLK_RIGHT:
+		std::cout << "Right arrow key released\n";
+		g_Scale /= 0.8f;
+		break;
+	case SDLK_1:
+	case SDLK_KP_1:
+		std::cout << "Key 1 released\n";
+		break;
+	}
 }
 
 void OnMouseMotionEvent(const SDL_MouseMotionEvent& e)

@@ -13,7 +13,11 @@ float g_WindowHeight{ 300 };
 
 #pragma region ownDeclarations
 // Declare your own global variables here
+Texture g_DAELogo{};
+Texture g_HelloTexture{};
+const Point2f g_DAEPoint{ 100,100 };
 
+float g_Scale{ 0.5f };
 // Declare your own functions here
 
 #pragma endregion ownDeclarations
