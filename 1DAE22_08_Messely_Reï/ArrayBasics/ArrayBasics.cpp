@@ -7,8 +7,12 @@ int arr1[size]{5,4,3,2,1};
 int arr2[]{ 10,20,30,40,50 };
 int arr3[size]{ 15,25 };
 
+const int gridSize{ 20 };
+Point2f grids[gridSize]{};
+
 void PrintElements(int* pNumbers, int size);
 void PrintElements(int* pNumbers, int startIdx, int endIdx);
+int GetIndex(int rowIdx, int colIdx, int nrCols);
 
 int main()
 {
@@ -31,6 +35,10 @@ int main()
     PrintElements(arr3, 1, 3);
     std::cout << '\n';
     
+    for (int i{ 0 }; i < gridSize; i++)
+    {
+        
+    }
 }
 
 void PrintElements(int* pNumbers, int size) 
@@ -46,4 +54,9 @@ void PrintElements(int* pNumbers, int startIdx, int endIdx)
     {
         std::cout << pNumbers[i] << " ";
     }
+}
+
+int GetIndex(int rowIdx, int colIdx, int nrCols)
+{
+    return (rowIdx * nrCols + colIdx);
 }
