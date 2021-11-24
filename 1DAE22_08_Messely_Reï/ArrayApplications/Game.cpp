@@ -9,6 +9,7 @@ void Start()
 	// initialize game resources here
 	InitPentagrams(g_Pentagrams,g_PentagramsMaxSize);
 	InitRandStatsToFont();
+	InitGrid(g_Cells, g_ClickedCells, g_CellAmount);
 }
 
 void Draw()
@@ -22,6 +23,7 @@ void Draw()
 	SetColor(g_SoftYellow);
 	DrawRandStats();
 	DrawMousePos(g_LastMousePos,g_MaxNumberOfLastPos);
+	DrawGrid(g_Cells, g_ClickedCells, g_CellAmount);
 }
 
 void Update(float elapsedSec)
@@ -99,6 +101,7 @@ void OnMouseUpEvent(const SDL_MouseButtonEvent& e)
 		// std::cout << "Left mouse button released\n";
 		Point2f mousePos{ float( e.x ), float( g_WindowHeight - e.y ) };
 		AddPointToArray(g_ClickedPositions, g_MaxNumberOfClickedPos, mousePos, g_CurrentClickedPosIdx);
+		UpdateGrid(g_Cells, g_ClickedCells, g_CellAmount, mousePos);
 		break;
 	}
 	case SDL_BUTTON_RIGHT:
@@ -202,8 +205,51 @@ void DrawMousePos(Point2f* arr, const int arrSize)
 	for (int i{ 0 }; i < arrSize; i++)
 	{
 		SetColor(Color4f{ 0,0.4f,0.4f,0.6f });
-		FillEllipse(arr[i], float(i*2), float(i*2));
+		FillEllipse(arr[i], float(i), float(i));
 		// Need to make sure that the size is in colleration with the lastIdx
+	}
+}
+
+int GetIndex(int rowIdx, int colIdx, int nrCols)
+{
+	return (rowIdx * nrCols + colIdx);
+}
+void InitGrid(Rectf* pRects, bool* pBools, const int rectSize)
+{
+	const Point2f bottomLeft{ 15,15 };
+	const float spaceBetween{ 2 };
+	for (int i{ 0 }; i < rectSize; i++)
+	{
+		pRects[i].width = 20;
+		pRects[i].height = 30;
+		pBools[i] = false;
+	}
+	for (int i{ 0 }; i < 4; i++)
+	{
+		for (int j{ 0 }; j < 3; j++)
+		{
+			pRects[GetIndex(i, j, 3)].left = bottomLeft.x + i * pRects[i].width + i * spaceBetween;
+			pRects[GetIndex(i, j, 3)].bottom = bottomLeft.y + j * pRects[j].height + j * spaceBetween;
+		}
+	}
+}
+void DrawGrid(Rectf* pRects, bool* pBools, const int rectSize) 
+{
+	const Color4f clickedColor{ 1, 100 / 255.0f, 50 / 255.0f, 1 };
+	const Color4f defaultColor{ 204 / 255.0f, 204 / 255.0f, 204 / 255.0f, 1 };
+	const Color4f backgroundColor{ 239 / 255.0f, 239 / 255.0f, 239 / 255.0f,1 };
+	for (int i{ 0 }; i < rectSize; i++)
+	{
+		if (pBools[i]) SetColor(clickedColor);
+		else SetColor(defaultColor);
+		FillRect(pRects[i]);
+	}
+}
+void UpdateGrid(Rectf* pRects, bool* pBools, const int rectSize, const Point2f& pos)
+{
+	for (int i{ 0 }; i < rectSize; i++)
+	{
+		if (IsInsideRect(pRects[i], pos)) pBools[i] = !pBools[i];
 	}
 }
 #pragma endregion ownDefinitions

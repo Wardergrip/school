@@ -39,6 +39,10 @@ const int g_MaxNumberOfLastPos{ 10 };
 int g_CurrentMousePosIdx{ 0 };
 Point2f g_LastMousePos[g_MaxNumberOfLastPos]{};
 
+const int g_CellAmount{ 12 };
+bool g_ClickedCells[g_CellAmount]{};
+Rectf g_Cells[g_CellAmount]{};
+
 // Declare your own functions here
 void AddPointToArray(Point2f* arr, const int arrSize, const Point2f& mousePos, int& currentIdx);
 void DrawClickedPoints(const Point2f* pClickedPositions, const int arrSize);
@@ -52,6 +56,11 @@ void UpdateRandStats();
 void DrawRandStats();
 
 void DrawMousePos(Point2f* arr, const int arrSize);
+
+int GetIndex(int rowIdx, int colIdx, int nrCols);
+void InitGrid(Rectf* pRects, bool* pBools ,const int rectSize);
+void DrawGrid(Rectf* pRects, bool* pBools, const int rectSize);
+void UpdateGrid(Rectf* pRects, bool* pBools, const int rectSize, const Point2f& pos);
 #pragma endregion ownDeclarations
 
 #pragma region gameFunctions											
