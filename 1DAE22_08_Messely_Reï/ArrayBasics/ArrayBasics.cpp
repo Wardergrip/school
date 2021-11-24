@@ -35,9 +35,22 @@ int main()
     PrintElements(arr3, 1, 3);
     std::cout << '\n';
     
+    for (int i{ 0 }; i < 4; i++)
+    {
+        for (int j{ 0 }; j < 5; j++)
+        {
+            grids[GetIndex(i,j,5)].x = i + 1;
+            grids[GetIndex(i, j, 5)].y = j + 1;
+        }
+    }
+    std::cout << "== 2D arrays ===\n";
     for (int i{ 0 }; i < gridSize; i++)
     {
-        
+        if ((i % 5 == 0) && (i != 0))
+        {
+            std::cout << std::endl;
+        }
+        std::cout << grids[i].x << grids[i].y << " ";
     }
 }
 
