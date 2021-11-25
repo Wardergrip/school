@@ -356,7 +356,10 @@ namespace utils
 	{
 		DrawDotGrid(bottomLeft.x, bottomLeft.y, radius, rows, columns, dotSpace);
 	}
-
+	int GetIndex(int rowIdx, int colIdx, int nrCols)
+	{
+		return (rowIdx * nrCols + colIdx);
+	}
 #pragma endregion MyAdditions
 
 #pragma region textureImplementations
