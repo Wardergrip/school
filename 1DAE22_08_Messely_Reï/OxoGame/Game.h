@@ -22,15 +22,36 @@ Texture g_WhiteOTxt;
 Texture g_WhiteXTxt;
 Texture g_WinTxt;
 
+enum class Player
+{
+	none,
+	player0,
+	player1
+};
+enum class Placing
+{
+	none,
+	x,
+	o,
+	win
+};
+
 struct OxoTile
 {
 	Texture texture{};
 	Rectf rect{};
+	Player player{ Player::none };
+	Placing placed{ Placing::none };
 };
 
-const int g_TileAmount{ 9 }; 
+const int g_TileAmount{ 9 };
 OxoTile g_OxoTiles[g_TileAmount];
 OxoTile g_PlayerTiles[2];
+
+Player g_Turn{ Player::player0 };
+Placing g_Player0Placing{ Placing::o };
+Placing g_Player1Placing{ Placing::o };
+
 // Declare your own functions here
 void InitFiles();
 void DeleteTextures();
@@ -41,6 +62,9 @@ void DrawOxoGrid();
 
 void InitPlayers();
 void DrawPlayers();
+
+void UpdateIsPlacing(Player player = Player::none);
+void UpdateOxoGrid(const Point2f mousePos, Player player);
 #pragma endregion ownDeclarations
 
 #pragma region gameFunctions											

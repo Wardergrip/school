@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "Game.h"
+#include <iostream>
 
 //Basic game functions
 #pragma region gameFunctions											
@@ -39,6 +40,10 @@ void Update(float elapsedSec)
 	//{
 	//	std::cout << "Left and up arrow keys are down\n";
 	//}
+	UpdateIsPlacing(Player::player0);
+	UpdateIsPlacing(Player::player0);
+	UpdateIsPlacing(Player::player1);
+	UpdateIsPlacing(Player::player1);
 }
 
 void End()
@@ -57,19 +62,26 @@ void OnKeyDownEvent(SDL_Keycode key)
 
 void OnKeyUpEvent(SDL_Keycode key)
 {
-	//switch (key)
-	//{
-	//case SDLK_LEFT:
-	//	//std::cout << "Left arrow key released\n";
-	//	break;
-	//case SDLK_RIGHT:
-	//	//std::cout << "Right arrow key released\n";
-	//	break;
-	//case SDLK_1:
-	//case SDLK_KP_1:
-	//	//std::cout << "Key 1 released\n";
-	//	break;
-	//}
+	switch (key)
+	{
+	case SDLK_a:
+		UpdateIsPlacing(Player::player0);
+		break;
+	case SDLK_i:
+		UpdateIsPlacing(Player::player1);
+		break;
+	case SDLK_s:
+		switch (g_Turn)
+		{
+		case Player::player0:
+			g_Turn = Player::player1;
+			break;
+		case Player::player1:
+			g_Turn = Player::player0;
+			break;
+		}
+		break;
+	}
 }
 
 void OnMouseMotionEvent(const SDL_MouseMotionEvent& e)
@@ -85,22 +97,16 @@ void OnMouseDownEvent(const SDL_MouseButtonEvent& e)
 
 void OnMouseUpEvent(const SDL_MouseButtonEvent& e)
 {
-	////std::cout << "  [" << e.x << ", " << e.y << "]\n";
-	//switch (e.button)
-	//{
-	//case SDL_BUTTON_LEFT:
-	//{
-	//	//std::cout << "Left mouse button released\n";
-	//	//Point2f mousePos{ float( e.x ), float( g_WindowHeight - e.y ) };
-	//	break;
-	//}
-	//case SDL_BUTTON_RIGHT:
-	//	//std::cout << "Right mouse button released\n";
-	//	break;
-	//case SDL_BUTTON_MIDDLE:
-	//	//std::cout << "Middle mouse button released\n";
-	//	break;
-	//}
+	//std::cout << "  [" << e.x << ", " << e.y << "]\n";
+	switch (e.button)
+	{
+	case SDL_BUTTON_LEFT:
+	{
+		//std::cout << "Left mouse button released\n";
+		UpdateOxoGrid(Point2f{ float( e.x ), float( g_WindowHeight - e.y ) },g_Turn);
+		break;
+	}
+	}
 }
 #pragma endregion inputHandling
 
@@ -150,6 +156,7 @@ void InitOxoGrid()
 		g_OxoTiles[i].rect.width = size;
 		g_OxoTiles[i].rect.height = size;
 		g_OxoTiles[i].texture = g_FreeCellTxt;
+		g_OxoTiles[i].player = Player::none;
 	}
 	for (int i{ 0 }; i < sqrtAmounti; i++)
 	{
@@ -162,6 +169,55 @@ void InitOxoGrid()
 }
 void DrawOxoGrid()
 {
+	switch (g_Turn)
+	{
+	case Player::player0:
+		for (int i{ 0 }; i < g_TileAmount; i++)
+		{
+			if (g_OxoTiles[i].player == Player::player0)
+			{
+				if (g_OxoTiles[i].placed == Placing::x) g_OxoTiles[i].texture = g_GreenXTxt;
+				else if (g_OxoTiles[i].placed == Placing::o) g_OxoTiles[i].texture = g_GreenOTxt;
+				else std::cout << "DrawOxoGrid Error: 0\n";
+			}
+			else
+			{
+				switch (g_OxoTiles[i].placed)
+				{
+				case Placing::o:
+					g_OxoTiles[i].texture = g_WhiteOTxt;
+					break;
+				case Placing::x:
+					g_OxoTiles[i].texture = g_WhiteXTxt;
+					break;
+				}
+			}
+		}
+		break;
+	case Player::player1:
+		for (int i{ 0 }; i < g_TileAmount; i++)
+		{
+			if (g_OxoTiles[i].player == Player::player1)
+			{
+				if (g_OxoTiles[i].placed == Placing::x) g_OxoTiles[i].texture = g_GreenXTxt;
+				else if (g_OxoTiles[i].placed == Placing::o) g_OxoTiles[i].texture = g_GreenOTxt;
+				else std::cout << "DrawOxoGrid Error: 1\n";
+			}
+			else
+			{
+				switch (g_OxoTiles[i].placed)
+				{
+				case Placing::o:
+					g_OxoTiles[i].texture = g_WhiteOTxt;
+					break;
+				case Placing::x:
+					g_OxoTiles[i].texture = g_WhiteXTxt;
+					break;
+				}
+			}
+		}
+		break;
+	}
 	for (int i{ 0 }; i < g_TileAmount; i++)
 	{
 		DrawTexture(g_OxoTiles[i]);
@@ -190,5 +246,81 @@ void DrawPlayers()
 {
 	DrawTexture(g_PlayerTiles[0]);
 	DrawTexture(g_PlayerTiles[1]);
+}
+void UpdateIsPlacing(Player player)
+{
+	Texture x{}, o{};
+	if (g_Turn == player)
+	{
+		x = g_GreenXTxt;
+		o = g_GreenOTxt;
+	}
+	else
+	{
+		x = g_WhiteXTxt;
+		o = g_WhiteOTxt;
+	}
+
+	switch (player)
+	{
+	case Player::none:
+		break;
+	case Player::player0:
+		switch (g_Player0Placing)
+		{
+		case Placing::none:
+			break;
+		case Placing::x:
+			g_PlayerTiles[0].texture = o;
+			g_Player0Placing = Placing::o;
+			break;
+		case Placing::o:
+			g_PlayerTiles[0].texture = x;
+			g_Player0Placing = Placing::x;
+			break;
+		case Placing::win:
+			break;
+		}
+		break;
+	case Player::player1:
+		switch (g_Player1Placing)
+		{
+		case Placing::none:
+			break;
+		case Placing::x:
+			g_PlayerTiles[1].texture = o;
+			g_Player1Placing = Placing::o;
+			break;
+		case Placing::o:
+			g_PlayerTiles[1].texture = x;
+			g_Player1Placing = Placing::x;
+			break;
+		case Placing::win:
+			break;
+		}
+		break;
+	}
+}
+
+void UpdateOxoGrid(const Point2f mousePos, Player player)
+{
+	for (int i{ 0 }; i < g_TileAmount; i++)
+	{
+		if (IsInsideRect(g_OxoTiles[i].rect, mousePos))
+		{
+			g_OxoTiles[i].player = player;
+			switch (player)
+			{
+			case Player::player0:
+				g_OxoTiles[i].placed = g_Player0Placing;
+				g_Turn = Player::player1;
+				break;
+			case Player::player1:
+				g_OxoTiles[i].placed = g_Player1Placing;
+				g_Turn = Player::player0;
+				break;
+			}
+		}
+	}
 }
 #pragma endregion ownDefinitions
