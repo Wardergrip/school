@@ -7,6 +7,8 @@ void Start()
 {
 	// initialize game resources here
 	InitFiles();
+	InitOxoGrid();
+	InitPlayers();
 }
 
 void Draw()
@@ -14,7 +16,13 @@ void Draw()
 	ClearBackground();
 
 	// Put your own draw statements here
+	
+	// Background
 	DrawTexture(g_OXOTxt, Rectf{ 0,0,g_WindowWidth,g_WindowHeight });
+	// 
+	DrawOxoGrid();
+	DrawPlayers();
+
 }
 
 void Update(float elapsedSec)
@@ -117,6 +125,70 @@ void DeleteTextures()
 	DeleteTexture(g_WhiteOTxt);
 	DeleteTexture(g_WhiteXTxt);
 	DeleteTexture(g_WinTxt);
+	for (int i{ 0 }; i < g_TileAmount; i++)
+	{
+		DeleteTexture(g_OxoTiles[i].texture);
+	}
+	DeleteTexture(g_PlayerTiles[0].texture);
+	DeleteTexture(g_PlayerTiles[1].texture);
+}
+void DrawTexture(OxoTile oxoTile)
+{
+	DrawTexture(oxoTile.texture, oxoTile.rect);
+}
+
+void InitOxoGrid()
+{
+	const float size{ 60 };
+	const Point2f bottomLeftGrid{g_WindowWidth / 2 - 1.5f*size, g_WindowHeight / 2 - 1.5f * size };
+	const float spaceBetween{ 3 };
+	const float sqrtAmountf{ float(sqrt(g_TileAmount)) };
+	const int sqrtAmounti{ int(sqrt(g_TileAmount)) };
 	
+	for (int i{ 0 }; i < g_TileAmount; i++)
+	{
+		g_OxoTiles[i].rect.width = size;
+		g_OxoTiles[i].rect.height = size;
+		g_OxoTiles[i].texture = g_FreeCellTxt;
+	}
+	for (int i{ 0 }; i < sqrtAmounti; i++)
+	{
+		for (int j{ 0 }; j < sqrtAmounti; j++)
+		{
+			g_OxoTiles[GetIndex(i, j, sqrtAmounti)].rect.left = bottomLeftGrid.x + j * size + j * spaceBetween;
+			g_OxoTiles[GetIndex(i, j, sqrtAmounti)].rect.bottom = bottomLeftGrid.y + i * size + i * spaceBetween;
+		}
+	}
+}
+void DrawOxoGrid()
+{
+	for (int i{ 0 }; i < g_TileAmount; i++)
+	{
+		DrawTexture(g_OxoTiles[i]);
+	}
+}
+
+void InitPlayers()
+{
+	const float size{ 60 };
+	const float border{ 20 };
+
+	g_PlayerTiles[0].rect.width = size;
+	g_PlayerTiles[0].rect.height = size;
+	g_PlayerTiles[0].rect.left = border;
+	g_PlayerTiles[0].rect.bottom = border;
+
+	g_PlayerTiles[1].rect.width = size;
+	g_PlayerTiles[1].rect.height = size;
+	g_PlayerTiles[1].rect.left = g_WindowWidth - border - size;
+	g_PlayerTiles[1].rect.bottom = border;
+
+	g_PlayerTiles[0].texture = g_GreenOTxt;
+	g_PlayerTiles[1].texture = g_WhiteOTxt;
+}
+void DrawPlayers()
+{
+	DrawTexture(g_PlayerTiles[0]);
+	DrawTexture(g_PlayerTiles[1]);
 }
 #pragma endregion ownDefinitions

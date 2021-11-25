@@ -73,6 +73,7 @@ namespace utils
 	void DrawDotGrid(float x, float y, float radius, float rows = 3, float columns = 3, float dotSpace = 0);
 	void DrawDotGrid(const Point2f& bottomLeft, float radius, float rows = 3, float columns = 3, float dotSpace = 0);
 
+	int GetIndex(int rowIdx, int colIdx, int nrCols);
 #pragma endregion MyAdditions
 
 #pragma region TextureFunctionality
