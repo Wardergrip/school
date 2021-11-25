@@ -15,9 +15,7 @@ void Draw()
 	ClearBackground();
 
 	// Put your own draw statements here
-	//DrawCards();
-	DrawTexture(g_CardTextures[0], Point2f{ 0,0 }, Rectf{ 0,0,140,190 });
-	DrawTexture(g_CardTextures[0], Point2f{ 150,0 });
+	DrawCards();
 }
 
 void Update(float elapsedSec)
@@ -34,6 +32,12 @@ void Update(float elapsedSec)
 	//{
 	//	std::cout << "Left and up arrow keys are down\n";
 	//}
+
+	if (g_Shuffle)
+	{
+		ShuffleCards();
+		g_Shuffle = false;
+	}
 }
 
 void End()
@@ -52,19 +56,13 @@ void OnKeyDownEvent(SDL_Keycode key)
 
 void OnKeyUpEvent(SDL_Keycode key)
 {
-	//switch (key)
-	//{
-	//case SDLK_LEFT:
-	//	//std::cout << "Left arrow key released\n";
-	//	break;
-	//case SDLK_RIGHT:
-	//	//std::cout << "Right arrow key released\n";
-	//	break;
-	//case SDLK_1:
-	//case SDLK_KP_1:
-	//	//std::cout << "Key 1 released\n";
-	//	break;
-	//}
+	switch (key)
+	{
+	case SDLK_s:
+		std::cout << "s key released.\n";
+		g_Shuffle = true;
+		break;
+	}
 }
 
 void OnMouseMotionEvent(const SDL_MouseMotionEvent& e)
@@ -105,6 +103,20 @@ int GetIndex(int rowIdx, int colIdx, int nrCols)
 {
 	return (rowIdx * nrCols + colIdx);
 }
+void Swap(Texture* pArray, int size, int idx1, int idx2)
+{
+	if ((idx1 >= size) || (idx2 >= size) || (idx1 < 0) || (idx2 < 0)) std::cout << "Texture Swapping error: swapping out of bounds\n";
+	Texture a{ pArray[idx1] };
+	pArray[idx1] = pArray[idx2];
+	pArray[idx2] = a;
+}
+void Swap(Rectf* pArray, int size, int idx1, int idx2)
+{
+	if ((idx1 >= size) || (idx2 >= size) || (idx1 < 0) || (idx2 < 0)) std::cout << "Rectf Swapping error: swapping out of bounds\n";
+	Rectf a{ pArray[idx1] };
+	pArray[idx1] = pArray[idx2];
+	pArray[idx2] = a;
+}
 
 void InitCards()
 {
@@ -139,8 +151,27 @@ void DrawCards()
 	{
 		for (int j{ 0 }; j < 4; j++)
 		{
-			DrawTexture(g_CardTextures[GetIndex(j, i, 13)], Point2f{ i * g_CardRects[0].width,j * g_CardRects[0].height });//, g_CardRects[GetIndex(j, i, 13)]);
+			DrawTexture(g_CardTextures[GetIndex(j, i, 13)], g_CardRects[GetIndex(j, i, 13)]); 
 		}
+	}
+}
+void ShuffleCards()
+{
+	const int amountShuffle{ GenerateRandom(50, 150) };
+	unsigned int a{};
+	unsigned int b{};
+	const bool debugMsg{ false };
+	if (debugMsg) std::cout << "Shuffling for " << amountShuffle << " times.\n";
+	for (int i{ 0 }; i < amountShuffle; i++)
+	{
+		do {
+		a = GenerateRandom(0, g_AmountOfCards - 1);
+		b = GenerateRandom(0, g_AmountOfCards - 1);
+		} while (a == b); // Making sure you don't swap a card with the same card
+		// One of the following 2 lines should be commented, if both are left uncommented, nothing will happen but changing the draworder
+		//Swap(g_CardTextures, g_AmountOfCards, a, b); // Swaps Textures
+		Swap(g_CardRects, g_AmountOfCards, a, b); // Swaps Position
+		if (debugMsg) std::cout << "Swapped " << a << " & " << b << std::endl;
 	}
 }
 #pragma endregion ownDefinitions

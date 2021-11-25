@@ -15,15 +15,21 @@ float g_WindowHeight{ 600 };
 // Declare your own global variables here
 const int g_AmountOfCards{ 52 };
 Texture g_CardTextures[g_AmountOfCards];
-const float g_CardScale{ 1 };
+const float g_CardScale{ 0.55f };
 const Rectf g_DefaultCard{ 0,0,140,190 };
 Rectf g_CardRects[g_AmountOfCards];
+
+bool g_Shuffle{ false };
 // Declare your own functions here
 int GetIndex(int rowIdx, int colIdx, int nrCols);
+void Swap(Texture* pArray, int size, int idx1, int idx2);
+void Swap(Rectf* pArray, int size, int idx1, int idx2);
 
 void InitCards();
 void DeleteCards();
 void DrawCards();
+void ShuffleCards();
+
 #pragma endregion ownDeclarations
 
 #pragma region gameFunctions											
