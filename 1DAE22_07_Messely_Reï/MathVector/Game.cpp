@@ -45,7 +45,17 @@ void Draw()
 	//Vector2f mouseVector{ g_CurrentMousePos.x - g_MiddleOfScreen.x, g_CurrentMousePos.y - g_MiddleOfScreen.y};
 	//DrawVector(mouseVector, g_MiddleOfScreen);
 	//DrawVector(mouseVector);
+	// 
+	// Add
+	// 
+	SetColor(1, 1, 0, 1);
 	DrawVector(g_VectorA);
+	DrawVector(g_VectorB, VectorToPoint(g_VectorA));
+	DrawVector(Add(g_VectorA, g_VectorB));
+	//
+	// Substract
+	//
+	SetColor(0, 1, 1, 1);
 	DrawVector(g_VectorB);
 	DrawVector(Substract(g_VectorA, g_VectorB), VectorToPoint(g_VectorB));
 	// 
