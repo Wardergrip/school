@@ -308,19 +308,27 @@ void UpdateOxoGrid(const Point2f mousePos, Player player)
 	{
 		if (IsInsideRect(g_OxoTiles[i].rect, mousePos))
 		{
-			g_OxoTiles[i].player = player;
-			switch (player)
+			if (g_OxoTiles[i].placed == Placing::none)
 			{
-			case Player::player0:
-				g_OxoTiles[i].placed = g_Player0Placing;
-				g_Turn = Player::player1;
-				break;
-			case Player::player1:
-				g_OxoTiles[i].placed = g_Player1Placing;
-				g_Turn = Player::player0;
-				break;
+				g_OxoTiles[i].player = player;
+				switch (player)
+				{
+				case Player::player0:
+					g_OxoTiles[i].placed = g_Player0Placing;
+					g_Turn = Player::player1;
+					break;
+				case Player::player1:
+					g_OxoTiles[i].placed = g_Player1Placing;
+					g_Turn = Player::player0;
+					break;
+				}
 			}
 		}
 	}
+}
+
+void CheckWin()
+{
+
 }
 #pragma endregion ownDefinitions

@@ -65,6 +65,8 @@ void DrawPlayers();
 
 void UpdateIsPlacing(Player player = Player::none);
 void UpdateOxoGrid(const Point2f mousePos, Player player);
+
+void CheckWin();
 #pragma endregion ownDeclarations
 
 #pragma region gameFunctions											
