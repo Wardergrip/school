@@ -52,6 +52,9 @@ Player g_Turn{ Player::player0 };
 Placing g_Player0Placing{ Placing::o };
 Placing g_Player1Placing{ Placing::o };
 
+bool g_Win{ false };
+const bool g_DevMode{ false };
+
 // Declare your own functions here
 void InitFiles();
 void DeleteTextures();
@@ -67,6 +70,7 @@ void UpdateIsPlacing(Player player = Player::none);
 void UpdateOxoGrid(const Point2f mousePos, Player player);
 
 void CheckWin();
+void PlayerWin();
 #pragma endregion ownDeclarations
 
 #pragma region gameFunctions											

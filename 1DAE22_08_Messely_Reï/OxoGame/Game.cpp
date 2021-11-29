@@ -40,6 +40,8 @@ void Update(float elapsedSec)
 	//{
 	//	std::cout << "Left and up arrow keys are down\n";
 	//}
+
+	// Cheap way to make sure the active player his tile is always green
 	UpdateIsPlacing(Player::player0);
 	UpdateIsPlacing(Player::player0);
 	UpdateIsPlacing(Player::player1);
@@ -67,18 +69,21 @@ void OnKeyUpEvent(SDL_Keycode key)
 	case SDLK_a:
 		UpdateIsPlacing(Player::player0);
 		break;
-	case SDLK_i:
+	case SDLK_l:
 		UpdateIsPlacing(Player::player1);
 		break;
 	case SDLK_s:
-		switch (g_Turn)
+		if (g_DevMode)
 		{
-		case Player::player0:
-			g_Turn = Player::player1;
-			break;
-		case Player::player1:
-			g_Turn = Player::player0;
-			break;
+			switch (g_Turn)
+			{
+			case Player::player0:
+				g_Turn = Player::player1;
+				break;
+			case Player::player1:
+				g_Turn = Player::player0;
+				break;
+			}
 		}
 		break;
 	}
@@ -169,58 +174,28 @@ void InitOxoGrid()
 }
 void DrawOxoGrid()
 {
-	switch (g_Turn)
+	if (!g_Win)
 	{
-	case Player::player0:
 		for (int i{ 0 }; i < g_TileAmount; i++)
 		{
-			if (g_OxoTiles[i].player == Player::player0)
+			switch (g_OxoTiles[i].placed)
 			{
-				if (g_OxoTiles[i].placed == Placing::x) g_OxoTiles[i].texture = g_GreenXTxt;
-				else if (g_OxoTiles[i].placed == Placing::o) g_OxoTiles[i].texture = g_GreenOTxt;
-				else std::cout << "DrawOxoGrid Error: 0\n";
+			case Placing::x:
+				g_OxoTiles[i].texture = g_WhiteXTxt;
+				break;
+			case Placing::o:
+				g_OxoTiles[i].texture = g_WhiteOTxt;
+				break;
 			}
-			else
-			{
-				switch (g_OxoTiles[i].placed)
-				{
-				case Placing::o:
-					g_OxoTiles[i].texture = g_WhiteOTxt;
-					break;
-				case Placing::x:
-					g_OxoTiles[i].texture = g_WhiteXTxt;
-					break;
-				}
-			}
+			DrawTexture(g_OxoTiles[i]);
 		}
-		break;
-	case Player::player1:
-		for (int i{ 0 }; i < g_TileAmount; i++)
-		{
-			if (g_OxoTiles[i].player == Player::player1)
-			{
-				if (g_OxoTiles[i].placed == Placing::x) g_OxoTiles[i].texture = g_GreenXTxt;
-				else if (g_OxoTiles[i].placed == Placing::o) g_OxoTiles[i].texture = g_GreenOTxt;
-				else std::cout << "DrawOxoGrid Error: 1\n";
-			}
-			else
-			{
-				switch (g_OxoTiles[i].placed)
-				{
-				case Placing::o:
-					g_OxoTiles[i].texture = g_WhiteOTxt;
-					break;
-				case Placing::x:
-					g_OxoTiles[i].texture = g_WhiteXTxt;
-					break;
-				}
-			}
-		}
-		break;
 	}
-	for (int i{ 0 }; i < g_TileAmount; i++)
+	else
 	{
-		DrawTexture(g_OxoTiles[i]);
+		for (int i{ 0 }; i < g_TileAmount; i++)
+		{
+			DrawTexture(g_OxoTiles[i]);
+		}
 	}
 }
 
@@ -249,56 +224,59 @@ void DrawPlayers()
 }
 void UpdateIsPlacing(Player player)
 {
-	Texture x{}, o{};
-	if (g_Turn == player)
+	if (!g_Win)
 	{
-		x = g_GreenXTxt;
-		o = g_GreenOTxt;
-	}
-	else
-	{
-		x = g_WhiteXTxt;
-		o = g_WhiteOTxt;
-	}
+		Texture x{}, o{};
+		if (g_Turn == player)
+		{
+			x = g_GreenXTxt;
+			o = g_GreenOTxt;
+		}
+		else
+		{
+			x = g_WhiteXTxt;
+			o = g_WhiteOTxt;
+		}
 
-	switch (player)
-	{
-	case Player::none:
-		break;
-	case Player::player0:
-		switch (g_Player0Placing)
+		switch (player)
 		{
-		case Placing::none:
+		case Player::none:
 			break;
-		case Placing::x:
-			g_PlayerTiles[0].texture = o;
-			g_Player0Placing = Placing::o;
+		case Player::player0:
+			switch (g_Player0Placing)
+			{
+			case Placing::none:
+				break;
+			case Placing::x:
+				g_PlayerTiles[0].texture = o;
+				g_Player0Placing = Placing::o;
+				break;
+			case Placing::o:
+				g_PlayerTiles[0].texture = x;
+				g_Player0Placing = Placing::x;
+				break;
+			case Placing::win:
+				break;
+			}
 			break;
-		case Placing::o:
-			g_PlayerTiles[0].texture = x;
-			g_Player0Placing = Placing::x;
-			break;
-		case Placing::win:
+		case Player::player1:
+			switch (g_Player1Placing)
+			{
+			case Placing::none:
+				break;
+			case Placing::x:
+				g_PlayerTiles[1].texture = o;
+				g_Player1Placing = Placing::o;
+				break;
+			case Placing::o:
+				g_PlayerTiles[1].texture = x;
+				g_Player1Placing = Placing::x;
+				break;
+			case Placing::win:
+				break;
+			}
 			break;
 		}
-		break;
-	case Player::player1:
-		switch (g_Player1Placing)
-		{
-		case Placing::none:
-			break;
-		case Placing::x:
-			g_PlayerTiles[1].texture = o;
-			g_Player1Placing = Placing::o;
-			break;
-		case Placing::o:
-			g_PlayerTiles[1].texture = x;
-			g_Player1Placing = Placing::x;
-			break;
-		case Placing::win:
-			break;
-		}
-		break;
 	}
 }
 
@@ -315,11 +293,11 @@ void UpdateOxoGrid(const Point2f mousePos, Player player)
 				{
 				case Player::player0:
 					g_OxoTiles[i].placed = g_Player0Placing;
-					g_Turn = Player::player1;
+					CheckWin();
 					break;
 				case Player::player1:
 					g_OxoTiles[i].placed = g_Player1Placing;
-					g_Turn = Player::player0;
+					CheckWin();
 					break;
 				}
 			}
@@ -329,6 +307,100 @@ void UpdateOxoGrid(const Point2f mousePos, Player player)
 
 void CheckWin()
 {
-
+	if (!g_Win)
+	{
+		if ((g_OxoTiles[GetIndex(2, 0, 3)].placed == Placing::o) && (g_OxoTiles[GetIndex(1, 1, 3)].placed == Placing::x) && (g_OxoTiles[GetIndex(0, 2, 3)].placed == Placing::o))
+		{ // Top left to bottom right
+			g_Win = true;
+			g_OxoTiles[GetIndex(2, 0, 3)].texture = g_GreenOTxt;
+			g_OxoTiles[GetIndex(1, 1, 3)].texture = g_GreenXTxt;
+			g_OxoTiles[GetIndex(0, 2, 3)].texture = g_GreenOTxt;
+			PlayerWin();
+		}
+		else if ((g_OxoTiles[GetIndex(0, 0, 3)].placed == Placing::o) && (g_OxoTiles[GetIndex(1, 1, 3)].placed == Placing::x) && (g_OxoTiles[GetIndex(2, 2, 3)].placed == Placing::o))
+		{ // Bottom left to top right diagonal
+			g_Win = true;
+			g_OxoTiles[GetIndex(0, 0, 3)].texture = g_GreenOTxt;
+			g_OxoTiles[GetIndex(1, 1, 3)].texture = g_GreenXTxt;
+			g_OxoTiles[GetIndex(2, 2, 3)].texture = g_GreenOTxt;
+			PlayerWin();
+		}
+		else if ((g_OxoTiles[GetIndex(0, 2, 3)].placed == Placing::o) && (g_OxoTiles[GetIndex(1, 2, 3)].placed == Placing::x) && (g_OxoTiles[GetIndex(2, 2, 3)].placed == Placing::o))
+		{ // Right colomn
+			g_Win = true;
+			g_OxoTiles[GetIndex(0, 2, 3)].texture = g_GreenOTxt;
+			g_OxoTiles[GetIndex(1, 2, 3)].texture = g_GreenXTxt;
+			g_OxoTiles[GetIndex(2, 2, 3)].texture = g_GreenOTxt;
+			PlayerWin();
+		}
+		else if ((g_OxoTiles[GetIndex(0, 1, 3)].placed == Placing::o) && (g_OxoTiles[GetIndex(1, 1, 3)].placed == Placing::x) && (g_OxoTiles[GetIndex(2, 1, 3)].placed == Placing::o))
+		{ // Middle colomn
+			g_Win = true;
+			g_OxoTiles[GetIndex(0, 1, 3)].texture = g_GreenOTxt;
+			g_OxoTiles[GetIndex(1, 1, 3)].texture = g_GreenXTxt;
+			g_OxoTiles[GetIndex(2, 1, 3)].texture = g_GreenOTxt;
+			PlayerWin();
+		}
+		else if ((g_OxoTiles[GetIndex(0, 0, 3)].placed == Placing::o) && (g_OxoTiles[GetIndex(1, 0, 3)].placed == Placing::x) && (g_OxoTiles[GetIndex(2, 0, 3)].placed == Placing::o))
+		{ // Left colomn
+			g_Win = true;
+			g_OxoTiles[GetIndex(0, 0, 3)].texture = g_GreenOTxt;
+			g_OxoTiles[GetIndex(1, 0, 3)].texture = g_GreenXTxt;
+			g_OxoTiles[GetIndex(2, 0, 3)].texture = g_GreenOTxt;
+			PlayerWin();
+		}
+		else if ((g_OxoTiles[GetIndex(0, 0, 3)].placed == Placing::o) && (g_OxoTiles[GetIndex(0, 1, 3)].placed == Placing::x) && (g_OxoTiles[GetIndex(0, 2, 3)].placed == Placing::o))
+		{ // Lowest row
+			g_Win = true;
+			g_OxoTiles[GetIndex(0, 0, 3)].texture = g_GreenOTxt;
+			g_OxoTiles[GetIndex(0, 1, 3)].texture = g_GreenXTxt;
+			g_OxoTiles[GetIndex(0, 2, 3)].texture = g_GreenOTxt;
+			PlayerWin();
+		}
+		else if ((g_OxoTiles[GetIndex(1, 0, 3)].placed == Placing::o) && (g_OxoTiles[GetIndex(1, 1, 3)].placed == Placing::x) && (g_OxoTiles[GetIndex(1, 2, 3)].placed == Placing::o))
+		{ // Middle row
+			g_Win = true;
+			g_OxoTiles[GetIndex(1, 0, 3)].texture = g_GreenOTxt;
+			g_OxoTiles[GetIndex(1, 1, 3)].texture = g_GreenXTxt;
+			g_OxoTiles[GetIndex(1, 2, 3)].texture = g_GreenOTxt;
+			PlayerWin();
+		}
+		else if ((g_OxoTiles[GetIndex(2, 0, 3)].placed == Placing::o) && (g_OxoTiles[GetIndex(2, 1, 3)].placed == Placing::x) && (g_OxoTiles[GetIndex(2, 2, 3)].placed == Placing::o))
+		{ // First row
+			g_Win = true;
+			g_OxoTiles[GetIndex(2, 0, 3)].texture = g_GreenOTxt;
+			g_OxoTiles[GetIndex(2, 1, 3)].texture = g_GreenXTxt;
+			g_OxoTiles[GetIndex(2, 2, 3)].texture = g_GreenOTxt;
+			PlayerWin();
+		}
+		else
+		{
+			switch (g_Turn)
+			{
+			case Player::player0:
+				g_Turn = Player::player1;
+				break;
+			case Player::player1:
+				g_Turn = Player::player0;
+				break;
+			}
+		}
+	}
+}
+void PlayerWin()
+{
+	switch (g_Turn)
+	{
+	case Player::player0:
+		g_PlayerTiles[0].texture = g_WinTxt;
+		g_PlayerTiles[1].texture = g_FreeCellTxt;
+		std::cout << "Player 0 (Player on the left) has won!\n";
+		break;
+	case Player::player1:
+		g_PlayerTiles[1].texture = g_WinTxt;
+		g_PlayerTiles[0].texture = g_FreeCellTxt;
+		std::cout << "Player 1 (Player on the right) has won!\n";
+		break;
+	}
 }
 #pragma endregion ownDefinitions
