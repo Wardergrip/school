@@ -32,16 +32,44 @@ int main()
     std::string input{};
     std::cin >> input;
     std::cout << "Occurances of '" << input << "' at:\n";
-    std::cout << g_Gutenburg.find(input);
-    std::size_t found{};
-    for (int i{ 0 }; i < 10; i++)
-    {
-        found = found + g_Gutenburg.find(input,found +1);
-        std::cout << g_Gutenburg.find(found);
+    std::size_t found{ g_Gutenburg.find(input) };
+    while (found < g_Gutenburg.length())
+    { 
+        std::cout << found << " ";
+        found = g_Gutenburg.find(input, found + 1);
     }
     std::cout << "\nIn reverse order:\n";
-    std::cout << g_Gutenburg.rfind(input);
+    found = g_Gutenburg.rfind(input);
+    while (found < g_Gutenburg.length())
+    {
+        std::cout << found << " ";
+        found = g_Gutenburg.rfind(input, found - 1);
+    }
     std::cout << "\nThe word to replace by * in the above text? ";
     std::cin >> input;
-    //std::cout << g_Gutenburg.replace(g_Gutenburg.find(input), '*');
+    found = g_Gutenburg.find(input);
+    while (found < g_Gutenburg.length())
+    {
+        std::string rplcmnt{};
+        for (int i{ 0 }; i < input.length(); i++)
+        {
+            rplcmnt += "*";
+        }
+        g_Gutenburg.replace(found, input.length(), rplcmnt);
+        found = g_Gutenburg.find(input, found + 1);
+    }
+    std::cout << g_Gutenburg << std::endl;
+    std::cout << "The string you want to erase from the text? ";
+    std::cin >> input;
+    found = g_Gutenburg.find(input);
+    while (found < g_Gutenburg.length())
+    {
+        g_Gutenburg.erase(found, input.length());
+        found = g_Gutenburg.find(input, found + 1);
+    }
+    std::cout << g_Gutenburg << std::endl;
+    std::cout << "Length: " << g_Gutenburg.length() << " chars\n";
+    std::cout << "Size: " << g_Gutenburg.size() << " bytes\n";
+    std::cout << "Capacity: " << g_Gutenburg.capacity() << " bytes\n";
+
 }
