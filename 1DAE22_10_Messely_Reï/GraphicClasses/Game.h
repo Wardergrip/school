@@ -31,6 +31,11 @@ Light* g_pLight6{ nullptr };
 Light* g_pLight7{ nullptr };
 Light* g_pLight8{ nullptr };
 
+class DaeEllipse;
+DaeEllipse* g_pDell1{ nullptr };
+DaeEllipse* g_pDell2{ nullptr };
+DaeEllipse* g_pDell3{ nullptr };
+
 // Declare your own functions here
 void CreateFractions();
 void DeleteFractions();
@@ -38,6 +43,12 @@ void DrawFractions();
 
 void CreateLights();
 void DeleteLights();
+void DrawLights();
+void HitLights(const Point2f& pos);
+
+void CreateDells();
+void DeleteDells();
+void DrawDells();
 #pragma endregion ownDeclarations
 
 #pragma region gameFunctions											

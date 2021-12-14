@@ -2,6 +2,8 @@
 #include "Game.h"
 #include "Fraction.h"
 #include "Light.h"
+#include "DaeEllipse.h"
+#include <iostream>
 
 
 //Basic game functions
@@ -11,14 +13,17 @@ void Start()
 	// initialize game resources here
 	CreateFractions();
 	CreateLights();
+	CreateDells();
 }
 
 void Draw()
 {
-	ClearBackground();
+	ClearBackground(0,0,0);
 
 	// Put your own draw statements here
-
+	DrawFractions();
+	DrawLights();
+	DrawDells();
 }
 
 void Update(float elapsedSec)
@@ -42,6 +47,7 @@ void End()
 	// free game resources here
 	DeleteFractions();
 	DeleteLights();
+	DeleteDells();
 }
 #pragma endregion gameFunctions
 
@@ -72,7 +78,10 @@ void OnKeyUpEvent(SDL_Keycode key)
 void OnMouseMotionEvent(const SDL_MouseMotionEvent& e)
 {
 	//std::cout << "  [" << e.x << ", " << e.y << "]\n";
-	//Point2f mousePos{ float( e.x ), float( g_WindowHeight - e.y ) };
+	Point2f mousePos{ float( e.x ), float( g_WindowHeight - e.y ) };
+	g_pDell1->ActivateTest(mousePos);
+	g_pDell2->ActivateTest(mousePos);
+	g_pDell3->ActivateTest(mousePos);
 }
 
 void OnMouseDownEvent(const SDL_MouseButtonEvent& e)
@@ -82,22 +91,23 @@ void OnMouseDownEvent(const SDL_MouseButtonEvent& e)
 
 void OnMouseUpEvent(const SDL_MouseButtonEvent& e)
 {
-	////std::cout << "  [" << e.x << ", " << e.y << "]\n";
-	//switch (e.button)
-	//{
-	//case SDL_BUTTON_LEFT:
-	//{
-	//	//std::cout << "Left mouse button released\n";
-	//	//Point2f mousePos{ float( e.x ), float( g_WindowHeight - e.y ) };
-	//	break;
-	//}
-	//case SDL_BUTTON_RIGHT:
-	//	//std::cout << "Right mouse button released\n";
-	//	break;
-	//case SDL_BUTTON_MIDDLE:
-	//	//std::cout << "Middle mouse button released\n";
-	//	break;
-	//}
+	//std::cout << "  [" << e.x << ", " << e.y << "]\n";
+	switch (e.button)
+	{
+	case SDL_BUTTON_LEFT:
+	{
+		//std::cout << "Left mouse button released\n";
+		Point2f mousePos{ float( e.x ), float( g_WindowHeight - e.y ) };
+		HitLights(mousePos);
+		break;
+	}
+	case SDL_BUTTON_RIGHT:
+		//std::cout << "Right mouse button released\n";
+		break;
+	case SDL_BUTTON_MIDDLE:
+		//std::cout << "Middle mouse button released\n";
+		break;
+	}
 }
 #pragma endregion inputHandling
 
@@ -130,7 +140,7 @@ void DeleteFractions()
 void DrawFractions()
 {
 	const Point2f bl{ 10,10 };
-	const float size{ 40 };
+	const float size{ 20 };
 	g_pFrac6->Draw(bl, size);
 	g_pFrac5->Draw(Point2f{bl.x, bl.y + (size + size / 2)}, size);
 	g_pFrac4->Draw(Point2f{ bl.x, bl.y + 2*(size + size / 2) }, size);
@@ -142,14 +152,16 @@ void DrawFractions()
 void CreateLights()
 {
 	float height{ 20 };
-	g_pLight1 = new Light{ Rectf{50,10,GenerateRandom(10,40),height}, RandomColor() };
-	g_pLight2 = new Light{ Rectf{100,10,GenerateRandom(10,40),height}, RandomColor() };
-	g_pLight3 = new Light{ Rectf{50,10 + height,GenerateRandom(10,40),height}, RandomColor() };
-	g_pLight4 = new Light{ Rectf{100,10 + height,GenerateRandom(10,40),height}, RandomColor() };
-	g_pLight5 = new Light{ Rectf{50,10 + 2 * height,GenerateRandom(10,40),height}, RandomColor() };
-	g_pLight6 = new Light{ Rectf{100,10 + 2 * height,GenerateRandom(10,40),height}, RandomColor() };
-	g_pLight7 = new Light{ Rectf{50,10 + 3 * height,GenerateRandom(10,40),height}, RandomColor() };
-	g_pLight8 = new Light{ Rectf{100,10 + 3 * height,GenerateRandom(10,40),height}, RandomColor() };
+	float left{120};
+	int low{ 20 }, high{ 50 };
+	g_pLight1 = new Light{ Rectf{left,10,float(GenerateRandom(low,high)),height}, RandomColor() };
+	g_pLight2 = new Light{ Rectf{left + 50,10,float(GenerateRandom(low,high)),height}, RandomColor() };
+	g_pLight3 = new Light{ Rectf{left,10 + height,float(GenerateRandom(low,high)),height}, RandomColor() };
+	g_pLight4 = new Light{ Rectf{left + 50,10 + height,float(GenerateRandom(low,high)),height}, RandomColor() };
+	g_pLight5 = new Light{ Rectf{left,10 + 2 * height,float(GenerateRandom(low,high)),height}, RandomColor() };
+	g_pLight6 = new Light{ Rectf{left + 50,10 + 2 * height,float(GenerateRandom(low,high)),height}, RandomColor() };
+	g_pLight7 = new Light{ Rectf{left,10 + 3 * height,float(GenerateRandom(low,high)),height}, RandomColor() };
+	g_pLight8 = new Light{ Rectf{left + 50,10 + 3 * height,float(GenerateRandom(low,high)),height}, RandomColor() };
 }
 void DeleteLights()
 {
@@ -170,4 +182,56 @@ void DeleteLights()
 	delete g_pLight8;
 	g_pLight8 = nullptr;
 }
+void DrawLights()
+{
+	g_pLight1->Draw();
+	g_pLight2->Draw();
+	g_pLight3->Draw();
+	g_pLight4->Draw();
+	g_pLight5->Draw();
+	g_pLight6->Draw();
+	g_pLight7->Draw();
+	g_pLight8->Draw();
+}
+void HitLights(const Point2f& pos)
+{
+	bool isChanged{ false };
+	if(g_pLight1->IsHit(pos)) isChanged = true;
+	if(g_pLight2->IsHit(pos)) isChanged = true;
+	if(g_pLight3->IsHit(pos)) isChanged = true;
+	if(g_pLight4->IsHit(pos)) isChanged = true;
+	if(g_pLight5->IsHit(pos)) isChanged = true;
+	if(g_pLight6->IsHit(pos)) isChanged = true;
+	if(g_pLight7->IsHit(pos)) isChanged = true;
+	if(g_pLight8->IsHit(pos)) isChanged = true;
+
+	if (isChanged)
+	{
+		int amountOn{ g_pLight1->IsOn() + g_pLight2->IsOn() + g_pLight3->IsOn() + g_pLight4->IsOn() + g_pLight5->IsOn() + g_pLight6->IsOn() + g_pLight7->IsOn() + g_pLight8->IsOn() };
+		std::cout << amountOn << " lights are on.\n";
+	}
+}
+
+void CreateDells()
+{
+	g_pDell1 = new DaeEllipse{ Point2f{40,250}, 30, 40, Color4f{1,0,0,1} };
+	g_pDell2 = new DaeEllipse{ Point2f{160,250}, 80, 40, Color4f{0,1,0,1} };
+	g_pDell3 = new DaeEllipse{ Point2f{350,150}, 120, 140, Color4f{1,1,0,1} };
+}
+void DeleteDells()
+{
+	delete g_pDell1;
+	g_pDell1 = nullptr;
+	delete g_pDell2;
+	g_pDell2 = nullptr;
+	delete g_pDell3;
+	g_pDell3 = nullptr;
+}
+void DrawDells()
+{
+	g_pDell1->Draw();
+	g_pDell2->Draw();
+	g_pDell3->Draw();
+}
+
 #pragma endregion ownDefinitions

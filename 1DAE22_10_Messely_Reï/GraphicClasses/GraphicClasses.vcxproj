@@ -152,6 +152,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Core.cpp" />
+    <ClCompile Include="DaeEllipse.cpp" />
     <ClCompile Include="Fraction.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Light.cpp" />
@@ -167,6 +168,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core.h" />
+    <ClInclude Include="DaeEllipse.h" />
     <ClInclude Include="Fraction.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Light.h" />
