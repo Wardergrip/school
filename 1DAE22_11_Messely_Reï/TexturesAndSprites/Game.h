@@ -29,6 +29,7 @@ std::string g_FilePathTibo{ "Resources/Tibo.png" };
 
 class SuperSprite; // class forward declaration
 SuperSprite* g_Mario{ nullptr };
+AnimationState g_MarioState{ AnimationState::idle };
 
 std::string g_FilePathMarioIdle{ "Resources/marioIdle.png" };
 std::string g_FilePathMarioJump{ "Resources/marioJump.png" };

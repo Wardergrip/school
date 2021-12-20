@@ -25,10 +25,8 @@ void Start()
 	}
 	g_Mario = new SuperSprite(3);
 	g_Mario->InitState(int(AnimationState::idle), g_FilePathMarioIdle, 4, 2, 7, 0.1f, 1);
-	g_Mario->InitState(int(AnimationState::running), g_FilePathMarioJump, 4, 4, 15, 0.1f, true);
-	g_Mario->InitState(int(AnimationState::jumping), g_FilePathMarioJump, 4, 3, 11, 0.1f, true);
-
-	
+	g_Mario->InitState(int(AnimationState::running), g_FilePathMarioRun, 4, 4, 15, 0.05f, 1,true);
+	g_Mario->InitState(int(AnimationState::jumping), g_FilePathMarioJump, 4, 3, 11, 0.15f, 1,true);
 }
 
 void Draw()
@@ -47,13 +45,14 @@ void Draw()
 			g_pSprites[i]->Draw(Point2f{ float(10 + (i-3) * 190),70 });
 		}
 	}
-	g_Mario->DrawSte(int(AnimationState::idle), 10, 10);
-
+	g_Mario->DrawSte(int(g_MarioState), 10, 10);
+	
 }
 
 void Update(float elapsedSec)
 {
 	// process input, do physics 
+	g_Mario->UpdateSte(elapsedSec);
 
 	for (int i{ 0 }; i < g_AmountOfSprites; ++i)
 	{
@@ -75,6 +74,8 @@ void Update(float elapsedSec)
 void End()
 {
 	// free game resources here
+	delete g_Mario;
+	g_Mario = nullptr;
 }
 #pragma endregion gameFunctions
 
@@ -98,6 +99,7 @@ void OnKeyUpEvent(SDL_Keycode key)
 		break;
 	case SDLK_RIGHT:
 		//std::cout << "Right arrow key released\n";
+		g_MarioState = AnimationState((int(g_MarioState) + 1) % 3);
 		break;
 	case SDLK_1:
 	case SDLK_KP_1:

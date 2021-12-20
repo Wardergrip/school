@@ -42,6 +42,7 @@ Sprite::~Sprite()
 
 // =================================================================================== //
 
+// Changes the properties of the sprite.
 bool Sprite::ChangeTexture(const std::string& filename, int nrCols, int nrRows, int nrOfFrames, float frameSec, float scale, bool loopOnce)
 {
 	m_Cols = nrCols;
@@ -59,7 +60,7 @@ bool Sprite::ChangeTexture(const std::string& filename, int nrCols, int nrRows, 
 	}
 	return true;
 }
-
+// Updates the sprite so it moves forward in the tilesheet.
 bool Sprite::Update(float elapsedSec)
 {
 	if (m_LoopOnce)
@@ -85,24 +86,26 @@ bool Sprite::Update(float elapsedSec)
 		m_AccuSec -= m_FrameSec;
 	}
 	}
-	return true;
+	return false;
 }
-
+// Makes sure the loop starts at the beginning.
 void Sprite::InitLoopOnce()
 {
 	m_AccuSec = 0;
 	m_ActFrame = 0;
 }
+// Change if this sprite may only loop once.
 void Sprite::ChangeLoopOnce(bool loopOnce)
 {
 	m_LoopOnce = loopOnce;
 }
 
+// Draws the sprite at the requested position.
 void Sprite::Draw(const Point2f& pos)
 {
 	Rectf srcRect{};
 	srcRect.width = m_Texture.width / m_Cols;
-	srcRect.height = m_Texture.height / (m_NrOfFrames / m_Cols);
+	srcRect.height = m_Texture.height / m_Rows;
 	srcRect.left = (m_ActFrame % m_Cols) * srcRect.width;
 	srcRect.bottom = ((m_ActFrame / m_Cols) + 1) * srcRect.height;
 
