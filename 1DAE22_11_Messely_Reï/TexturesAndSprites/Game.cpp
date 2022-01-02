@@ -76,6 +76,11 @@ void End()
 	// free game resources here
 	delete g_Mario;
 	g_Mario = nullptr;
+	for (int i{ 0 }; i < g_AmountOfSprites; ++i)
+	{
+		delete g_pSprites[i];
+		g_pSprites[i] = nullptr;
+	}
 }
 #pragma endregion gameFunctions
 
