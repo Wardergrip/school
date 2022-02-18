@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "Game.h"
+#include "Smiley.h"
 
 Game::Game( const Window& window ) 
 	:m_Window{ window }
@@ -14,11 +15,19 @@ Game::~Game( )
 
 void Game::Initialize( )
 {
-	
+	for (int i{ 0 }; i < m_MaxAmountOfSmileys; ++i)
+	{
+		m_pSmileys[i] = new Smiley(Point2f{i * 40.0f, m_Window.height / 2});
+	}
 }
 
 void Game::Cleanup( )
 {
+	for (int i{ 0 }; i < m_MaxAmountOfSmileys; ++i)
+	{
+		delete m_pSmileys[i];
+		m_pSmileys[i] = nullptr;
+	}
 }
 
 void Game::Update( float elapsedSec )
@@ -33,11 +42,21 @@ void Game::Update( float elapsedSec )
 	//{
 	//	std::cout << "Left and up arrow keys are down\n";
 	//}
+
+	for (int i{ 0 }; i < m_MaxAmountOfSmileys; ++i)
+	{
+		m_pSmileys[i]->Update(elapsedSec, Rectf{ 0,0,m_Window.width,m_Window.height }, Rectf{50,50,m_Window.width * 0.8f,m_Window.height * 0.8f});
+	}
 }
 
 void Game::Draw( ) const
 {
 	ClearBackground( );
+
+	for (int i{ 0 }; i < m_MaxAmountOfSmileys; ++i)
+	{
+		m_pSmileys[i]->Draw();
+	}
 }
 
 void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )
@@ -48,19 +67,21 @@ void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )
 void Game::ProcessKeyUpEvent( const SDL_KeyboardEvent& e )
 {
 	//std::cout << "KEYUP event: " << e.keysym.sym << std::endl;
-	//switch ( e.keysym.sym )
-	//{
-	//case SDLK_LEFT:
-	//	//std::cout << "Left arrow key released\n";
-	//	break;
-	//case SDLK_RIGHT:
-	//	//std::cout << "`Right arrow key released\n";
-	//	break;
-	//case SDLK_1:
-	//case SDLK_KP_1:
-	//	//std::cout << "Key 1 released\n";
-	//	break;
-	//}
+	switch ( e.keysym.sym )
+	{
+	case SDLK_UP:
+		for (int i{ 0 }; i < m_MaxAmountOfSmileys; ++i)
+		{
+			m_pSmileys[i]->IncreaseSpeed();
+		}
+		break;
+	case SDLK_DOWN:
+		for (int i{ 0 }; i < m_MaxAmountOfSmileys; ++i)
+		{
+			m_pSmileys[i]->DecreaseSpeed();
+		}
+		break;
+	}
 }
 
 void Game::ProcessMouseMotionEvent( const SDL_MouseMotionEvent& e )

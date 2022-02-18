@@ -4,6 +4,7 @@
 // -- Smiley.h file --
 #pragma once
 #include "utils.h"
+
 class  Texture; // class forward declaration
 class Smiley
 {

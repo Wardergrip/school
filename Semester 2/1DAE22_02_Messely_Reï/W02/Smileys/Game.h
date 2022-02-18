@@ -1,5 +1,7 @@
 #pragma once
 
+class Smiley;
+
 class Game final
 {
 public:
@@ -23,6 +25,9 @@ public:
 private:
 	// DATA MEMBERS
 	const Window m_Window;
+
+	static const int m_MaxAmountOfSmileys{10};
+	Smiley* m_pSmileys[m_MaxAmountOfSmileys];
 
 	// FUNCTIONS
 	void Initialize( );
