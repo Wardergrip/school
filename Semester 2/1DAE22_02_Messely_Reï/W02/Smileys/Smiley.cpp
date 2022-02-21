@@ -5,7 +5,7 @@
 #include "Texture.h"
 
 // Static Texture data
-Texture* Smiley::m_pSmileyTexture{ new Texture("Resources/Textures/Smileys.png")};
+Texture* Smiley::m_pSmileyTexture{ nullptr };
 int Smiley::m_InstanceCounter{ 0 };
 
 // Constructor
@@ -15,11 +15,12 @@ int Smiley::m_InstanceCounter{ 0 };
 //  - Adapts the instance counter
 Smiley::Smiley( const Point2f& position )
 	:m_Position{position}
-	,m_Velocity{100,100}
+	,m_Velocity{150,150}
 	,m_IsHighest{false}
 	,m_IsSleeping{false}
 	,m_IsInSafeArea{true}
 {
+	if (m_InstanceCounter == 0) m_pSmileyTexture = new Texture("Resources/Textures/Smileys.png");
 	++m_InstanceCounter;
 }
 
@@ -32,6 +33,7 @@ Smiley::~Smiley( )
 		delete m_pSmileyTexture;
 		m_pSmileyTexture = nullptr;
 	}
+	--m_InstanceCounter;
 }
 
 // Draw
@@ -57,10 +59,24 @@ void Smiley::Draw( )
 void Smiley::Update( float elapsedSec, const Rectf& boundingRect, const Rectf& safeRect )
 {
 	if (m_IsSleeping) return;
-	m_Position.x = m_Velocity.x * elapsedSec;
-	m_Position.y = m_Velocity.y * elapsedSec;
-	if ((m_Position.x < boundingRect.left) || (m_Position.x > boundingRect.left + boundingRect.width)) m_Velocity.x = -m_Velocity.x;
-	if ((m_Position.y < boundingRect.bottom) || (m_Position.y > boundingRect.bottom + boundingRect.height)) m_Velocity.y = -m_Velocity.y;
+	m_Position.x += m_Velocity.x * elapsedSec;
+	m_Position.y += m_Velocity.y * elapsedSec;
+	if (m_Position.x < boundingRect.left)
+	{
+		m_Velocity.x = abs(m_Velocity.x);
+	}
+	else if (m_Position.x + (m_pSmileyTexture->GetWidth() / 3) > boundingRect.left + boundingRect.width)
+	{
+		m_Velocity.x = -abs(m_Velocity.x);
+	}
+	if (m_Position.y < boundingRect.bottom)
+	{
+		m_Velocity.y = abs(m_Velocity.y);
+	} 
+	else if (m_Position.y + m_pSmileyTexture->GetHeight() > boundingRect.bottom + boundingRect.height)
+	{
+		m_Velocity.y = -abs(m_Velocity.y);
+	}
 	m_IsInSafeArea = IsInSafeArea(safeRect);
 }
 
