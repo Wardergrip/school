@@ -4,8 +4,6 @@
 #include "utils.h"
 using namespace utils;
 
-// ---- STATICS ----
-
 ButtonBase::ButtonBase(Texture* pTexture)
 	:m_pTexture{pTexture}
 	,m_Button{}
@@ -81,6 +79,8 @@ void ButtonBase::AdjustRectToTexture(float borderScale)
 		m_Button.bottom - ((m_pTexture->GetHeight() * borderScale) / 2),
 		(m_pTexture->GetWidth() * borderScale),(m_pTexture->GetHeight() * borderScale) };
 }
+
+// ---- STATICS ----
 
 Point2f ButtonBase::Rect_to_BL(const Rectf& r)
 {
