@@ -56,6 +56,17 @@ void utils::DrawLine( const Point2f& p1, const Point2f& p2, float lineWidth )
 	DrawLine( p1.x, p1.y, p2.x, p2.y, lineWidth );
 }
 
+void utils::FillTriangle(const Point2f& p1, const Point2f& p2, const Point2f& p3)
+{
+	glBegin(GL_TRIANGLES);
+	{
+		glVertex2f(p1.x, p1.y);
+		glVertex2f(p2.x, p2.y);
+		glVertex2f(p3.x, p3.y);
+	}
+	glEnd();
+}
+
 void utils::DrawRect( float left, float bottom, float width, float height, float lineWidth )
 {
 	if (width > 0 && height > 0 && lineWidth > 0)

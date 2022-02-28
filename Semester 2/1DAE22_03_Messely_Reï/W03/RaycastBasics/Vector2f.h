@@ -66,6 +66,8 @@ struct Vector2f
 	// Vector2f w = v.Orthogonal();
 	Vector2f Orthogonal( ) const;
 
+	Vector2f Reflect(const Vector2f& surfaceNormal) const;
+
 	// Sets the values of x and y
 	void Set( float newX, float newY );
 

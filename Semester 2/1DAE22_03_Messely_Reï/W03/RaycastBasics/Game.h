@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include "Vector2f.h"
 
 class Game final
 {
@@ -12,7 +13,7 @@ public:
 	~Game();
 
 	void Update( float elapsedSec );
-	void Draw( ) const;
+	void Draw( );
 
 	// Event handling
 	void ProcessKeyDownEvent( const SDL_KeyboardEvent& e );
@@ -26,9 +27,11 @@ private:
 	const Window m_Window;
 
 	std::vector<Point2f> m_Surface;
+	Point2f m_MousePos;
 
 	// FUNCTIONS
 	void Initialize( );
 	void Cleanup( );
 	void ClearBackground( ) const;
+	void DrawVector(const Vector2f& v, const Point2f& startPoint);
 };

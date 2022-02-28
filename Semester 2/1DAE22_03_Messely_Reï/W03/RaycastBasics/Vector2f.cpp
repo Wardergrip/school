@@ -105,6 +105,11 @@ Vector2f Vector2f::Orthogonal() const
 	return Vector2f{ -y, x };
 }
 
+Vector2f Vector2f::Reflect(const Vector2f& surfaceNormal) const
+{
+	return (*this) - 2 * (this->DotProduct(surfaceNormal) *surfaceNormal);
+}
+
 void Vector2f::Set(float newX, float newY)
 {
 	x = newX;
