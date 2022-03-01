@@ -1,5 +1,7 @@
 #include "pch.h"
 #include "Game.h"
+#include "MainMenu.h"
+#include <iostream>
 
 Game::Game( const Window& window ) 
 	:m_Window{ window }
@@ -14,11 +16,13 @@ Game::~Game( )
 
 void Game::Initialize( )
 {
-	
+	m_pMainMenu = new MainMenu(m_Window);
 }
 
 void Game::Cleanup( )
 {
+	delete m_pMainMenu;
+	m_pMainMenu = nullptr;
 }
 
 void Game::Update( float elapsedSec )
@@ -33,11 +37,13 @@ void Game::Update( float elapsedSec )
 	//{
 	//	std::cout << "Left and up arrow keys are down\n";
 	//}
+	m_pMainMenu->Update(elapsedSec);
 }
 
 void Game::Draw( ) const
 {
 	ClearBackground( );
+	m_pMainMenu->Draw();
 }
 
 void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )
@@ -61,11 +67,13 @@ void Game::ProcessKeyUpEvent( const SDL_KeyboardEvent& e )
 	//	//std::cout << "Key 1 released\n";
 	//	break;
 	//}
+	MainMenu::m_State = MainMenu::State::titlescreen;
 }
 
 void Game::ProcessMouseMotionEvent( const SDL_MouseMotionEvent& e )
 {
 	//std::cout << "MOUSEMOTION event: " << e.x << ", " << e.y << std::endl;
+	m_pMainMenu->CheckSelect(Point2f{float(e.x),float(e.y)});
 }
 
 void Game::ProcessMouseDownEvent( const SDL_MouseButtonEvent& e )
@@ -100,6 +108,7 @@ void Game::ProcessMouseUpEvent( const SDL_MouseButtonEvent& e )
 	//	std::cout << " middle button " << std::endl;
 	//	break;
 	//}
+	m_pMainMenu->CheckClicks(e);
 }
 
 void Game::ClearBackground( ) const

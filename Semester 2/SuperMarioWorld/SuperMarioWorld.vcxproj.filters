@@ -13,78 +13,111 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Frameworkfiles">
+      <UniqueIdentifier>{4440bdaa-e481-48c1-bee2-530d8d9ebf73}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="pch.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Core.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Game.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="ButtonBase.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MainMenu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MenuButton.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SettingsButton.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core.cpp">
+      <Filter>Frameworkfiles</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Frameworkfiles</Filter>
     </ClCompile>
     <ClCompile Include="Matrix2x3.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Frameworkfiles</Filter>
+    </ClCompile>
+    <ClCompile Include="pch.cpp">
+      <Filter>Frameworkfiles</Filter>
     </ClCompile>
     <ClCompile Include="SoundEffect.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Frameworkfiles</Filter>
     </ClCompile>
     <ClCompile Include="SoundStream.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Frameworkfiles</Filter>
     </ClCompile>
     <ClCompile Include="structs.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Frameworkfiles</Filter>
     </ClCompile>
     <ClCompile Include="SVGParser.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Frameworkfiles</Filter>
     </ClCompile>
     <ClCompile Include="Texture.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Frameworkfiles</Filter>
     </ClCompile>
     <ClCompile Include="utils.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Frameworkfiles</Filter>
     </ClCompile>
     <ClCompile Include="Vector2f.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Frameworkfiles</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="pch.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Core.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Game.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Matrix2x3.h">
+    <ClInclude Include="ButtonBase.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MainMenu.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MenuButton.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SettingsButton.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Core.h">
+      <Filter>Frameworkfiles</Filter>
+    </ClInclude>
+    <ClInclude Include="Matrix2x3.h">
+      <Filter>Frameworkfiles</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>Frameworkfiles</Filter>
     </ClInclude>
     <ClInclude Include="SoundEffect.h">
-      <Filter>Header Files</Filter>
+      <Filter>Frameworkfiles</Filter>
     </ClInclude>
     <ClInclude Include="SoundStream.h">
-      <Filter>Header Files</Filter>
+      <Filter>Frameworkfiles</Filter>
     </ClInclude>
     <ClInclude Include="structs.h">
-      <Filter>Header Files</Filter>
+      <Filter>Frameworkfiles</Filter>
     </ClInclude>
     <ClInclude Include="SVGParser.h">
-      <Filter>Header Files</Filter>
+      <Filter>Frameworkfiles</Filter>
     </ClInclude>
     <ClInclude Include="Texture.h">
-      <Filter>Header Files</Filter>
+      <Filter>Frameworkfiles</Filter>
     </ClInclude>
     <ClInclude Include="utils.h">
-      <Filter>Header Files</Filter>
+      <Filter>Frameworkfiles</Filter>
     </ClInclude>
     <ClInclude Include="Vector2f.h">
-      <Filter>Header Files</Filter>
+      <Filter>Frameworkfiles</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

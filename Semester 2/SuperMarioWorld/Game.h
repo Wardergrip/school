@@ -1,5 +1,7 @@
 #pragma once
 
+class MainMenu;
+
 class Game final
 {
 public:
@@ -23,6 +25,8 @@ public:
 private:
 	// DATA MEMBERS
 	const Window m_Window;
+
+	MainMenu* m_pMainMenu;
 
 	// FUNCTIONS
 	void Initialize( );
