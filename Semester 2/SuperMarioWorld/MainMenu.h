@@ -48,6 +48,7 @@ private:
 	float m_TransitionAlpha;
 
 	Texture* m_pTitlescreenTitle;
+	Texture* m_pTitlescreenBorder;
 
 
 	// +-----+ FUNCTIONS +-----+

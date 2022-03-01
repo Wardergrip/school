@@ -7,7 +7,7 @@
 #include "SettingsButton.h"
 #include <iostream>
 
-MainMenu::State MainMenu::m_State{State::titlescreen};
+MainMenu::State MainMenu::m_State{State::playing};
 bool MainMenu::m_IsQWERTY{ true };
 
 bool MainMenu::IsQWERTY()
@@ -18,7 +18,7 @@ bool MainMenu::IsQWERTY()
 MainMenu::MainMenu(const Window& window)
 	:m_Window{window}
 	,m_pCreditsTexture{}
-	,m_TransitioningTo{State::titlescreen}
+	,m_TransitioningTo{State::off}
 	,m_Selecting{State::off}
 	,m_TransitionAlpha{0}
 	,m_pPlayButton{ new MenuButton() }
@@ -26,6 +26,7 @@ MainMenu::MainMenu(const Window& window)
 	,m_pBackButton{ new MenuButton() }
 	,m_pIsQWERTYButton{ new SettingsButton(m_IsQWERTY)}
 	,m_pTitlescreenTitle{ new Texture{"Resources/TitleScreenTitle.png"}}
+	,m_pTitlescreenBorder{new Texture{"Resources/TitleScreenBorder.png"}}
 {
 	std::string fontPath{ "Resources/consola.ttf" };
 	Color4f textColor{ 1,1,1,1 };
@@ -63,6 +64,8 @@ MainMenu::~MainMenu()
 	m_pCreditsTexture = nullptr;
 	delete m_pTitlescreenTitle;
 	m_pTitlescreenTitle = nullptr;
+	delete m_pTitlescreenBorder;
+	m_pTitlescreenBorder = nullptr;
 }
 
 void MainMenu::Draw() const
@@ -75,7 +78,15 @@ void MainMenu::Draw() const
 		DrawBackground();
 		m_pPlayButton->SetActive(false);
 		m_pSettingsButton->SetActive(false);
-		m_pTitlescreenTitle->Draw(Point2f{ m_Window.width / 2 - m_pTitlescreenTitle->GetWidth() / 2, m_Window.height * 0.8f - m_pTitlescreenTitle->GetHeight() / 2 });
+
+		glPushMatrix();
+		{
+			float scale{ 1.5f };
+			glTranslatef(m_Window.width / 2 - scale * (m_pTitlescreenTitle->GetWidth() / 2), m_Window.height * 0.7f - scale * (m_pTitlescreenTitle->GetHeight() / 2), 0);
+			glScalef(scale, scale, 0);
+			m_pTitlescreenTitle->Draw();
+		}
+		glPopMatrix();
 
 		switch (m_Selecting)
 		{
@@ -90,7 +101,7 @@ void MainMenu::Draw() const
 		m_pPlayButton->Draw();
 		m_pSettingsButton->Draw();
 
-		m_pCreditsTexture->Draw(Point2f{ 10,10 });
+		m_pCreditsTexture->Draw(Point2f{ 50,50 });
 	}
 	// Settings objects
 	else if (m_State == State::settings)
@@ -200,4 +211,11 @@ void MainMenu::DrawBackground() const
 {
 	utils::SetColor(Color4f{ 0,0,0,1 });
 	utils::FillRect(Rectf{ 0,0,m_Window.width,m_Window.height });
+	glPushMatrix();
+	{
+		Vector2f scalingVector{ m_Window.width / m_pTitlescreenBorder->GetWidth(),m_Window.height / m_pTitlescreenBorder->GetHeight() };
+		glScalef(scalingVector.x, scalingVector.y, 0);
+		m_pTitlescreenBorder->Draw();
+	}
+	glPopMatrix();
 }

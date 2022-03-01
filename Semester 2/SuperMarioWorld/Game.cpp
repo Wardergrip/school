@@ -2,6 +2,9 @@
 #include "Game.h"
 #include "MainMenu.h"
 #include <iostream>
+#include "PowerUp.h"
+#include "Texture.h"
+#include "Level.h"
 
 Game::Game( const Window& window ) 
 	:m_Window{ window }
@@ -17,12 +20,16 @@ Game::~Game( )
 void Game::Initialize( )
 {
 	m_pMainMenu = new MainMenu(m_Window);
+	m_PU = new PowerUp(new Texture{"Resources/Fireflower.png"},2,0.125f);
+	m_Level = new Level();
 }
 
 void Game::Cleanup( )
 {
 	delete m_pMainMenu;
 	m_pMainMenu = nullptr;
+	delete m_PU;
+	m_PU = nullptr;
 }
 
 void Game::Update( float elapsedSec )
@@ -38,12 +45,21 @@ void Game::Update( float elapsedSec )
 	//	std::cout << "Left and up arrow keys are down\n";
 	//}
 	m_pMainMenu->Update(elapsedSec);
+	m_PU->Update(elapsedSec);
 }
 
 void Game::Draw( ) const
 {
 	ClearBackground( );
 	m_pMainMenu->Draw();
+	m_Level->DebugDraw();
+
+	glPushMatrix();
+	{
+		glScalef(3, 3, 0);
+		m_PU->Draw();
+	}
+	glPopMatrix();
 }
 
 void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )
@@ -67,7 +83,6 @@ void Game::ProcessKeyUpEvent( const SDL_KeyboardEvent& e )
 	//	//std::cout << "Key 1 released\n";
 	//	break;
 	//}
-	MainMenu::m_State = MainMenu::State::titlescreen;
 }
 
 void Game::ProcessMouseMotionEvent( const SDL_MouseMotionEvent& e )

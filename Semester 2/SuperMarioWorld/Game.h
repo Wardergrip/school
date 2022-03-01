@@ -1,6 +1,8 @@
 #pragma once
 
 class MainMenu;
+class PowerUp;
+class Level;
 
 class Game final
 {
@@ -27,6 +29,10 @@ private:
 	const Window m_Window;
 
 	MainMenu* m_pMainMenu;
+
+	PowerUp* m_PU;
+
+	Level* m_Level;
 
 	// FUNCTIONS
 	void Initialize( );
