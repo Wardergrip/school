@@ -5,6 +5,7 @@
 #include "PowerUp.h"
 #include "Texture.h"
 #include "Level.h"
+#include "Mario.h"
 
 Game::Game( const Window& window ) 
 	:m_Window{ window }
@@ -20,16 +21,36 @@ Game::~Game( )
 void Game::Initialize( )
 {
 	m_pMainMenu = new MainMenu(m_Window);
-	m_PU = new PowerUp(new Texture{"Resources/Fireflower.png"},2,0.125f);
-	m_Level = new Level();
+	m_pLevel = new Level();
+	m_pLevel->Push_back(Point2f{ 0,0 });
+	m_pLevel->Push_back(Point2f{ 0,100 });
+	m_pLevel->Push_back(Point2f{ 200,100 });
+	m_pLevel->Push_back(Point2f{ 200,10 });
+	m_pLevel->Push_back(Point2f{ 400,10 });
+	m_pLevel->Push_back(Point2f{ 400,100 });
+	m_pLevel->Push_back(Point2f{ m_Window.width,100 });
+	m_pLevel->Push_back(Point2f{ m_Window.width,0 });
+	m_pLevel->Push_back(Point2f{ 0,0 });
+	/*m_pLevel->Push_back(Point2f{ 0,0 });
+	m_pLevel->Push_back(Point2f{ 0,190 });
+	m_pLevel->Push_back(Point2f{ 340,190 });
+	m_pLevel->Push_back(Point2f{ 408,124 });
+	m_pLevel->Push_back(Point2f{ 560,124 });
+	m_pLevel->Push_back(Point2f{ 660,224 });
+	m_pLevel->Push_back(Point2f{ 846,224 });
+	m_pLevel->Push_back(Point2f{ 846,0 });
+	m_pLevel->Push_back(Point2f{ 0,0 });*/
+	m_pMario = new Mario();
 }
 
 void Game::Cleanup( )
 {
 	delete m_pMainMenu;
 	m_pMainMenu = nullptr;
-	delete m_PU;
-	m_PU = nullptr;
+	delete m_pLevel;
+	m_pLevel = nullptr;
+	delete m_pMario;
+	m_pMario = nullptr;
 }
 
 void Game::Update( float elapsedSec )
@@ -45,21 +66,15 @@ void Game::Update( float elapsedSec )
 	//	std::cout << "Left and up arrow keys are down\n";
 	//}
 	m_pMainMenu->Update(elapsedSec);
-	m_PU->Update(elapsedSec);
+	m_pMario->Update(elapsedSec, *m_pLevel);
 }
 
 void Game::Draw( ) const
 {
 	ClearBackground( );
 	m_pMainMenu->Draw();
-	m_Level->DebugDraw();
-
-	glPushMatrix();
-	{
-		glScalef(3, 3, 0);
-		m_PU->Draw();
-	}
-	glPopMatrix();
+	m_pLevel->DebugDraw();
+	m_pMario->Draw();
 }
 
 void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )

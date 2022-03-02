@@ -10,8 +10,8 @@ public:
 
 	void Push_back(const Point2f& p);
 
-	bool IsOnTop(const Rectf& other) const;
-	bool IsColliding(const Rectf& other) const;
+	bool IsOnTop(Rectf& other) ;
+	bool IsHorizontallyTouching(const Rectf& other) const;
 
 private:
 	std::vector<Point2f> m_Vertices;

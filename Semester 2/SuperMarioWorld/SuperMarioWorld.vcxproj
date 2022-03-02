@@ -158,6 +158,7 @@
     <ClCompile Include="Level.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainMenu.cpp" />
+    <ClCompile Include="Mario.cpp" />
     <ClCompile Include="Matrix2x3.cpp" />
     <ClCompile Include="MenuButton.cpp" />
     <ClCompile Include="pch.cpp">
@@ -183,6 +184,7 @@
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Level.h" />
     <ClInclude Include="MainMenu.h" />
+    <ClInclude Include="Mario.h" />
     <ClInclude Include="Matrix2x3.h" />
     <ClInclude Include="MenuButton.h" />
     <ClInclude Include="pch.h" />

@@ -3,6 +3,7 @@
 class MainMenu;
 class PowerUp;
 class Level;
+class Mario;
 
 class Game final
 {
@@ -30,9 +31,8 @@ private:
 
 	MainMenu* m_pMainMenu;
 
-	PowerUp* m_PU;
-
-	Level* m_Level;
+	Level* m_pLevel;
+	Mario* m_pMario;
 
 	// FUNCTIONS
 	void Initialize( );

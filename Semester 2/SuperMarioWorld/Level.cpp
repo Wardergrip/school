@@ -30,14 +30,37 @@ void Level::Push_back(const Point2f& p)
 	m_Vertices.push_back(p);
 }
 
-bool Level::IsOnTop(const Rectf& other) const
+bool Level::IsOnTop(Rectf& other)
 {
 	HitInfo HI{};
-	return Raycast(m_Vertices, Point2f{ other.left + other.width / 2,other.bottom - 1}, Point2f{ other.left + other.width / 2,other.bottom + other.height / 2 }, HI);
+	// How deep does the ray go under the shape
+	float offSet{ 1 };
+	if (Raycast(m_Vertices, Point2f{ other.left,other.bottom + other.height / 2 }, Point2f{ other.left,other.bottom - offSet }, HI))
+	{
+		// Following line may induce jitters
+		other.bottom += offSet * (1 - HI.lambda);
+		return true;
+	}
+	else if (Raycast(m_Vertices, Point2f{ other.left + other.width,other.bottom + other.height / 2 }, Point2f{ other.left + other.width,other.bottom - offSet }, HI))
+	{
+		other.bottom += offSet * (1 - HI.lambda);
+		return true;
+	}
+	return false;
 }
 
-bool Level::IsColliding(const Rectf& other) const
+bool Level::IsHorizontallyTouching(const Rectf& other) const
 {
 	HitInfo HI{};
-	return Raycast(m_Vertices, Point2f{ other.left + other.width / 2,other.bottom }, Point2f{ other.left + other.width / 2,other.bottom + other.height / 2 }, HI);
+	// This offset is to make sure that clipping vertically isn't seen as a touch
+	float offsetBL{ 1 };
+	if (Raycast(m_Vertices, Point2f{ other.left - 1,other.bottom + offsetBL}, Point2f{ other.left + other.width + 1,other.bottom + offsetBL}, HI))
+	{
+		return true;
+	}
+	else if (Raycast(m_Vertices, Point2f{ other.left - 1,other.bottom + other.height }, Point2f{ other.left + other.width + 1,other.bottom + other.height }, HI))
+	{
+		return true;
+	}
+	return false;
 }
