@@ -7,7 +7,7 @@
 #include "SettingsButton.h"
 #include <iostream>
 
-MainMenu::State MainMenu::m_State{State::playing};
+MainMenu::State MainMenu::m_State{State::titlescreen};
 bool MainMenu::m_IsQWERTY{ true };
 
 bool MainMenu::IsQWERTY()

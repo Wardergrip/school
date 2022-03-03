@@ -152,7 +152,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="ButtonBase.cpp" />
+    <ClCompile Include="Coin.cpp" />
     <ClCompile Include="Core.cpp" />
+    <ClCompile Include="FireFlower.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Level.cpp" />
@@ -167,7 +169,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="PowerUp.cpp" />
+    <ClCompile Include="PickUp.cpp" />
     <ClCompile Include="SettingsButton.cpp" />
     <ClCompile Include="SoundEffect.cpp" />
     <ClCompile Include="SoundStream.cpp" />
@@ -179,7 +181,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ButtonBase.h" />
+    <ClInclude Include="Coin.h" />
     <ClInclude Include="Core.h" />
+    <ClInclude Include="FireFlower.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Level.h" />
@@ -188,7 +192,7 @@
     <ClInclude Include="Matrix2x3.h" />
     <ClInclude Include="MenuButton.h" />
     <ClInclude Include="pch.h" />
-    <ClInclude Include="PowerUp.h" />
+    <ClInclude Include="PickUp.h" />
     <ClInclude Include="SettingsButton.h" />
     <ClInclude Include="SoundEffect.h" />
     <ClInclude Include="SoundStream.h" />

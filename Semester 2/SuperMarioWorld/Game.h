@@ -1,7 +1,6 @@
 #pragma once
 
 class MainMenu;
-class PowerUp;
 class Level;
 class Mario;
 
