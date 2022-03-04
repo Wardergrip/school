@@ -16,6 +16,10 @@ GameObject::GameObject()
 {
 }
 
+GameObject::~GameObject()
+{
+}
+
 Point2f GameObject::GetCenter() const
 {
     return Point2f{m_Rect.left + m_Rect.width / 2,m_Rect.bottom + m_Rect.height / 2};

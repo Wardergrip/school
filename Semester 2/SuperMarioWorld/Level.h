@@ -1,6 +1,8 @@
 #pragma once
 #include <vector>
-class Level
+#include "utils.h"
+
+class Level final
 {
 public:
 	Level();
@@ -10,7 +12,8 @@ public:
 
 	void Push_back(const Point2f& p);
 
-	bool IsOnTop(Rectf& other) ;
+	bool IsOnTop(Rectf& other);
+	bool IsOnTop(const Rectf& other, utils::HitInfo& hi);
 	bool IsHorizontallyTouching(const Rectf& other) const;
 
 private:

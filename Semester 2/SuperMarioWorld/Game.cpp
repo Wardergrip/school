@@ -2,10 +2,13 @@
 #include "Game.h"
 #include "MainMenu.h"
 #include <iostream>
-#include "PowerUp.h"
+#include "PickUp.h"
 #include "Texture.h"
 #include "Level.h"
 #include "Mario.h"
+#include "Coin.h"
+#include "FireFlower.h"
+#include "Mushroom.h"
 
 Game::Game( const Window& window ) 
 	:m_Window{ window }
@@ -20,7 +23,7 @@ Game::~Game( )
 
 void Game::Initialize( )
 {
-	m_pMainMenu = new MainMenu(m_Window);
+	m_pMainMenu = new MainMenu(m_Window, MainMenu::State::playing);
 	m_pLevel = new Level();
 	m_pLevel->Push_back(Point2f{ 0,0 });
 	m_pLevel->Push_back(Point2f{ 0,100 });
@@ -31,16 +34,10 @@ void Game::Initialize( )
 	m_pLevel->Push_back(Point2f{ m_Window.width,100 });
 	m_pLevel->Push_back(Point2f{ m_Window.width,0 });
 	m_pLevel->Push_back(Point2f{ 0,0 });
-	/*m_pLevel->Push_back(Point2f{ 0,0 });
-	m_pLevel->Push_back(Point2f{ 0,190 });
-	m_pLevel->Push_back(Point2f{ 340,190 });
-	m_pLevel->Push_back(Point2f{ 408,124 });
-	m_pLevel->Push_back(Point2f{ 560,124 });
-	m_pLevel->Push_back(Point2f{ 660,224 });
-	m_pLevel->Push_back(Point2f{ 846,224 });
-	m_pLevel->Push_back(Point2f{ 846,0 });
-	m_pLevel->Push_back(Point2f{ 0,0 });*/
 	m_pMario = new Mario();
+	m_pCoin = new Coin(Coin::Type::big, Point2f{200,300});
+	m_pFF = new FireFlower(Point2f{ 0,300 });
+	m_pMr = new Mushroom(m_pLevel, Point2f{0,400});
 }
 
 void Game::Cleanup( )
@@ -51,6 +48,12 @@ void Game::Cleanup( )
 	m_pLevel = nullptr;
 	delete m_pMario;
 	m_pMario = nullptr;
+	delete m_pCoin;
+	m_pCoin;
+	delete m_pMr;
+	m_pMr = nullptr;
+	delete m_pFF;
+	m_pFF = nullptr;
 }
 
 void Game::Update( float elapsedSec )
@@ -67,6 +70,10 @@ void Game::Update( float elapsedSec )
 	//}
 	m_pMainMenu->Update(elapsedSec);
 	m_pMario->Update(elapsedSec, *m_pLevel);
+	m_pCoin->UpdateAnim(elapsedSec);
+	m_pFF->UpdateAnim(elapsedSec);
+	m_pMr->UpdateAnim(elapsedSec);
+	m_pMr->Update(elapsedSec);
 }
 
 void Game::Draw( ) const
@@ -75,6 +82,9 @@ void Game::Draw( ) const
 	m_pMainMenu->Draw();
 	m_pLevel->DebugDraw();
 	m_pMario->Draw();
+	m_pCoin->Draw();
+	m_pFF->Draw();
+	m_pMr->Draw();
 }
 
 void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )

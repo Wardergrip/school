@@ -15,7 +15,7 @@ bool MainMenu::IsQWERTY()
 	return m_IsQWERTY;
 }
 
-MainMenu::MainMenu(const Window& window)
+MainMenu::MainMenu(const Window& window, State startingState)
 	:m_Window{window}
 	,m_pCreditsTexture{}
 	,m_TransitioningTo{State::off}
@@ -28,6 +28,7 @@ MainMenu::MainMenu(const Window& window)
 	,m_pTitlescreenTitle{ new Texture{"Resources/TitleScreenTitle.png"}}
 	,m_pTitlescreenBorder{new Texture{"Resources/TitleScreenBorder.png"}}
 {
+	m_State = startingState;
 	std::string fontPath{ "Resources/consola.ttf" };
 	Color4f textColor{ 1,1,1,1 };
 	int fontSize{ 32 };

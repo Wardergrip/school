@@ -10,7 +10,7 @@ public:
 	virtual ~PickUp();
 
 	void Draw() const;
-	void UpdateAnim(float elapsedSec);
+	virtual void UpdateAnim(float elapsedSec);
 	bool IsOverlapping(const Rectf& other) const;
 	PickUpType GetType() const;
 
@@ -23,5 +23,6 @@ protected:
 	float m_MaxSec;
 	float m_AccuSec;
 
+	void AdjustRectToTexture(int horAmount, float maxSec = 1.0f, int vertAmount = 1, int row = 1);
 };
 

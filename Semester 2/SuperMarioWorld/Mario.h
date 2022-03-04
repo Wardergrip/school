@@ -2,7 +2,7 @@
 #include "GameObject.h"
 #include "Vector2f.h"
 class Level;
-class Mario : public GameObject
+class Mario final : public GameObject
 {
 public:
 	Mario();

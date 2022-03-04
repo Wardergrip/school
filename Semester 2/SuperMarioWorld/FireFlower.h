@@ -1,8 +1,8 @@
 #pragma once
 #include "PickUp.h"
-class FireFlower : public PickUp
+class FireFlower final : public PickUp
 {
 public:
-	FireFlower();
+	FireFlower(const Point2f& pos = {});
 };
 

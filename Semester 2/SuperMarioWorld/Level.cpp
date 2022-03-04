@@ -1,6 +1,5 @@
 #include "pch.h"
 #include "Level.h"
-#include "utils.h"
 using namespace utils;
 
 Level::Level()
@@ -44,6 +43,23 @@ bool Level::IsOnTop(Rectf& other)
 	else if (Raycast(m_Vertices, Point2f{ other.left + other.width,other.bottom + other.height / 2 }, Point2f{ other.left + other.width,other.bottom - offSet }, HI))
 	{
 		other.bottom += offSet * (1 - HI.lambda);
+		return true;
+	}
+	return false;
+}
+
+bool Level::IsOnTop(const Rectf& other, HitInfo& hi)
+{
+	HitInfo HI{};
+	float offSet{ 1 };
+	if (Raycast(m_Vertices, Point2f{ other.left,other.bottom + other.height / 2 }, Point2f{ other.left,other.bottom - offSet }, HI))
+	{
+		hi = HI;
+		return true;
+	}
+	else if (Raycast(m_Vertices, Point2f{ other.left + other.width,other.bottom + other.height / 2 }, Point2f{ other.left + other.width,other.bottom - offSet }, HI))
+	{
+		hi = HI;
 		return true;
 	}
 	return false;

@@ -163,6 +163,7 @@
     <ClCompile Include="Mario.cpp" />
     <ClCompile Include="Matrix2x3.cpp" />
     <ClCompile Include="MenuButton.cpp" />
+    <ClCompile Include="Mushroom.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -191,6 +192,7 @@
     <ClInclude Include="Mario.h" />
     <ClInclude Include="Matrix2x3.h" />
     <ClInclude Include="MenuButton.h" />
+    <ClInclude Include="Mushroom.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="PickUp.h" />
     <ClInclude Include="SettingsButton.h" />
