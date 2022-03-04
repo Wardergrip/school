@@ -76,3 +76,8 @@ Point2f Mario::GetMiddleBotLocation() const
 {
 	return Point2f(m_Rect.left + m_Rect.width / 2, m_Rect.bottom);
 }
+
+Rectf Mario::GetRect() const
+{
+	return m_Rect;
+}

@@ -14,6 +14,8 @@ public:
 	Point2f GetPureLocation() const;
 	Point2f GetMiddleBotLocation() const;
 
+	Rectf GetRect() const;
+
 private:
 	Vector2f m_Velocity;
 	Vector2f m_Gravity;

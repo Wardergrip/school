@@ -31,9 +31,15 @@ void PickUp::Draw() const
 	glPushMatrix();
 	{
 		glTranslatef(m_Position.x, m_Position.y, 0);
+		glScalef(1.75f, 1.75f, 0);
 		m_pTexture->Draw(Point2f{ 0,0 }, m_Rect);
 	}
 	glPopMatrix();
+}
+
+void PickUp::Update(float elapsedSec)
+{
+	UpdateAnim(elapsedSec);
 }
 
 void PickUp::UpdateAnim(float elapsedSec)

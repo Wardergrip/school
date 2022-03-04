@@ -36,11 +36,6 @@ private:
 	Level* m_pLevel;
 	Mario* m_pMario;
 
-	Coin* m_pCoin;
-
-	FireFlower* m_pFF;
-	Mushroom* m_pMr;
-
 	// FUNCTIONS
 	void Initialize( );
 	void Cleanup( );

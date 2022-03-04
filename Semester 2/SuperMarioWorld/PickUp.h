@@ -5,11 +5,12 @@ class Texture;
 class PickUp : public GameObject
 {
 public:
-	enum class PickUpType { coin, fireFlower, mushroom };
+	enum class PickUpType { coin = 0,  normalMushroom = 1, fireFlower = 2, oneUpMushroom = 3 };
 	PickUp(Texture* texture, int horAmount, float maxSec = 1.0f, int vertAmount = 1, int row = 1);
 	virtual ~PickUp();
 
 	void Draw() const;
+	virtual void Update(float elapsedSec);
 	virtual void UpdateAnim(float elapsedSec);
 	bool IsOverlapping(const Rectf& other) const;
 	PickUpType GetType() const;

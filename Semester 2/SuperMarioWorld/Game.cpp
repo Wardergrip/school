@@ -2,7 +2,7 @@
 #include "Game.h"
 #include "MainMenu.h"
 #include <iostream>
-#include "PickUp.h"
+
 #include "Texture.h"
 #include "Level.h"
 #include "Mario.h"
@@ -25,19 +25,7 @@ void Game::Initialize( )
 {
 	m_pMainMenu = new MainMenu(m_Window, MainMenu::State::playing);
 	m_pLevel = new Level();
-	m_pLevel->Push_back(Point2f{ 0,0 });
-	m_pLevel->Push_back(Point2f{ 0,100 });
-	m_pLevel->Push_back(Point2f{ 200,100 });
-	m_pLevel->Push_back(Point2f{ 200,10 });
-	m_pLevel->Push_back(Point2f{ 400,10 });
-	m_pLevel->Push_back(Point2f{ 400,100 });
-	m_pLevel->Push_back(Point2f{ m_Window.width,100 });
-	m_pLevel->Push_back(Point2f{ m_Window.width,0 });
-	m_pLevel->Push_back(Point2f{ 0,0 });
 	m_pMario = new Mario();
-	m_pCoin = new Coin(Coin::Type::big, Point2f{200,300});
-	m_pFF = new FireFlower(Point2f{ 0,300 });
-	m_pMr = new Mushroom(m_pLevel, Point2f{0,400});
 }
 
 void Game::Cleanup( )
@@ -48,12 +36,6 @@ void Game::Cleanup( )
 	m_pLevel = nullptr;
 	delete m_pMario;
 	m_pMario = nullptr;
-	delete m_pCoin;
-	m_pCoin;
-	delete m_pMr;
-	m_pMr = nullptr;
-	delete m_pFF;
-	m_pFF = nullptr;
 }
 
 void Game::Update( float elapsedSec )
@@ -70,10 +52,7 @@ void Game::Update( float elapsedSec )
 	//}
 	m_pMainMenu->Update(elapsedSec);
 	m_pMario->Update(elapsedSec, *m_pLevel);
-	m_pCoin->UpdateAnim(elapsedSec);
-	m_pFF->UpdateAnim(elapsedSec);
-	m_pMr->UpdateAnim(elapsedSec);
-	m_pMr->Update(elapsedSec);
+	m_pLevel->UpdatePickUps(elapsedSec, m_pMario->GetRect());
 }
 
 void Game::Draw( ) const
@@ -81,10 +60,8 @@ void Game::Draw( ) const
 	ClearBackground( );
 	m_pMainMenu->Draw();
 	m_pLevel->DebugDraw();
+	m_pLevel->DrawPickUps();
 	m_pMario->Draw();
-	m_pCoin->Draw();
-	m_pFF->Draw();
-	m_pMr->Draw();
 }
 
 void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )

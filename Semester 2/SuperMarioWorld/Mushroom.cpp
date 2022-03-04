@@ -3,13 +3,15 @@
 #include "Texture.h"
 #include "Level.h"
 #include "utils.h"
+#include <iostream>
 using namespace utils;
 
-Mushroom::Mushroom(Level* levelReference, const Point2f& pos)
-	:PickUp(new Texture{ "Resources/PowerUp.png" }, 1, 0.125f,2,2)
+Mushroom::Mushroom(PickUpType type, Level* levelReference, const Point2f& pos)
+	:PickUp(new Texture{ "Resources/PowerUp.png" }, 1, 0.125f,3,int(type))
 	,m_LevelRef{levelReference}
 	,m_Velocity{100,0}
 {
+	if (type != PickUpType::normalMushroom && type != PickUpType::oneUpMushroom) std::cout << "Wrong Mushroom type!\n";
 	m_Position = pos;
 	m_Rect.width = m_Rect.width / 2;
 }
