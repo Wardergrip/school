@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "GameObject.h"
 
+const float GameObject::m_Scale{1.75f};
+
 GameObject::GameObject(const Point2f& center, float width,float height)
     :m_Rect{center.x - width / 2,center.y - height / 2,width,height}
 {

@@ -7,6 +7,8 @@ public:
     GameObject();
     virtual ~GameObject();
 
+    static const float m_Scale;
+
 protected:
     Rectf m_Rect;
 
