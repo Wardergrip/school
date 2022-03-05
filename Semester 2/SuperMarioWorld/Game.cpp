@@ -58,9 +58,12 @@ void Game::Update( float elapsedSec )
 void Game::Draw( ) const
 {
 	ClearBackground( );
+	// Mainmenu automatically disables itself, you can draw it at all times
 	m_pMainMenu->Draw();
-	m_pLevel->DebugDraw();
+
 	m_pLevel->DrawPickUps();
+
+	m_pLevel->DebugDraw();
 	m_pMario->Draw();
 }
 

@@ -28,7 +28,7 @@ void Mario::Draw() const
 
 void Mario::Update(float elapsedSec, Level& level)
 {
-	if (!level.IsOnTop(m_Rect))
+	if (!level.IsOnTop(m_Rect) || m_Velocity.y > 0)
 	{
 		m_Velocity += m_Gravity * elapsedSec;
 		m_IsInAir = true;

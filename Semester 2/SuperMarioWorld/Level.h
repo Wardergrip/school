@@ -2,6 +2,7 @@
 #include <vector>
 #include "utils.h"
 class PickUp;
+class Platform;
 class Level final
 {
 public:
@@ -15,14 +16,18 @@ public:
 
 	void Push_back(const Point2f& p);
 	void Push_back(PickUp* pu);
+	void Push_back(Platform* p);
 
 	bool IsOnTop(Rectf& other);
 	bool IsOnTop(const Rectf& other, utils::HitInfo& hi);
 	bool IsHorizontallyTouching(const Rectf& other) const;
 
 private:
+	bool m_EnableDebugDraw;
+	
 	std::vector<Point2f> m_Vertices;
-	std::vector<PickUp*> m_PickUps;
+	std::vector<PickUp*> m_pPickUps;
+	std::vector<Platform*> m_pPlatforms;
 
 	void PushDemoLevel();
 	void PushDemoPickUps();
