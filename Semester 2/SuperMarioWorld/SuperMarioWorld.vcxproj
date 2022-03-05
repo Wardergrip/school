@@ -172,6 +172,7 @@
     </ClCompile>
     <ClCompile Include="PickUp.cpp" />
     <ClCompile Include="Platform.cpp" />
+    <ClCompile Include="Player.cpp" />
     <ClCompile Include="SettingsButton.cpp" />
     <ClCompile Include="SoundEffect.cpp" />
     <ClCompile Include="SoundStream.cpp" />
@@ -197,6 +198,7 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="PickUp.h" />
     <ClInclude Include="Platform.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="SettingsButton.h" />
     <ClInclude Include="SoundEffect.h" />
     <ClInclude Include="SoundStream.h" />
