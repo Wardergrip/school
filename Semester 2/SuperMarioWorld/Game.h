@@ -1,5 +1,6 @@
 #pragma once
 #include "Player.h"
+#include "Camera.h"
 
 class MainMenu;
 class Level;
@@ -34,6 +35,7 @@ private:
 
 	MainMenu* m_pMainMenu;
 
+	Camera m_Camera;
 	Player m_Player;
 
 	Level* m_pLevel;

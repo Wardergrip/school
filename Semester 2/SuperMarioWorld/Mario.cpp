@@ -108,7 +108,7 @@ void Mario::UpdateAnim(float elapsedSec)
 
 void Mario::Jump()
 {
-	m_Velocity.y = m_JumpSpeed;
+	if (!m_IsInAir) m_Velocity.y = m_JumpSpeed;
 }
 
 Point2f Mario::GetPureLocation() const

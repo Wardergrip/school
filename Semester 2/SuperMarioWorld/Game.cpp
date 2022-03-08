@@ -12,6 +12,7 @@
 
 Game::Game( const Window& window ) 
 	:m_Window{ window }
+	,m_Camera{window.width,window.height}
 	,m_Player{}
 {
 	Initialize( );
@@ -27,6 +28,7 @@ void Game::Initialize( )
 	m_pMainMenu = new MainMenu(m_Window, MainMenu::State::playing);
 	m_pLevel = new Level(m_Player);
 	m_pMario = new Mario();
+	m_Camera.SetLevelBoundaries(Rectf{0,0,m_Window.width * 2,m_Window.height * 2});
 }
 
 void Game::Cleanup( )
@@ -52,8 +54,11 @@ void Game::Update( float elapsedSec )
 	//	std::cout << "Left and up arrow keys are down\n";
 	//}
 	m_pMainMenu->Update(elapsedSec);
+
+	if (m_pMainMenu->m_State != MainMenu::State::playing) return;
 	m_pMario->Update(elapsedSec, *m_pLevel);
 	m_pLevel->UpdatePickUps(elapsedSec, m_pMario->GetRect());
+	m_Camera.UpdateTransitioning(m_pMario->GetRect(), elapsedSec);
 }
 
 void Game::Draw( ) const
@@ -62,10 +67,16 @@ void Game::Draw( ) const
 	// Mainmenu automatically disables itself, you can draw it at all times
 	m_pMainMenu->Draw();
 
-	m_pLevel->DrawPickUps();
+	if (m_pMainMenu->m_State != MainMenu::State::playing) return;
+	glPushMatrix();
+	{
+		m_Camera.Transform(m_pMario->GetRect());
+		m_pLevel->DrawPickUps();
 
-	m_pLevel->DebugDraw();
-	m_pMario->Draw();
+		m_pLevel->DebugDraw();
+		m_pMario->Draw();
+	}
+	glPopMatrix();
 }
 
 void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )
