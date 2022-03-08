@@ -37,18 +37,21 @@ Avatar::~Avatar()
 
 void Avatar::Draw() const
 {
-	switch (m_ActionState)
+	/*switch (m_ActionState)
 	{
 	case Avatar::ActionState::waiting:
 		SetColor(Color4f{ 1,1,0,1 });
+		std::cout << "Waiting\n";
 		break;
 	case Avatar::ActionState::moving:
 		SetColor(Color4f{ 1,0,0,1 });
+		std::cout << "Moving\n";
 		break;
 	case Avatar::ActionState::transforming:
+		std::cout << "Transforming\n";
 		SetColor(Color4f{ 0,0.4f,1,1 });
 		break;
-	}
+	}*/
 	glPushMatrix();
 	{
 		glTranslatef(m_Position.x,m_Position.y,0);
@@ -63,7 +66,7 @@ void Avatar::Draw() const
 	// Power
 	/*for (int i{ 0 }; i < m_Power; ++i)
 	{
-		SetColor(Color4f{ 0,0,0,1 });
+		SetColor(Color4f{ 1,0,0,1 });
 		float offset{ 5 };
 		float side{ 5 };
 		FillRect(m_Shape.left + offset, m_Shape.bottom + offset + i * offset + i * side, side, side);
@@ -72,7 +75,6 @@ void Avatar::Draw() const
 
 void Avatar::Update(float elapsedSec, const Level& level)
 {
-	bool onGround{ level.IsOnGround(Rectf{m_Position.x,m_Position.y,m_Shape.width,m_Shape.height}) };
 	if (m_ActionState == ActionState::transforming)
 	{
 		m_AccuTransformSec += elapsedSec;
@@ -81,9 +83,12 @@ void Avatar::Update(float elapsedSec, const Level& level)
 			m_AccuTransformSec = 0;
 			m_ActionState = ActionState::waiting;
 			m_Velocity = Vector2f{0,0};
+			++m_Power;
 		}
+		UpdateAnim(elapsedSec);
 		return;
 	}
+	bool onGround{ level.IsOnGround(Rectf{m_Position.x,m_Position.y,m_Shape.width,m_Shape.height}) };
 	if (onGround)
 	{
 		m_Velocity = Vector2f{ 0,0 };
@@ -111,25 +116,30 @@ void Avatar::Update(float elapsedSec, const Level& level)
 	}
 	m_Position.y += m_Velocity.y * elapsedSec;
 	m_Position.x += m_Velocity.x;
+	level.HandleCollision(m_Position, m_Shape, m_Velocity);
 
-	m_AnimTime += elapsedSec;
-	if (m_AnimTime >= 1 /m_NrFramesPerSec)
-	{
-		++m_AnimFrame;
-		m_AnimFrame %= m_NrOfFrames;
-		m_AnimTime = 0;
-	}
-	m_Shape.left = (m_AnimFrame * m_Shape.width);
-	m_Shape.bottom = m_pSpritesTexture->GetHeight() - (float(m_ActionState) + 3 * m_Power) * m_Shape.height;
+	UpdateAnim(elapsedSec);
 }
 
 void Avatar::PowerUpHit()
 {
 	m_ActionState = ActionState::transforming;
-	++m_Power;
+	//++m_Power;
 }
 
 Rectf Avatar::GetShape() const
 {
 	return Rectf{m_Position.x,m_Position.y,m_Shape.width,m_Shape.height};
+}
+
+void Avatar::UpdateAnim(float elapsedSec)
+{
+	m_AnimTime += elapsedSec;
+	if (m_AnimTime >= 1.0f / m_NrFramesPerSec)
+	{
+		++m_AnimFrame %= m_NrOfFrames;
+		m_AnimTime = 0;
+	}
+	m_Shape.left = (m_AnimFrame * m_Shape.width);
+	m_Shape.bottom = m_Shape.height * (float(m_ActionState) + 1 + 3 * m_Power);
 }

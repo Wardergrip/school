@@ -3,7 +3,7 @@
 #include "PowerUpManager.h"
 #include "Avatar.h"
 #include "Vector2f.h"
-
+#include "Camera.h"
 
 class Game final
 {
@@ -32,6 +32,7 @@ private:
 	Level m_Level;
 	PowerUpManager m_PowerUpManager;
 	Avatar m_Avatar;
+	Camera m_Camera;
 
 
 	// FUNCTIONS

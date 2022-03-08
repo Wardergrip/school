@@ -11,7 +11,7 @@ int main( int argc, char *argv[] )
 
 	StartHeapControl();
 
-	Core* pCore{ new Core{ Window{ "MiniGame - Messely, Reï - 1DAE22", 846.f , 500.f } } };
+	Core* pCore{ new Core{ Window{ "MiniGame - Messely, Reï - 1DAE22", 300.f , 250.f } } };
 	pCore->Run();
 	delete pCore;
 

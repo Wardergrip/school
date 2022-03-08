@@ -54,6 +54,7 @@ bool PowerUpManager::HitItem(const Rectf& rect)
 	{
 		if (m_pItems[i]->IsOverlapping(rect))
 		{
+			delete m_pItems[i];
 			m_pItems[i] = m_pItems.back();
 			m_pItems.pop_back();
 			return true;

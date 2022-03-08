@@ -7,7 +7,7 @@ class Avatar
 public:
 	enum class ActionState
 	{
-		waiting, moving, transforming
+		waiting = 0, moving = 1, transforming = 2
 	};
 	Avatar();
 	~Avatar();
@@ -36,5 +36,7 @@ private:
 	float m_AccuTransformSec;
 	float m_MaxTransformSec;
 	int m_Power;
+
+	void UpdateAnim(float elapsedSec);
 };
 
