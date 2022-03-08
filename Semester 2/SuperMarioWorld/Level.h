@@ -3,10 +3,11 @@
 #include "utils.h"
 class PickUp;
 class Platform;
+class Player;
 class Level final
 {
 public:
-	Level();
+	Level(Player& player);
 	~Level();
 
 	void DebugDraw(const Color4f& col = Color4f{1,0,0,1}) const;
@@ -19,13 +20,14 @@ public:
 	void Push_back(Platform* p);
 
 	bool IsOnTop(Rectf& other);
-	bool IsOnTop(const Rectf& other, utils::HitInfo& hi);
+	bool IsOnTop(const Rectf& other, utils::HitInfo& hi, const Vector2f& velocity);
 	bool IsHorizontallyTouching(const Rectf& other) const;
 
 private:
 	bool m_EnableDebugDraw;
-	
-	std::vector<Point2f> m_Vertices;
+	Player& m_Player;
+
+	std::vector<std::vector<Point2f>> m_Vertices;
 	std::vector<PickUp*> m_pPickUps;
 	std::vector<Platform*> m_pPlatforms;
 

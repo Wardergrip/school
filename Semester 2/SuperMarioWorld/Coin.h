@@ -3,7 +3,6 @@
 class Coin final : public PickUp
 {
 public:
-	enum class Type {normal, big};
 	Coin(Type type, const Point2f& spawnPos = {});
 	virtual ~Coin();
 	

@@ -1,4 +1,5 @@
 #pragma once
+#include "Vector2f.h"
 class GameObject
 {
 public:
@@ -10,6 +11,8 @@ public:
     static const float m_Scale;
 
 protected:
+    const static Vector2f m_Gravity;
+
     Rectf m_Rect;
 
     Point2f GetCenter() const;

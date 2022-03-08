@@ -1,5 +1,7 @@
 #include "pch.h"
 #include "Level.h"
+#include "Player.h"
+#include "SVGParser.h"
 
 #include "FireFlower.h"
 #include "Mushroom.h"
@@ -7,13 +9,16 @@
 #include "Platform.h"
 using namespace utils;
 
-Level::Level()
-	:m_Vertices{}
+Level::Level(Player& player)
+	:m_EnableDebugDraw{true}
+	,m_Player{player}
+	,m_Vertices{}
 	,m_pPickUps{}
 	,m_pPlatforms{}
-	,m_EnableDebugDraw{true}
 {
+	m_Vertices.push_back(std::vector<Point2f>{});
 	PushDemoLevel();
+	//SVGParser::GetVerticesFromSvgFile("Resources/firstPlatformE.svg", m_Vertices);
 	PushDemoPickUps();
 }
 
@@ -36,11 +41,11 @@ void Level::DebugDraw(const Color4f& col) const
 {
 	if (!m_EnableDebugDraw) return;
 	SetColor(col);
-	for (size_t i{ 0 }; i < m_Vertices.size(); ++i)
+	for (size_t i{ 0 }; i < m_Vertices[0].size(); ++i)
 	{
-		if ((i + 1) < m_Vertices.size())
+		if ((i + 1) < m_Vertices[0].size())
 		{
-			DrawLine(m_Vertices[i], m_Vertices[i + 1]);
+			DrawLine(m_Vertices[0][i], m_Vertices[0][i + 1]);
 		}
 	}
 	for (size_t i{ 0 }; i < m_pPlatforms.size(); ++i)
@@ -67,7 +72,16 @@ void Level::UpdatePickUps(float elapsedSec, const Rectf& other)
 		m_pPickUps[i]->Update(elapsedSec);
 		if (m_pPickUps[i]->IsOverlapping(other))
 		{
-			m_pPickUps[i]->GetType();
+			PickUp::Type t{ m_pPickUps[i]->GetType() };
+			switch (t)
+			{
+			case PickUp::Type::coin:
+				m_Player.AddCoin();
+				break;
+			case PickUp::Type::bigCoin:
+				m_Player.AddBigCoin();
+				break;
+			}
 			delete m_pPickUps[i];
 			m_pPickUps[i] = nullptr;
 		}
@@ -76,7 +90,7 @@ void Level::UpdatePickUps(float elapsedSec, const Rectf& other)
 
 void Level::Push_back(const Point2f& p)
 {
-	m_Vertices.push_back(p);
+	m_Vertices[0].push_back(p);
 }
 
 void Level::Push_back(PickUp* pu)
@@ -94,13 +108,13 @@ bool Level::IsOnTop(Rectf& other)
 	HitInfo HI{};
 	// How deep does the ray go under the shape
 	float offSet{ 1 };
-	if (Raycast(m_Vertices, Point2f{ other.left,other.bottom + 6 }, Point2f{ other.left,other.bottom - offSet }, HI))
+	if (Raycast(m_Vertices[0], Point2f{other.left,other.bottom + 6}, Point2f{other.left,other.bottom - offSet}, HI))
 	{
 		// Following line may induce jitters
 		other.bottom += offSet * (1 - HI.lambda);
 		return true;
 	}
-	else if (Raycast(m_Vertices, Point2f{ other.left + other.width,other.bottom + 6 }, Point2f{ other.left + other.width,other.bottom - offSet }, HI))
+	else if (Raycast(m_Vertices[0], Point2f{other.left + other.width,other.bottom + 6}, Point2f{other.left + other.width,other.bottom - offSet}, HI))
 	{
 		other.bottom += offSet * (1 - HI.lambda);
 		return true;
@@ -116,16 +130,20 @@ bool Level::IsOnTop(Rectf& other)
 	return false;
 }
 
-bool Level::IsOnTop(const Rectf& other, HitInfo& hi)
+bool Level::IsOnTop(const Rectf& other, HitInfo& hi, const Vector2f& velocity)
 {
 	HitInfo HI{};
-	float offSet{ 1 };
-	if (Raycast(m_Vertices, Point2f{ other.left,other.bottom + other.height / 2 }, Point2f{ other.left,other.bottom - offSet }, HI))
+	// This is the offset to determine how deep the raycast goes
+	float downwardsOffSet{ 1 };
+	// Faster falling = longer raycast (deeper in charachter)
+	float upwardsOffset{velocity.y / 50.0f};
+	if (upwardsOffset < 6) upwardsOffset = 6;
+	if (Raycast(m_Vertices[0], Point2f{other.left,other.bottom + upwardsOffset}, Point2f{other.left,other.bottom - downwardsOffSet}, HI))
 	{
 		hi = HI;
 		return true;
 	}
-	else if (Raycast(m_Vertices, Point2f{ other.left + other.width,other.bottom + other.height / 2 }, Point2f{ other.left + other.width,other.bottom - offSet }, HI))
+	else if (Raycast(m_Vertices[0], Point2f{other.left + other.width,other.bottom + upwardsOffset }, Point2f{other.left + other.width,other.bottom - downwardsOffSet}, HI))
 	{
 		hi = HI;
 		return true;
@@ -150,11 +168,11 @@ bool Level::IsHorizontallyTouching(const Rectf& other) const
 	HitInfo HI{};
 	// This offset is to make sure that clipping vertically isn't seen as a touch
 	float offsetBL{ 1 };
-	if (Raycast(m_Vertices, Point2f{ other.left - 1,other.bottom + offsetBL}, Point2f{ other.left + other.width + 1,other.bottom + offsetBL}, HI))
+	if (Raycast(m_Vertices[0], Point2f{other.left - 1,other.bottom + offsetBL}, Point2f{other.left + other.width + 1,other.bottom + offsetBL}, HI))
 	{
 		return true;
 	}
-	else if (Raycast(m_Vertices, Point2f{ other.left - 1,other.bottom + other.height }, Point2f{ other.left + other.width + 1,other.bottom + other.height }, HI))
+	else if (Raycast(m_Vertices[0], Point2f{other.left - 1,other.bottom + other.height}, Point2f{other.left + other.width + 1,other.bottom + other.height}, HI))
 	{
 		return true;
 	}
@@ -180,7 +198,7 @@ void Level::PushDemoPickUps()
 {
 	for (float i{ 0 }; i < 10; ++i)
 	{
-		Push_back(new Coin(Coin::Type::normal, Point2f{100 + 20 * i,100 }));
+		Push_back(new Coin(Coin::Type::coin, Point2f{100 + 20 * i,100 }));
 	}
-	Push_back(new Mushroom(PickUp::PickUpType::normalMushroom, this, Point2f{ 10,200 }));
+	Push_back(new Mushroom(PickUp::Type::normalMushroom, this, Point2f{ 10,200 }));
 }

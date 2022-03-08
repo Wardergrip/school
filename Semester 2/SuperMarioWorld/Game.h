@@ -1,4 +1,5 @@
 #pragma once
+#include "Player.h"
 
 class MainMenu;
 class Level;
@@ -32,6 +33,8 @@ private:
 	const Window m_Window;
 
 	MainMenu* m_pMainMenu;
+
+	Player m_Player;
 
 	Level* m_pLevel;
 	Mario* m_pMario;

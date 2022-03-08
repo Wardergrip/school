@@ -6,27 +6,25 @@
 #include <iostream>
 using namespace utils;
 
-Mushroom::Mushroom(PickUpType type, Level* levelReference, const Point2f& pos)
-	:PickUp(new Texture{ "Resources/PowerUp.png" }, 1, 0.125f,3,int(type))
+Mushroom::Mushroom(Type type, Level* levelReference, const Point2f& pos)
+	:PickUp(type, new Texture{ "Resources/PowerUp.png" }, 1, 0.125f,3,int(type))
 	,m_LevelRef{levelReference}
 	,m_Velocity{100,0}
 {
-	if (type != PickUpType::normalMushroom && type != PickUpType::oneUpMushroom) std::cout << "Wrong Mushroom type!\n";
+	if (type != Type::normalMushroom && type != Type::oneUpMushroom) std::cout << "Wrong Mushroom type!\n";
 	m_Position = pos;
-	m_Rect.width = m_Rect.width / 2;
 }
 
 void Mushroom::Update(float elapsedSec)
 {
 	HitInfo HI;
-	Vector2f g{0,-981};
 	Rectf r{ m_Position.x,m_Position.y,m_Rect.width,m_Rect.height };
-	if (m_LevelRef->IsOnTop(r, HI))
+	if (m_LevelRef->IsOnTop(r, HI, m_Velocity))
 	{
 		m_Velocity.y = 0;
 		m_Position.y += (1 - HI.lambda);
 	}
-	else m_Velocity += g * elapsedSec;
+	else m_Velocity += m_Gravity * elapsedSec;
 	if (m_LevelRef->IsHorizontallyTouching(r))
 	{
 		m_Velocity.x = -m_Velocity.x;

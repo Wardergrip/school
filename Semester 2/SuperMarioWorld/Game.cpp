@@ -12,6 +12,7 @@
 
 Game::Game( const Window& window ) 
 	:m_Window{ window }
+	,m_Player{}
 {
 	Initialize( );
 }
@@ -24,7 +25,7 @@ Game::~Game( )
 void Game::Initialize( )
 {
 	m_pMainMenu = new MainMenu(m_Window, MainMenu::State::playing);
-	m_pLevel = new Level();
+	m_pLevel = new Level(m_Player);
 	m_pMario = new Mario();
 }
 
@@ -70,6 +71,12 @@ void Game::Draw( ) const
 void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )
 {
 	//std::cout << "KEYDOWN event: " << e.keysym.sym << std::endl;
+	switch ( e.keysym.sym )
+	{
+	case SDLK_p:
+		m_Player.DebugPrintAll();
+		break;
+	}
 }
 
 void Game::ProcessKeyUpEvent( const SDL_KeyboardEvent& e )

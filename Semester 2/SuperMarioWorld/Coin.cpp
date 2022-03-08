@@ -8,9 +8,10 @@ Texture* Coin::m_BigCoinTexture{ nullptr };
 int Coin::m_Instances{0};
 
 Coin::Coin(Type type, const Point2f& spawnPos)
-	:PickUp(nullptr, 3, 0.15f)
+	:PickUp(type, nullptr, 3, 0.15f)
 	,m_AnimGoingUp{ true }
 {
+	if (type != Type::coin && type != Type::bigCoin) throw "Wrong coin type!";
 	m_Position = spawnPos;
 	++m_Instances;
 	if (m_Instances == 1)
@@ -20,11 +21,11 @@ Coin::Coin(Type type, const Point2f& spawnPos)
 	}
 	switch (type)
 	{
-	case Coin::Type::normal:
+	case Coin::Type::coin:
 		m_pTexture = m_NormalCoinTexture;
 		AdjustRectToTexture(3, 0.15f);
 		break;
-	case Coin::Type::big:
+	case Coin::Type::bigCoin:
 		m_pTexture = m_BigCoinTexture;
 		AdjustRectToTexture(4, 0.75f);
 		break;

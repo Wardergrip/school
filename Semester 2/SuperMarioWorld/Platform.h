@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
 #include "utils.h"
-class Platform
+class Platform final
 {
 public:
 	Platform(const Rectf& rect);

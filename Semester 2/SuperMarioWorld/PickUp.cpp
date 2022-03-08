@@ -3,9 +3,9 @@
 #include "Texture.h"
 #include "utils.h"
 
-PickUp::PickUp(Texture* texture, int horAmount, float maxSec, int vertAmount, int row)
+PickUp::PickUp(Type type, Texture* texture, int horAmount, float maxSec, int vertAmount, int row)
 	:GameObject()
-	,m_Type{PickUpType::coin}
+	,m_Type{type}
 	,m_pTexture{texture}
 	,m_Position{}
 	,m_Frames{horAmount}
@@ -31,7 +31,7 @@ void PickUp::Draw() const
 	glPushMatrix();
 	{
 		glTranslatef(m_Position.x, m_Position.y, 0);
-		glScalef(1.75f, 1.75f, 0);
+		glScalef(m_Scale, m_Scale, 0);
 		m_pTexture->Draw(Point2f{ 0,0 }, m_Rect);
 	}
 	glPopMatrix();
@@ -59,7 +59,7 @@ bool PickUp::IsOverlapping(const Rectf& other) const
 	return utils::IsOverlapping(Rectf{m_Position.x,m_Position.y,m_Rect.width,m_Rect.height}, other);
 }
 
-PickUp::PickUpType PickUp::GetType() const
+PickUp::Type PickUp::GetType() const
 {
 	return m_Type;
 }

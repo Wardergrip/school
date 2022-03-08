@@ -19,7 +19,8 @@ public:
 	Rectf GetRect() const;
 
 private:
-	enum class AnimState 
+	// Animation stuff
+	enum class AnimState
 	{
 		neutral = 0,
 		lookUp = 1,
@@ -33,16 +34,24 @@ private:
 		jumpRun = 9,
 		spinJump1 = 10,spinJump2 = 11,spinJump3 = 12,spinJump4 = 13
 	};
-	Texture* m_pTexture;
+	const Texture* m_pTexture;
 	bool m_IsGrabbing;
 	AnimState m_AnimState;
+	float m_AnimTime;
+	int m_FramesPerSec;
 
+	const float m_SpeedTreshHold;
+
+	bool IsAtWalkingSpeed();
+	bool IsAtRunningSpeed();
+
+	// World loc stuff
 	Point2f m_Position;
 	Vector2f m_Velocity;
-	Vector2f m_Gravity;
 	float m_LastHorDirection;
 	float m_HorSpeed;
 	float m_JumpSpeed;
+
 	bool m_IsInAir;
 
 };

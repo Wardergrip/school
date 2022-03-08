@@ -11,12 +11,14 @@ Mario::Mario()
 	,m_pTexture{new Texture{"Resources/SmallMarioSheet.png"}}
 	,m_IsGrabbing{false}
 	,m_AnimState{AnimState::neutral}
+	,m_AnimTime{0}
+	,m_FramesPerSec{10}
+	,m_SpeedTreshHold{200}
 	,m_Position{20,300}
 	,m_Velocity{0,0}
-	,m_Gravity{0,-981}
 	,m_LastHorDirection{-1}
 	,m_HorSpeed{150}
-	,m_JumpSpeed{500}
+	,m_JumpSpeed{700}
 	,m_IsInAir{false}
 {
 	m_Rect = Rectf{0,1*(m_pTexture->GetHeight() / 3),m_pTexture->GetWidth() / 14,m_pTexture->GetHeight() / 3};
@@ -29,11 +31,7 @@ Mario::~Mario()
 }
 
 void Mario::Draw() const
-{
-
-	/*SetColor(Color4f{ 1,1,0,1 });
-	FillRect(GetRect());*/
-	
+{	
 	glPushMatrix();
 	{
 		glTranslatef(m_Position.x, m_Position.y,0);
@@ -47,10 +45,11 @@ void Mario::Draw() const
 void Mario::Update(float elapsedSec, Level& level)
 {
 	HitInfo HI;
-	if (!level.IsOnTop(GetRect(),HI) || m_Velocity.y > 0)
+	if (!level.IsOnTop(GetRect(),HI,m_Velocity) || m_Velocity.y > 0)
 	{
 		m_Velocity += m_Gravity * elapsedSec;
 		m_IsInAir = true;
+		std::cout << "Vy: " << m_Velocity.y << '\n';
 	}
 	else
 	{
@@ -97,9 +96,15 @@ void Mario::UpdateAnim(float elapsedSec)
 	{
 		m_AnimState = AnimState::fall;
 	}
-	else if (m_Velocity.x > 0)
+	else if (IsAtWalkingSpeed())
 	{
-		m_AnimState = AnimState::walk;
+		m_AnimTime += elapsedSec;
+		if (m_AnimTime >= (1.0f / m_FramesPerSec))
+		{
+			m_AnimTime = 0;
+			if (m_AnimState == AnimState::neutral) m_AnimState = AnimState::walk;
+			else m_AnimState = AnimState::neutral;
+		}
 	}
 	else m_AnimState = AnimState::neutral;
 
@@ -119,4 +124,19 @@ Point2f Mario::GetMiddleBotLocation() const
 Rectf Mario::GetRect() const
 {
 	return Rectf{m_Position.x,m_Position.y,m_Scale * m_Rect.width,m_Scale * m_Rect.height};
+}
+
+bool Mario::IsAtWalkingSpeed()
+{
+	float currentSpeed{ std::abs(m_Velocity.x) };
+	if (currentSpeed > m_SpeedTreshHold) return false;
+	if (currentSpeed < 1) return false;
+	return true;
+}
+
+bool Mario::IsAtRunningSpeed()
+{
+	float currentSpeed{ std::abs(m_Velocity.x) };
+	if (currentSpeed > m_SpeedTreshHold) return true;
+	return false;
 }

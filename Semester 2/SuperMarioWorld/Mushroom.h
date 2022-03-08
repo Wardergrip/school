@@ -4,7 +4,7 @@ class Level;
 class Mushroom final : public PickUp
 {
 public:
-	Mushroom(PickUpType type, Level* levelReference, const Point2f& pos = {});
+	Mushroom(Type type, Level* levelReference, const Point2f& pos = {});
 
 	void Update(float elapsedSec);
 

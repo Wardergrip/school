@@ -1,12 +1,13 @@
 #pragma once
-class Player
+class Player final
 {
 public:
 	Player();
 
 	void AddScore( unsigned int score );
-	void AddLive();
+	void AddLife();
 	void AddCoin();
+	void AddBigCoin();
 	// Returns false if there are no lives left
 	bool ReduceLive();
 
@@ -14,9 +15,12 @@ public:
 	int GetLives() const;
 	int GetCoinAmount() const;
 
+	void DebugPrintAll() const;
+
 private:
 	unsigned int m_Score;
 	int m_Lives;
 	int m_CoinAmount;
+	int m_BigCoinAmount;
 };
 

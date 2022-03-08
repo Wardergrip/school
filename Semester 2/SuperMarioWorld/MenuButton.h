@@ -1,13 +1,12 @@
 #pragma once
 #include "ButtonBase.h"
-class MenuButton : public ButtonBase
+class MenuButton final : public ButtonBase
 {
 public:
 	MenuButton();
 	MenuButton(Texture* pTexture);
 
 	void SetActive(bool isActive);
-	void SetButtonColor(const Color4f& buttonColor);
 
 	void Draw() const;
 	
@@ -15,6 +14,6 @@ public:
 
 private:
 	bool m_IsActive;
-	Color4f m_ButtonColor;
+	const Color4f m_ButtonColor;
 };
 

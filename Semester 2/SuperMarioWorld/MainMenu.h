@@ -4,7 +4,7 @@ class Texture;
 class MenuButton;
 class SettingsButton;
 
-class MainMenu
+class MainMenu final
 {
 public:
 	enum class State
