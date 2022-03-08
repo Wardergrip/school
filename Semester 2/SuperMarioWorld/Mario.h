@@ -12,6 +12,7 @@ public:
 	void Draw() const;
 	void Update(float elapsedSec, Level& level);
 	void UpdateAnim(float elapsedSec);
+	void Jump();
 
 	Point2f GetPureLocation() const;
 	Point2f GetMiddleBotLocation() const;

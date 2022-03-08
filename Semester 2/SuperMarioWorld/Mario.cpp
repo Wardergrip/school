@@ -44,12 +44,11 @@ void Mario::Draw() const
 
 void Mario::Update(float elapsedSec, Level& level)
 {
-	HitInfo HI;
+	HitInfo HI{};
 	if (!level.IsOnTop(GetRect(),HI,m_Velocity) || m_Velocity.y > 0)
 	{
 		m_Velocity += m_Gravity * elapsedSec;
 		m_IsInAir = true;
-		std::cout << "Vy: " << m_Velocity.y << '\n';
 	}
 	else
 	{
@@ -77,10 +76,6 @@ void Mario::Update(float elapsedSec, Level& level)
 		}
 	}
 	else m_Velocity.x = 0;
-	if (pStates[SDL_SCANCODE_UP] && !m_IsInAir)
-	{
-		m_Velocity.y = m_JumpSpeed;
-	}
 
 	m_Position += m_Velocity * elapsedSec;
 	UpdateAnim(elapsedSec);
@@ -109,6 +104,11 @@ void Mario::UpdateAnim(float elapsedSec)
 	else m_AnimState = AnimState::neutral;
 
 	m_Rect.left = int(m_AnimState) * m_Rect.width;
+}
+
+void Mario::Jump()
+{
+	m_Velocity.y = m_JumpSpeed;
 }
 
 Point2f Mario::GetPureLocation() const
