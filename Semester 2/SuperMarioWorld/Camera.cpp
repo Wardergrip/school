@@ -5,8 +5,9 @@
 Camera::Camera(float width, float height)
 	:m_Width{width}
 	,m_Height{height}
-	,m_Treshold{1.5f}
+	,m_Treshold{1.7f}
 	,m_LevelBoundaries{0,0,0,0}
+	,m_PreviousPos{0,0}
 {
 }
 
@@ -25,9 +26,19 @@ void Camera::SetLevelBoundaries(const Rectf& levelBoundaries)
 
 void Camera::UpdateTransitioning(const Rectf& target, float elapsedSec)
 {
+	float transitionSpeed{ 2 };
+	float horizontalOffset{ 100 };
 	Point2f pos{ Track(target) };
-	
 	Clamp(pos);
+	if (pos.x > m_PreviousPos.x) // Going right
+	{
+		if (m_Treshold < 2.5f) m_Treshold += transitionSpeed * elapsedSec;
+	}
+	else if (pos.x < m_PreviousPos.x) // Going left
+	{
+		//if (m_Treshold > 1.5f) m_Treshold -= transitionSpeed * elapsedSec;
+	}
+	m_PreviousPos = pos;
 }
 
 Point2f Camera::Track(const Rectf& target) const

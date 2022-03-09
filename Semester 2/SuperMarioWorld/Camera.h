@@ -14,6 +14,7 @@ private:
 	const float m_Height;
 	float m_Treshold;
 	Rectf m_LevelBoundaries;
+	Point2f m_PreviousPos;
 	
 	Point2f Track(const Rectf& target) const;
 	void Clamp(Point2f& bottomLeftPos) const;

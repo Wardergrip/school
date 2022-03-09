@@ -2,7 +2,7 @@
 #include "GameObject.h"
 
 const float GameObject::m_Scale{ 1.75f };
-const Vector2f GameObject::m_Gravity{ 0,-2600 };
+const Vector2f GameObject::m_Gravity{ 0,-2600};
 
 GameObject::GameObject(const Point2f& center, float width,float height)
     :m_Rect{center.x - width / 2,center.y - height / 2,width,height}

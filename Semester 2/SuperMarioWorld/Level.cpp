@@ -8,6 +8,7 @@
 #include "Coin.h"
 #include "Platform.h"
 using namespace utils;
+#include <iostream>
 
 Level::Level(Player& player)
 	:m_EnableDebugDraw{true}
@@ -18,12 +19,17 @@ Level::Level(Player& player)
 {
 	m_Vertices.push_back(std::vector<Point2f>{});
 	PushDemoLevel();
-	//SVGParser::GetVerticesFromSvgFile("Resources/firstPlatformE.svg", m_Vertices);
+	//if(!SVGParser::GetVerticesFromSvgFile("Resources/firstPlatformE.svg", m_Vertices)) throw "Something went wrong";
 	PushDemoPickUps();
+	//std::cout << m_Vertices.at(0).at(0).x << ' ' << m_Vertices.at(0).at(0).y << '\n';
 }
 
 Level::~Level()
 {
+	for (size_t i{ 0 }; i < m_Vertices.size(); ++i)
+	{
+		m_Vertices[i].clear();
+	}
 	m_Vertices.clear();
 	for (size_t i{0}; i < m_pPickUps.size(); ++i)
 	{
@@ -187,8 +193,8 @@ void Level::PushDemoLevel()
 	Push_back(Point2f{ 200,10 });
 	Push_back(Point2f{ 400,10 });
 	Push_back(Point2f{ 400,100 });
-	Push_back(Point2f{ 638,100 });
-	Push_back(Point2f{ 638,0 });
+	Push_back(Point2f{ 1800,100 });
+	Push_back(Point2f{ 1800,0 });
 	Push_back(Point2f{ 558,0 });
 	Push_back(Point2f{ 0,0 });
 	Push_back(new Platform(Point2f{250,150},100));

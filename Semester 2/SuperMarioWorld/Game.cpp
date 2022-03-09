@@ -28,7 +28,7 @@ void Game::Initialize( )
 	m_pMainMenu = new MainMenu(m_Window, MainMenu::State::playing);
 	m_pLevel = new Level(m_Player);
 	m_pMario = new Mario();
-	m_Camera.SetLevelBoundaries(Rectf{0,0,m_Window.width * 2,m_Window.height * 2});
+	m_Camera.SetLevelBoundaries(Rectf{0,0,m_Window.width * 4,m_Window.height});
 }
 
 void Game::Cleanup( )
