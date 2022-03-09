@@ -87,7 +87,7 @@ void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )
 	case SDLK_p:
 		m_Player.DebugPrintAll();
 		break;
-	case SDLK_UP:
+	case SDLK_SPACE:
 		m_pMario->Jump();
 		break;
 	}

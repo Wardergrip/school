@@ -37,11 +37,14 @@ private:
 	};
 	const Texture* m_pTexture;
 	bool m_IsGrabbing;
+	bool m_LookUp;
+	bool m_Duck;
 	AnimState m_AnimState;
 	float m_AnimTime;
 	int m_FramesPerSec;
 
 	const float m_SpeedTreshHold;
+	const float m_MaxSpeed;
 
 	bool IsAtWalkingSpeed();
 	bool IsAtRunningSpeed();
