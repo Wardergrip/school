@@ -88,7 +88,7 @@ void Avatar::Update(float elapsedSec, const Level& level)
 		UpdateAnim(elapsedSec);
 		return;
 	}
-	bool onGround{ level.IsOnGround(Rectf{m_Position.x,m_Position.y,m_Shape.width,m_Shape.height}) };
+	bool onGround{ level.IsOnGround(Rectf{m_Position.x,m_Position.y,m_Shape.width,m_Shape.height},m_Velocity) };
 	if (onGround)
 	{
 		m_Velocity = Vector2f{ 0,0 };

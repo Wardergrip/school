@@ -4,6 +4,7 @@
 #include "Avatar.h"
 #include "Vector2f.h"
 #include "Camera.h"
+#include "Texture.h"
 
 class Game final
 {
@@ -34,6 +35,7 @@ private:
 	Avatar m_Avatar;
 	Camera m_Camera;
 
+	bool m_HasReachedEnd;
 
 	// FUNCTIONS
 	void Initialize( );

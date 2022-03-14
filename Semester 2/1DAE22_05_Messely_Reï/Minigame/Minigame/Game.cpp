@@ -6,6 +6,7 @@
 Game::Game( const Window& window )
 	:m_Window{ window }
 	,m_Camera{ window.width,window.height }
+	,m_HasReachedEnd{false}
 {	 
 	Initialize( );
 }
@@ -28,6 +29,11 @@ void Game::Cleanup( )
 
 void Game::Update( float elapsedSec )
 {
+	if (m_Level.HasReachedEnd(m_Avatar.GetShape()))
+	{
+		m_HasReachedEnd = true;
+		return;
+	}
 	// Update game objects
 	m_PowerUpManager.Update( elapsedSec );
 	m_Avatar.Update( elapsedSec, m_Level );
@@ -48,6 +54,11 @@ void Game::Draw( ) const
 		m_Level.DrawForeground( );
 	}
 	glPopMatrix();
+	if (m_HasReachedEnd)
+	{
+		utils::SetColor(Color4f{0.f,0.f,0.f,0.6f});
+		utils::FillRect(Rectf{ 0,0,m_Window.width,m_Window.height });
+	}
 }
 
 void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )
