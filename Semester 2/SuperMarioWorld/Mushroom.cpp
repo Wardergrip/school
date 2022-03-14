@@ -17,15 +17,15 @@ Mushroom::Mushroom(Type type, Level* levelReference, const Point2f& pos)
 
 void Mushroom::Update(float elapsedSec)
 {
-	HitInfo HI;
+	HitInfo HIv{},HIh{};
 	Rectf r{ m_Position.x,m_Position.y,m_Rect.width,m_Rect.height };
-	if (m_LevelRef->IsOnTop(r, HI, m_Velocity))
+	if (m_LevelRef->IsOnTop(r, HIv, m_Velocity))
 	{
 		m_Velocity.y = 0;
-		m_Position.y += (1 - HI.lambda);
+		m_Position.y += (1 - HIv.lambda);
 	}
 	else m_Velocity += m_Gravity * elapsedSec;
-	if (m_LevelRef->IsHorizontallyTouching(r))
+	if (m_LevelRef->IsHorizontallyTouching(r, HIh, m_Velocity))
 	{
 		m_Velocity.x = -m_Velocity.x;
 	}

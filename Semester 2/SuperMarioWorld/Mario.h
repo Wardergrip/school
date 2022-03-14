@@ -52,8 +52,10 @@ private:
 	// World loc stuff
 	Point2f m_Position;
 	Vector2f m_Velocity;
-	float m_LastHorDirection;
-	float m_HorSpeed;
+	float m_SprintAcceleration;
+	float m_HorizontalDirection;
+	const float m_WalkSpeed;
+	const float m_SprintSpeed;
 	float m_JumpSpeed;
 
 	bool m_IsInAir;

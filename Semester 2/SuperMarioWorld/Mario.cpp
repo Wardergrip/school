@@ -19,8 +19,10 @@ Mario::Mario()
 	,m_MaxSpeed{500}
 	,m_Position{20,300}
 	,m_Velocity{0,0}
-	,m_LastHorDirection{-1}
-	,m_HorSpeed{150}
+	,m_SprintAcceleration{100}
+	,m_HorizontalDirection{1}
+	,m_WalkSpeed{150}
+	,m_SprintSpeed{400}
 	,m_JumpSpeed{700}
 	,m_IsInAir{false}
 {
@@ -38,8 +40,8 @@ void Mario::Draw() const
 	glPushMatrix();
 	{
 		glTranslatef(m_Position.x, m_Position.y,0);
-		if (m_LastHorDirection < 0) glTranslatef(GetRect().width,0,0);
-		glScalef(m_Scale * m_LastHorDirection, m_Scale, 0);
+		if (m_HorizontalDirection > 0) glTranslatef(GetRect().width,0,0);
+		glScalef(m_Scale * -m_HorizontalDirection, m_Scale, 0);
 		m_pTexture->Draw(Point2f{0,0}, m_Rect);
 	}
 	glPopMatrix();
@@ -51,9 +53,9 @@ void Mario::Draw() const
 
 void Mario::Update(float elapsedSec, Level& level)
 {
-	HitInfo HI{};
-	const bool onTop{ level.IsOnTop(GetRect(),HI,m_Velocity) };
-	const bool isHorTouch{ level.IsHorizontallyTouching(GetRect()) };
+	HitInfo HIv{}, HIh{};
+	const bool onTop{ level.IsOnTop(GetRect(),HIv,m_Velocity) };
+	const bool isHorTouch{ level.IsHorizontallyTouching(GetRect(),HIh,m_Velocity) };
 	if (!onTop || m_Velocity.y > 0)
 	{
 		m_Velocity += m_Gravity * elapsedSec;
@@ -61,45 +63,70 @@ void Mario::Update(float elapsedSec, Level& level)
 	}
 	else
 	{
-		m_Position.y += (1 - HI.lambda);
+		m_Position.y += (1 - HIv.lambda);
 		m_Velocity.y = 0;
 		m_IsInAir = false;
 	}
 	const Uint8 *pStates = SDL_GetKeyboardState( nullptr );
+	// Trying to move right
 	if (pStates[SDL_SCANCODE_RIGHT])
 	{
-		if (isHorTouch && m_LastHorDirection <= -0.5f) m_Velocity.x = 0;
+		if (isHorTouch && m_HorizontalDirection >= 0.5f)
+		{
+			m_Position.x -= (1 - HIh.lambda);
+			m_Velocity.x = 0;
+		}
 		else if (!m_Duck || m_IsInAir)
 		{
-			m_Velocity.x = m_HorSpeed;
-			m_LastHorDirection = -1;
+			if (pStates[SDL_SCANCODE_LSHIFT])
+			{
+				if (m_Velocity.x < m_WalkSpeed) m_Velocity.x = m_WalkSpeed;
+				if (m_Velocity.x < m_SprintSpeed) m_Velocity.x += m_SprintAcceleration * elapsedSec;
+			}
+			else if (m_Velocity.x > m_SpeedTreshHold) m_Velocity.x -= m_SprintAcceleration * elapsedSec;
+			else m_Velocity.x = m_WalkSpeed;
 		}
 		else m_Velocity.x = 0;
+		m_HorizontalDirection = 1;
 	}
+	// Trying to move left
 	else if (pStates[SDL_SCANCODE_LEFT])
 	{
-		if (isHorTouch && m_LastHorDirection >= 0.5f) m_Velocity.x = 0;
+		if (isHorTouch && m_HorizontalDirection <= -0.5f)
+		{
+			m_Position.x += (1 - HIh.lambda);
+			m_Velocity.x = 0;
+		}
 		else if (!m_Duck || m_IsInAir)
 		{
-			m_Velocity.x = -m_HorSpeed;
-			m_LastHorDirection = 1;
+			if (pStates[SDL_SCANCODE_LSHIFT])
+			{
+				if (m_Velocity.x < m_WalkSpeed) m_Velocity.x = m_WalkSpeed;
+				if (m_Velocity.x < m_SprintSpeed) m_Velocity.x += m_SprintAcceleration * elapsedSec;
+			}
+			else if (m_Velocity.x > m_SpeedTreshHold) m_Velocity.x -= m_SprintAcceleration * elapsedSec;
+			else m_Velocity.x = m_WalkSpeed;
 		}
 		else m_Velocity.x = 0;
+		m_HorizontalDirection = -1;
 	}
 	else m_Velocity.x = 0;
 
+	// Trying to look up
 	if (pStates[SDL_SCANCODE_UP]) m_LookUp = true;
 	else m_LookUp = false;
+	// Trying to duck
 	if (pStates[SDL_SCANCODE_DOWN]) m_Duck = true;
 	else m_Duck = false;
 
-	m_Position += m_Velocity * elapsedSec;
+	m_Position.x += m_HorizontalDirection * m_Velocity.x * elapsedSec;
+	m_Position.y += m_Velocity.y * elapsedSec;
 	UpdateAnim(elapsedSec);
 }
 
 void Mario::UpdateAnim(float elapsedSec)
 {
-	float frameSpeedMultiplier{ std::abs(m_Velocity.x) / (m_MaxSpeed - 2 * m_HorSpeed) };
+	float frameSpeedMultiplier{ std::abs(m_Velocity.x) / (m_MaxSpeed - 2 * m_WalkSpeed) };
 	if (m_IsInAir && m_Velocity.y > 0)
 	{
 		m_AnimState = AnimState::jump;
@@ -180,15 +207,13 @@ Rectf Mario::GetRect() const
 
 bool Mario::IsAtWalkingSpeed()
 {
-	float currentSpeed{ std::abs(m_Velocity.x) };
-	if (currentSpeed > m_SpeedTreshHold) return false;
-	if (currentSpeed < 1) return false;
+	if (m_Velocity.x > m_SpeedTreshHold) return false;
+	if (m_Velocity.x < 1) return false;
 	return true;
 }
 
 bool Mario::IsAtRunningSpeed()
 {
-	float currentSpeed{ std::abs(m_Velocity.x) };
-	if (currentSpeed > m_SpeedTreshHold) return true;
+	if (m_Velocity.x > m_SpeedTreshHold) return true;
 	return false;
 }

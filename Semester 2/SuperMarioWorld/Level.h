@@ -21,7 +21,7 @@ public:
 
 	bool IsOnTop(Rectf& other);
 	bool IsOnTop(const Rectf& other, utils::HitInfo& hi, const Vector2f& velocity);
-	bool IsHorizontallyTouching(const Rectf& other) const;
+	bool IsHorizontallyTouching(const Rectf& other, utils::HitInfo& hi, const Vector2f& velocity) const;
 
 private:
 	bool m_EnableDebugDraw;

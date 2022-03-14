@@ -143,7 +143,7 @@ bool Level::IsOnTop(const Rectf& other, HitInfo& hi, const Vector2f& velocity)
 	float downwardsOffSet{ 1 };
 	// Faster falling = longer raycast (deeper in charachter)
 	float upwardsOffset{velocity.y / 50.0f};
-	if (upwardsOffset < 6) upwardsOffset = 6;
+	if (upwardsOffset < 8) upwardsOffset = 8;
 	if (Raycast(m_Vertices[0], Point2f{other.left,other.bottom + upwardsOffset}, Point2f{other.left,other.bottom - downwardsOffSet}, HI))
 	{
 		hi = HI;
@@ -169,17 +169,22 @@ bool Level::IsOnTop(const Rectf& other, HitInfo& hi, const Vector2f& velocity)
 	return false;
 }
 
-bool Level::IsHorizontallyTouching(const Rectf& other) const
+bool Level::IsHorizontallyTouching(const Rectf& other, HitInfo& hi, const Vector2f& velocity) const
 {
 	HitInfo HI{};
 	// This offset is to make sure that clipping vertically isn't seen as a touch
 	float offsetBL{ 1 };
-	if (Raycast(m_Vertices[0], Point2f{other.left - 1,other.bottom + offsetBL}, Point2f{other.left + other.width + 1,other.bottom + offsetBL}, HI))
+	// Sprinting = longer raycast (further out of charachter)
+	float sidewaysOffset{ velocity.x / 30.0f };
+	if (sidewaysOffset < 1) sidewaysOffset = 1;
+	if (Raycast(m_Vertices[0], Point2f{other.left - sidewaysOffset,other.bottom + offsetBL}, Point2f{other.left + other.width + sidewaysOffset,other.bottom + offsetBL}, HI))
 	{
+		hi = HI;
 		return true;
 	}
-	else if (Raycast(m_Vertices[0], Point2f{other.left - 1,other.bottom + other.height}, Point2f{other.left + other.width + 1,other.bottom + other.height}, HI))
+	else if (Raycast(m_Vertices[0], Point2f{other.left - sidewaysOffset,other.bottom + other.height}, Point2f{other.left + other.width + sidewaysOffset,other.bottom + other.height}, HI))
 	{
+		hi = HI;
 		return true;
 	}
 	return false;
