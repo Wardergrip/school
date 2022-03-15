@@ -1,10 +1,12 @@
 #include "pch.h"
 #include "PowerUpManager.h"
+#include "SoundEffect.h"
 #include "utils.h"
 using namespace utils;
 
 PowerUpManager::PowerUpManager()
 	:m_pItems{}
+	,m_pPickUpSE{new SoundEffect("Resources/Sounds/powerUp.mp3")}
 {
 }
 
@@ -16,7 +18,8 @@ PowerUpManager::~PowerUpManager()
 		m_pItems[i] = nullptr;
 	}
 	m_pItems.clear();
-
+	delete m_pPickUpSE;
+	m_pPickUpSE = nullptr;
 	// Memory leak is from pManager in game.cpp
 }
 
@@ -57,6 +60,7 @@ bool PowerUpManager::HitItem(const Rectf& rect)
 			delete m_pItems[i];
 			m_pItems[i] = m_pItems.back();
 			m_pItems.pop_back();
+			m_pPickUpSE->Play(1);
 			return true;
 		}
 	}

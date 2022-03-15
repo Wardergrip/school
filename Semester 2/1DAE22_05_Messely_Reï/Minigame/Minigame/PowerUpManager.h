@@ -3,6 +3,8 @@
 #include <vector>
 #include "structs.h"
 
+class SoundEffect;
+
 class PowerUpManager final
 {
 public:
@@ -22,6 +24,8 @@ public:
 
 private:
 	std::vector<PowerUp*> m_pItems;
+
+	SoundEffect* m_pPickUpSE;
 
 	// Your helper functions
 };

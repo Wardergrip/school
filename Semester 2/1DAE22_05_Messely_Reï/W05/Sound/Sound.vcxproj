@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{efa42e00-78aa-4311-9003-b4cff1fdac10}</ProjectGuid>
-    <RootNamespace>Minigame</RootNamespace>
+    <ProjectGuid>{3dff9c73-35ac-45b7-8350-50474f1e8b57}</ProjectGuid>
+    <RootNamespace>Sound</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -151,12 +151,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Avatar.cpp" />
-    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Core.cpp" />
     <ClCompile Include="Game.cpp" />
-    <ClCompile Include="HUD.cpp" />
-    <ClCompile Include="Level.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Matrix2x3.cpp" />
     <ClCompile Include="pch.cpp">
@@ -165,9 +161,6 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="Platform.cpp" />
-    <ClCompile Include="PowerUp.cpp" />
-    <ClCompile Include="PowerUpManager.cpp" />
     <ClCompile Include="SoundEffect.cpp" />
     <ClCompile Include="SoundStream.cpp" />
     <ClCompile Include="structs.cpp" />
@@ -177,17 +170,10 @@
     <ClCompile Include="Vector2f.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Avatar.h" />
-    <ClInclude Include="Camera.h" />
     <ClInclude Include="Core.h" />
     <ClInclude Include="Game.h" />
-    <ClInclude Include="HUD.h" />
-    <ClInclude Include="Level.h" />
     <ClInclude Include="Matrix2x3.h" />
     <ClInclude Include="pch.h" />
-    <ClInclude Include="Platform.h" />
-    <ClInclude Include="PowerUp.h" />
-    <ClInclude Include="PowerUpManager.h" />
     <ClInclude Include="SoundEffect.h" />
     <ClInclude Include="SoundStream.h" />
     <ClInclude Include="structs.h" />
@@ -195,22 +181,6 @@
     <ClInclude Include="Texture.h" />
     <ClInclude Include="utils.h" />
     <ClInclude Include="Vector2f.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="resources\Images\AvatarSheet.png" />
-    <Image Include="resources\Images\background.png" />
-    <Image Include="resources\Images\EffectsMenu.png" />
-    <Image Include="resources\Images\EndSign.png" />
-    <Image Include="resources\Images\Fence.png" />
-    <Image Include="resources\Images\HudLeft.png" />
-    <Image Include="resources\Images\HudPowerUp.png" />
-    <Image Include="resources\Images\HudRight.png" />
-    <Image Include="resources\Images\platform.png" />
-    <Image Include="resources\Images\PowerUp.png" />
-    <Image Include="resources\Images\StreamsMenu.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="resources\Images\level.svg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -7,6 +7,7 @@ Game::Game( const Window& window )
 	:m_Window{ window }
 	,m_Camera{ window.width,window.height }
 	,m_HasReachedEnd{false}
+	,m_HUD{ Point2f{10, m_Window.height - 10},3 }
 {	 
 	Initialize( );
 }
@@ -59,6 +60,7 @@ void Game::Draw( ) const
 		utils::SetColor(Color4f{0.f,0.f,0.f,0.6f});
 		utils::FillRect(Rectf{ 0,0,m_Window.width,m_Window.height });
 	}
+	m_HUD.Draw();
 }
 
 void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )
@@ -116,6 +118,7 @@ void Game::DoCollisionTests( )
 	if ( m_PowerUpManager.HitItem( m_Avatar.GetShape( ) ) )
 	{
 		m_Avatar.PowerUpHit( );
+		m_HUD.PowerUpHit();
 	}
 }
 

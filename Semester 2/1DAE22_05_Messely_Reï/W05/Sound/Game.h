@@ -1,24 +1,23 @@
 #pragma once
-#include "Level.h"
-#include "PowerUpManager.h"
-#include "Avatar.h"
-#include "Vector2f.h"
-#include "Camera.h"
+#include "SoundEffect.h"
+#include "SoundStream.h"
 #include "Texture.h"
-#include "HUD.h"
+
+class SoundStream;
+class SoundEffect;
 
 class Game final
 {
 public:
-	explicit Game( const Window& window );
+	explicit Game(const Window& window);
 	Game(const Game& other) = delete;
 	Game& operator=(const Game& other) = delete;
 	Game(Game&& other) = delete;
 	Game& operator=(Game&& other) = delete;
 	~Game();
 
-	void Update( float elapsedSec );
-	void Draw( ) const;
+	void Update(float elapsedSec);
+	void Draw() const;
 
 	// Event handling
 	void ProcessKeyDownEvent( const SDL_KeyboardEvent& e );
@@ -31,19 +30,24 @@ private:
 	// DATA MEMBERS
 	const Window m_Window;
 
-	Level m_Level;
-	PowerUpManager m_PowerUpManager;
-	Avatar m_Avatar;
-	Camera m_Camera;
-	HUD m_HUD;
+	//Which test series
+	bool m_StreamTest;
+	const Texture m_StreamMenuText;
+	const Texture m_EffectMenuText;
 
-	bool m_HasReachedEnd;
+	SoundStream* m_pDonkeyKongSong;
+	SoundStream* m_pMarioSong;
+	SoundEffect* m_pLaserSFX;
+	SoundEffect* m_pJinglesSFX;
 
 	// FUNCTIONS
 	void Initialize( );
 	void Cleanup( );
 	void ClearBackground( ) const;
-	void ShowTestMessage( ) const;
-	void AddPowerUps( );
-	void DoCollisionTests( );
+
+	void DrawMenu( ) const;
+	void SwitchTest( );
+	void TestStreams( const SDL_KeyboardEvent& e );
+	void TestEffects( const SDL_KeyboardEvent& e );
+
 };
