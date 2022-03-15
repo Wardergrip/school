@@ -35,13 +35,14 @@ private:
 		jump = 7,
 		fall = 8,
 		jumpRun = 9,
-		spinJump1 = 10,spinJump2 = 11,spinJump3 = 12,spinJump4 = 13
+		spinJump1 = 10,spinJump2 = 11,spinJump3 = 12,spinJump4 = 13,
+		victory = 17
 	};
-	const Texture* m_pTexture;
+	Texture* m_pTexture;
 	bool m_IsGrabbing;
 	bool m_LookUp;
 	bool m_Duck;
-	AnimState m_AnimState;
+	AnimState m_CurrentAnim;
 	float m_AnimTime;
 	int m_FramesPerSec;
 

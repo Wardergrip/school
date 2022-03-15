@@ -12,7 +12,7 @@ Mario::Mario()
 	,m_IsGrabbing{false}
 	,m_LookUp{false}
 	,m_Duck{false}
-	,m_AnimState{AnimState::neutral}
+	,m_CurrentAnim{AnimState::neutral}
 	,m_AnimTime{0}
 	,m_FramesPerSec{10}
 	,m_SpeedTreshHold{200}
@@ -129,11 +129,11 @@ void Mario::UpdateAnim(float elapsedSec)
 	float frameSpeedMultiplier{ std::abs(m_Velocity.x) / (m_MaxSpeed - 2 * m_WalkSpeed) };
 	if (m_IsInAir && m_Velocity.y > 0)
 	{
-		m_AnimState = AnimState::jump;
+		m_CurrentAnim = AnimState::jump;
 	}
 	else if (m_IsInAir)
 	{
-		m_AnimState = AnimState::fall;
+		m_CurrentAnim = AnimState::fall;
 	}
 	else if (IsAtWalkingSpeed())
 	{
@@ -141,8 +141,8 @@ void Mario::UpdateAnim(float elapsedSec)
 		if (m_AnimTime >= (1.0f / m_FramesPerSec))
 		{
 			m_AnimTime = 0;
-			if (m_AnimState == AnimState::neutral) m_AnimState = AnimState::walk;
-			else m_AnimState = AnimState::neutral;
+			if (m_CurrentAnim == AnimState::neutral) m_CurrentAnim = AnimState::walk;
+			else m_CurrentAnim = AnimState::neutral;
 		}
 	}
 	else if (IsAtRunningSpeed())
@@ -151,17 +151,17 @@ void Mario::UpdateAnim(float elapsedSec)
 		if (m_AnimTime >= (1.0f / (m_FramesPerSec * frameSpeedMultiplier)))
 		{
 			m_AnimTime = 0;
-			if (m_AnimState == AnimState::runNeutral) m_AnimState = AnimState::run;
-			else m_AnimState = AnimState::runNeutral;
+			if (m_CurrentAnim == AnimState::runNeutral) m_CurrentAnim = AnimState::run;
+			else m_CurrentAnim = AnimState::runNeutral;
 		}
 	}
-	else if (m_LookUp) m_AnimState = AnimState::lookUp;
-	else m_AnimState = AnimState::neutral;
-	if (m_Duck) m_AnimState = AnimState::duck;
+	else if (m_LookUp) m_CurrentAnim = AnimState::lookUp;
+	else m_CurrentAnim = AnimState::neutral;
+	if (m_Duck) m_CurrentAnim = AnimState::duck;
 
 	if (m_IsGrabbing)
 	{
-		switch (m_AnimState)
+		switch (m_CurrentAnim)
 		{
 		case Mario::AnimState::neutral:
 		case Mario::AnimState::lookUp:
@@ -169,16 +169,16 @@ void Mario::UpdateAnim(float elapsedSec)
 		case Mario::AnimState::walk:
 			break;
 		default:
-			m_AnimState = AnimState::walk;
+			m_CurrentAnim = AnimState::walk;
 			break;
 		}
 		// % 7 is safety measure
-		m_Rect.left = (int(m_AnimState) % 7) * m_Rect.width;
+		m_Rect.left = (int(m_CurrentAnim) % 7) * m_Rect.width;
 		m_Rect.bottom = 2 * (m_pTexture->GetHeight() / 3);
 	}
 	else
 	{
-		m_Rect.left = int(m_AnimState) * m_Rect.width;
+		m_Rect.left = int(m_CurrentAnim) * m_Rect.width;
 		m_Rect.bottom = (m_pTexture->GetHeight() / 3);
 	}
 }
