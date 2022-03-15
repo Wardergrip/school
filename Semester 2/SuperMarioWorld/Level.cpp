@@ -2,11 +2,13 @@
 #include "Level.h"
 #include "Player.h"
 #include "SVGParser.h"
+#include "Texture.h"
 
 #include "FireFlower.h"
 #include "Mushroom.h"
 #include "Coin.h"
 #include "Platform.h"
+#include "Mario.h"
 using namespace utils;
 #include <iostream>
 
@@ -16,6 +18,7 @@ Level::Level(Player& player)
 	,m_Vertices{}
 	,m_pPickUps{}
 	,m_pPlatforms{}
+	,m_pBackgroundTexture{new Texture("Resources/Background.png")}
 {
 	m_Vertices.push_back(std::vector<Point2f>{});
 	PushDemoLevel();
@@ -41,6 +44,24 @@ Level::~Level()
 		delete m_pPlatforms[i];
 		m_pPlatforms[i] = nullptr;
 	}
+	delete m_pBackgroundTexture;
+	m_pBackgroundTexture = nullptr;
+}
+
+void Level::Draw(const Point2f& cameraLoc, bool debugDraw) const
+{
+	glPushMatrix();
+	{
+		glScalef(2.5f, 2.5f, 1);
+		for (int i{ 0 }; i < 8; ++i)
+		{
+			m_pBackgroundTexture->Draw(Point2f{ -cameraLoc.x * 0.05f - 100 + i * m_pBackgroundTexture->GetWidth(),0});
+		}
+	}
+	glPopMatrix();
+
+	DrawPickUps();
+	if (debugDraw) DebugDraw();
 }
 
 void Level::DebugDraw(const Color4f& col) const
@@ -70,13 +91,13 @@ void Level::DrawPickUps() const
 	}
 }
 
-void Level::UpdatePickUps(float elapsedSec, const Rectf& other)
+void Level::UpdatePickUps(float elapsedSec, Mario* mario)
 {
 	for (size_t i{ 0 }; i < m_pPickUps.size(); ++i)
 	{
 		if (m_pPickUps[i] == nullptr) continue;
 		m_pPickUps[i]->Update(elapsedSec);
-		if (m_pPickUps[i]->IsOverlapping(other))
+		if (m_pPickUps[i]->IsOverlapping(mario->GetRect()))
 		{
 			PickUp::Type t{ m_pPickUps[i]->GetType() };
 			switch (t)
@@ -86,6 +107,9 @@ void Level::UpdatePickUps(float elapsedSec, const Rectf& other)
 				break;
 			case PickUp::Type::bigCoin:
 				m_Player.AddBigCoin();
+				break;
+			case PickUp::Type::normalMushroom:
+				mario->Grow();
 				break;
 			}
 			delete m_pPickUps[i];
@@ -172,10 +196,11 @@ bool Level::IsOnTop(const Rectf& other, HitInfo& hi, const Vector2f& velocity)
 bool Level::IsHorizontallyTouching(const Rectf& other, HitInfo& hi, const Vector2f& velocity) const
 {
 	HitInfo HI{};
+	const float velX{std::abs(velocity.x)};
 	// This offset is to make sure that clipping vertically isn't seen as a touch
 	float offsetBL{ 1 };
 	// Sprinting = longer raycast (further out of charachter)
-	float sidewaysOffset{ velocity.x / 30.0f };
+	float sidewaysOffset{ velX / 30.0f };
 	if (sidewaysOffset < 1) sidewaysOffset = 1;
 	if (Raycast(m_Vertices[0], Point2f{other.left - sidewaysOffset,other.bottom + offsetBL}, Point2f{other.left + other.width + sidewaysOffset,other.bottom + offsetBL}, HI))
 	{

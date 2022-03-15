@@ -57,13 +57,14 @@ void Game::Update( float elapsedSec )
 
 	if (m_pMainMenu->m_State != MainMenu::State::playing) return;
 	m_pMario->Update(elapsedSec, *m_pLevel);
-	m_pLevel->UpdatePickUps(elapsedSec, m_pMario->GetRect());
+	m_pLevel->UpdatePickUps(elapsedSec, m_pMario);
 	m_Camera.UpdateTransitioning(m_pMario->GetRect(), elapsedSec);
 }
 
 void Game::Draw( ) const
 {
 	ClearBackground( );
+	utils::SetColor(Color4f{ 0.73f, 0.9f, 1.f,1.f });
 	// Mainmenu automatically disables itself, you can draw it at all times
 	m_pMainMenu->Draw();
 
@@ -73,7 +74,7 @@ void Game::Draw( ) const
 		m_Camera.Transform(m_pMario->GetRect());
 		m_pLevel->DrawPickUps();
 
-		m_pLevel->DebugDraw();
+		m_pLevel->Draw(m_Camera.GetPos(), true);
 		m_pMario->Draw();
 	}
 	glPopMatrix();

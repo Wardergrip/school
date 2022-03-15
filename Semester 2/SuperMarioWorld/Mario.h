@@ -19,6 +19,8 @@ public:
 
 	Rectf GetRect() const;
 
+	void Grow();
+
 private:
 	// Animation stuff
 	enum class AnimState

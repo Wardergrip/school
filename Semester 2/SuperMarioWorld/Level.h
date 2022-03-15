@@ -1,19 +1,22 @@
 #pragma once
 #include <vector>
 #include "utils.h"
+class Texture;
 class PickUp;
 class Platform;
 class Player;
+class Mario;
 class Level final
 {
 public:
 	Level(Player& player);
 	~Level();
 
+	void Draw(const Point2f& cameraLoc, bool debugDraw = false) const;
 	void DebugDraw(const Color4f& col = Color4f{1,0,0,1}) const;
 
 	void DrawPickUps() const;
-	void UpdatePickUps(float elapsedSec, const Rectf& other);
+	void UpdatePickUps(float elapsedSec, Mario* mario);
 
 	void Push_back(const Point2f& p);
 	void Push_back(PickUp* pu);
@@ -30,6 +33,8 @@ private:
 	std::vector<std::vector<Point2f>> m_Vertices;
 	std::vector<PickUp*> m_pPickUps;
 	std::vector<Platform*> m_pPlatforms;
+
+	Texture* m_pBackgroundTexture;
 
 	void PushDemoLevel();
 	void PushDemoPickUps();

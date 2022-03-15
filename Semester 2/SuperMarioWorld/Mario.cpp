@@ -205,6 +205,10 @@ Rectf Mario::GetRect() const
 	return Rectf{r.left,r.bottom,r.width,r.height * 0.55f};
 }
 
+void Mario::Grow()
+{
+}
+
 bool Mario::IsAtWalkingSpeed()
 {
 	if (m_Velocity.x > m_SpeedTreshHold) return false;

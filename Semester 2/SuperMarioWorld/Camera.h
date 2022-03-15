@@ -6,6 +6,7 @@ public:
 
 	void Transform(const Rectf& target) const;
 	void SetLevelBoundaries(const Rectf& levelBoundaries);
+	Point2f GetPos() const;
 	
 	void UpdateTransitioning(const Rectf& target,float elapsedSec);
 

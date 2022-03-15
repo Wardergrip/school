@@ -24,6 +24,11 @@ void Camera::SetLevelBoundaries(const Rectf& levelBoundaries)
 	m_LevelBoundaries = levelBoundaries;
 }
 
+Point2f Camera::GetPos() const
+{
+	return m_PreviousPos;
+}
+
 void Camera::UpdateTransitioning(const Rectf& target, float elapsedSec)
 {
 	float transitionSpeed{ 2 };
