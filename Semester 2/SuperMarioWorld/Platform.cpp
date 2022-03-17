@@ -12,11 +12,6 @@ Platform::Platform(const Rectf& rect)
 	m_Vertices.push_back(Point2f{ rect.left,rect.bottom });
 }
 
-Platform::~Platform()
-{
-	m_Vertices.clear();
-}
-
 void Platform::DebugDraw(const Color4f& col) const
 {
 	SetColor(col);

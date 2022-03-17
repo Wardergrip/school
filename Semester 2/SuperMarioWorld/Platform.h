@@ -4,9 +4,8 @@
 class Platform final
 {
 public:
-	Platform(const Rectf& rect);
-	Platform(const Point2f& start, float length, float downwardsThickness = 2.0f);
-	~Platform();
+	explicit Platform(const Rectf& rect);
+	explicit Platform(const Point2f& start, float length, float downwardsThickness = 2.0f);
 
 	void DebugDraw(const Color4f& col = Color4f{1,0,0,1}) const;
 

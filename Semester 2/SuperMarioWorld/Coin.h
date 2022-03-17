@@ -3,7 +3,9 @@
 class Coin final : public PickUp
 {
 public:
-	Coin(Type type, const Point2f& spawnPos = {});
+	explicit Coin(Type type, const Point2f& spawnPos = {});
+	Coin(const Coin& c) = delete;
+	Coin& operator=(const Coin& c) = delete;
 	virtual ~Coin();
 	
 	virtual void UpdateAnim(float elapsedSec) override;

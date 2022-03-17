@@ -1,8 +1,8 @@
 #pragma once
-class Camera
+class Camera final
 {
 public:
-	Camera(float width, float height);
+	explicit Camera(float width, float height);
 
 	void Transform(const Rectf& target) const;
 	void SetLevelBoundaries(const Rectf& levelBoundaries);

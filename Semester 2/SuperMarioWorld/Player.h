@@ -2,7 +2,7 @@
 class Player final
 {
 public:
-	Player();
+	explicit Player();
 
 	void AddScore( unsigned int score );
 	void AddLife();

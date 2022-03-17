@@ -6,7 +6,9 @@ class Level;
 class Mario final : public GameObject
 {
 public:
-	Mario();
+	explicit Mario();
+	Mario(const Mario& m) = delete;
+	Mario& operator=(const Mario& m) = delete;
 	~Mario();
 
 	void Draw() const;

@@ -6,7 +6,10 @@ class PickUp : public GameObject
 {
 public:
 	enum class Type { coin = -1, bigCoin = 0, normalMushroom = 1, fireFlower = 2, oneUpMushroom = 3 };
-	PickUp(Type type, Texture* texture, int horAmount, float maxSec = 1.0f, int vertAmount = 1, int row = 1);
+	
+	explicit PickUp(Type type, Texture* texture, int horAmount, float maxSec = 1.0f, int vertAmount = 1, int row = 1);
+	PickUp(const PickUp& p) = delete;
+	PickUp& operator=(const PickUp& p) = delete;
 	virtual ~PickUp();
 
 	void Draw() const;

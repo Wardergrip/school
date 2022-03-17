@@ -3,8 +3,8 @@
 class MenuButton final : public ButtonBase
 {
 public:
-	MenuButton();
-	MenuButton(Texture* pTexture);
+	explicit MenuButton();
+	explicit MenuButton(Texture* pTexture);
 
 	void SetActive(bool isActive);
 

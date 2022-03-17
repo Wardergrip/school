@@ -3,8 +3,10 @@ class Texture;
 class ButtonBase
 {
 public:
-	ButtonBase(Texture* pTexture = nullptr);
-	~ButtonBase();
+	explicit ButtonBase(Texture* pTexture = nullptr);
+	ButtonBase(const ButtonBase& b) = delete;
+	ButtonBase& operator=(const ButtonBase& b) = delete;
+	virtual ~ButtonBase();
 
 	void Draw() const;
 

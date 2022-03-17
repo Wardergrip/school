@@ -3,6 +3,6 @@
 class FireFlower final : public PickUp
 {
 public:
-	FireFlower(const Point2f& pos = {});
+	explicit FireFlower(const Point2f& pos = {});
 };
 

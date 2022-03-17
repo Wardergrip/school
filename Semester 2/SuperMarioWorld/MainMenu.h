@@ -18,7 +18,9 @@ public:
 	static State m_State;
 	static bool IsQWERTY();
 
-	MainMenu(const Window& window, State startingState);
+	explicit MainMenu(const Window& window, State startingState);
+	MainMenu(const MainMenu& m) = delete;
+	MainMenu& operator=(const MainMenu& m) = delete;
 	~MainMenu();
 	
 	void Draw() const;

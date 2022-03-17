@@ -3,7 +3,9 @@
 class SettingsButton final : public ButtonBase
 {
 public:
-	SettingsButton(bool& setting, Texture* pTexture = nullptr);
+	explicit SettingsButton(bool& setting, Texture* pTexture = nullptr);
+	SettingsButton(const SettingsButton& s) = delete;
+	SettingsButton& operator=(const SettingsButton& s) = delete;
 	~SettingsButton();
 
 	void Draw(float thickness = 2.0f) const;

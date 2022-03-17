@@ -3,9 +3,11 @@
 class GameObject
 {
 public:
-    GameObject(const Point2f& center, float width,float height);
-    GameObject(const Rectf& rect);
-    GameObject();
+    explicit GameObject(const Point2f& center, float width,float height);
+    explicit GameObject(const Rectf& rect);
+    explicit GameObject();
+    GameObject(const GameObject& g) = delete;
+    GameObject& operator=(const GameObject& g) = delete;
     virtual ~GameObject();
 
     static const float m_Scale;
