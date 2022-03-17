@@ -39,7 +39,6 @@ private:
 	Player m_Player;
 
 	Level* m_pLevel;
-	Mario* m_pMario;
 
 	// FUNCTIONS
 	void Initialize( );

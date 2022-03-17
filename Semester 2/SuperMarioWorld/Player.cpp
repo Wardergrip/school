@@ -2,12 +2,32 @@
 #include "Player.h"
 #include <iostream>
 
+#include "Mario.h"
+#include "Level.h"
+
 Player::Player()
 	:m_Score{0}
 	,m_Lives{3}
 	,m_CoinAmount{0}
 	,m_BigCoinAmount{0}
 {
+	m_pMario = new Mario();
+}
+
+Player::~Player()
+{
+	delete m_pMario;
+	m_pMario = nullptr;
+}
+
+void Player::Draw() const
+{
+	m_pMario->Draw();
+}
+
+void Player::Update(float elapsedSec, Level& level)
+{
+	m_pMario->Update(elapsedSec, level);
 }
 
 void Player::AddScore(unsigned int score)
@@ -76,7 +96,27 @@ int Player::GetCoinAmount() const
 	return m_CoinAmount;
 }
 
-void Player::DebugPrintAll() const
+Mario* Player::GetpMario() const
+{
+	return m_pMario;
+}
+
+Rectf Player::GetMarioRect() const
+{
+	return m_pMario->GetRect();
+}
+
+void Player::ProcessKeyDownEvent(const SDL_KeyboardEvent& e)
+{
+	switch (e.keysym.sym)
+	{
+	case SDLK_SPACE:
+		m_pMario->Jump();
+		break;
+	}
+}
+
+void Player::DebugPrintAllStats() const
 {
 	std::cout << "Score: " << m_Score << '\n';
 	std::cout << "Lives: " << m_Lives << '\n';

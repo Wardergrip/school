@@ -5,7 +5,7 @@
 
 #include "Texture.h"
 #include "Level.h"
-#include "Mario.h"
+//#include "Mario.h"
 #include "Coin.h"
 #include "FireFlower.h"
 #include "Mushroom.h"
@@ -27,7 +27,6 @@ void Game::Initialize( )
 {
 	m_pMainMenu = new MainMenu(m_Window, MainMenu::State::playing);
 	m_pLevel = new Level(m_Player);
-	m_pMario = new Mario();
 	m_Camera.SetLevelBoundaries(Rectf{0,0,m_Window.width * 4,m_Window.height});
 }
 
@@ -37,8 +36,6 @@ void Game::Cleanup( )
 	m_pMainMenu = nullptr;
 	delete m_pLevel;
 	m_pLevel = nullptr;
-	delete m_pMario;
-	m_pMario = nullptr;
 }
 
 void Game::Update( float elapsedSec )
@@ -56,9 +53,9 @@ void Game::Update( float elapsedSec )
 	m_pMainMenu->Update(elapsedSec);
 
 	if (m_pMainMenu->m_State != MainMenu::State::playing) return;
-	m_pMario->Update(elapsedSec, *m_pLevel);
-	m_pLevel->UpdatePickUps(elapsedSec, m_pMario);
-	m_Camera.UpdateTransitioning(m_pMario->GetRect(), elapsedSec);
+	m_Player.Update(elapsedSec, *m_pLevel);
+	m_pLevel->UpdatePickUps(elapsedSec, m_Player.GetpMario());
+	m_Camera.UpdateTransitioning(m_Player.GetMarioRect(), elapsedSec);
 }
 
 void Game::Draw( ) const
@@ -71,11 +68,11 @@ void Game::Draw( ) const
 	if (m_pMainMenu->m_State != MainMenu::State::playing) return;
 	glPushMatrix();
 	{
-		m_Camera.Transform(m_pMario->GetRect());
+		m_Camera.Transform(m_Player.GetMarioRect());
 		m_pLevel->DrawPickUps();
 
 		m_pLevel->Draw(m_Camera.GetPos(), true);
-		m_pMario->Draw();
+		m_Player.Draw();
 	}
 	glPopMatrix();
 }
@@ -83,13 +80,11 @@ void Game::Draw( ) const
 void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )
 {
 	//std::cout << "KEYDOWN event: " << e.keysym.sym << std::endl;
+	m_Player.ProcessKeyDownEvent(e);
 	switch ( e.keysym.sym )
 	{
 	case SDLK_p:
-		m_Player.DebugPrintAll();
-		break;
-	case SDLK_SPACE:
-		m_pMario->Jump();
+		m_Player.DebugPrintAllStats();
 		break;
 	}
 }

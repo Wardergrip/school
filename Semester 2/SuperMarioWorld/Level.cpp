@@ -202,12 +202,16 @@ bool Level::IsHorizontallyTouching(const Rectf& other, HitInfo& hi, const Vector
 	// Sprinting = longer raycast (further out of charachter)
 	float sidewaysOffset{ velX / 30.0f };
 	if (sidewaysOffset < 1) sidewaysOffset = 1;
-	if (Raycast(m_Vertices[0], Point2f{other.left - sidewaysOffset,other.bottom + offsetBL}, Point2f{other.left + other.width + sidewaysOffset,other.bottom + offsetBL}, HI))
+	// Raycast points
+	Point2f leftTop{ other.left - sidewaysOffset,other.bottom + other.height }, rightTop{ other.left + other.width + sidewaysOffset,other.bottom + other.height };
+	Point2f leftBot{ other.left - sidewaysOffset,other.bottom + offsetBL }, rightBot{ other.left + other.width + sidewaysOffset,other.bottom + offsetBL };
+
+	if (Raycast(m_Vertices[0], leftBot, rightBot, HI))
 	{
 		hi = HI;
 		return true;
 	}
-	else if (Raycast(m_Vertices[0], Point2f{other.left - sidewaysOffset,other.bottom + other.height}, Point2f{other.left + other.width + sidewaysOffset,other.bottom + other.height}, HI))
+	else if (Raycast(m_Vertices[0], leftTop, rightTop, HI))
 	{
 		hi = HI;
 		return true;

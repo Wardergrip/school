@@ -19,8 +19,9 @@ Mario::Mario()
 	,m_MaxSpeed{500}
 	,m_Position{20,300}
 	,m_Velocity{0,0}
-	,m_SprintAcceleration{100}
 	,m_HorizontalDirection{1}
+	,m_SprintAcceleration{100}
+	,m_SprintDeceleration{200}
 	,m_WalkSpeed{150}
 	,m_SprintSpeed{400}
 	,m_JumpSpeed{700}
@@ -83,7 +84,7 @@ void Mario::Update(float elapsedSec, Level& level)
 				if (m_Velocity.x < m_WalkSpeed) m_Velocity.x = m_WalkSpeed;
 				if (m_Velocity.x < m_SprintSpeed) m_Velocity.x += m_SprintAcceleration * elapsedSec;
 			}
-			else if (m_Velocity.x > m_SpeedTreshHold) m_Velocity.x -= m_SprintAcceleration * elapsedSec;
+			else if (m_Velocity.x > m_SpeedTreshHold) m_Velocity.x -= m_SprintDeceleration * elapsedSec;
 			else m_Velocity.x = m_WalkSpeed;
 		}
 		else m_Velocity.x = 0;
@@ -104,7 +105,7 @@ void Mario::Update(float elapsedSec, Level& level)
 				if (m_Velocity.x < m_WalkSpeed) m_Velocity.x = m_WalkSpeed;
 				if (m_Velocity.x < m_SprintSpeed) m_Velocity.x += m_SprintAcceleration * elapsedSec;
 			}
-			else if (m_Velocity.x > m_SpeedTreshHold) m_Velocity.x -= m_SprintAcceleration * elapsedSec;
+			else if (m_Velocity.x > m_SpeedTreshHold) m_Velocity.x -= m_SprintDeceleration * elapsedSec;
 			else m_Velocity.x = m_WalkSpeed;
 		}
 		else m_Velocity.x = 0;
