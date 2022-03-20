@@ -16,24 +16,15 @@
     <Filter Include="Frameworkfiles">
       <UniqueIdentifier>{4440bdaa-e481-48c1-bee2-530d8d9ebf73}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MainMenu">
+      <UniqueIdentifier>{da70934c-f091-4503-89bf-c4dbfa43be1f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ButtonBase.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="GameObject.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MainMenu.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MenuButton.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SettingsButton.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Core.cpp">
@@ -96,24 +87,27 @@
     <ClCompile Include="Camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ButtonBase.cpp">
+      <Filter>MainMenu</Filter>
+    </ClCompile>
+    <ClCompile Include="MainMenu.cpp">
+      <Filter>MainMenu</Filter>
+    </ClCompile>
+    <ClCompile Include="MenuButton.cpp">
+      <Filter>MainMenu</Filter>
+    </ClCompile>
+    <ClCompile Include="SettingsButton.cpp">
+      <Filter>MainMenu</Filter>
+    </ClCompile>
+    <ClCompile Include="HUD.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ButtonBase.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="GameObject.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MainMenu.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MenuButton.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SettingsButton.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Core.h">
@@ -171,6 +165,21 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Camera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ButtonBase.h">
+      <Filter>MainMenu</Filter>
+    </ClInclude>
+    <ClInclude Include="MainMenu.h">
+      <Filter>MainMenu</Filter>
+    </ClInclude>
+    <ClInclude Include="MenuButton.h">
+      <Filter>MainMenu</Filter>
+    </ClInclude>
+    <ClInclude Include="SettingsButton.h">
+      <Filter>MainMenu</Filter>
+    </ClInclude>
+    <ClInclude Include="HUD.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -8,6 +8,7 @@ class Mario;
 class Coin;
 class FireFlower;
 class Mushroom;
+class HUD;
 
 class Game final
 {
@@ -19,8 +20,8 @@ public:
 	Game& operator=(Game&& other) = delete;
 	~Game();
 
-	void Update( float elapsedSec );
 	void Draw( ) const;
+	void Update( float elapsedSec );
 
 	// Event handling
 	void ProcessKeyDownEvent( const SDL_KeyboardEvent& e );
@@ -37,6 +38,7 @@ private:
 
 	Camera m_Camera;
 	Player m_Player;
+	HUD* m_pHUD;
 
 	Level* m_pLevel;
 

@@ -81,10 +81,10 @@ void Mario::Update(float elapsedSec, Level& level)
 		{
 			if (pStates[SDL_SCANCODE_LSHIFT])
 			{
-				if (m_Velocity.x < m_WalkSpeed) m_Velocity.x = m_WalkSpeed;
-				if (m_Velocity.x < m_SprintSpeed) m_Velocity.x += m_SprintAcceleration * elapsedSec;
+				if (m_Velocity.x <= m_WalkSpeed) m_Velocity.x = m_WalkSpeed;
+				if (m_Velocity.x <= m_SprintSpeed) m_Velocity.x += m_SprintAcceleration * elapsedSec;
 			}
-			else if (m_Velocity.x > m_SpeedTreshHold) m_Velocity.x -= m_SprintDeceleration * elapsedSec;
+			else if (m_Velocity.x >= m_SpeedTreshHold) m_Velocity.x -= m_SprintDeceleration * elapsedSec;
 			else m_Velocity.x = m_WalkSpeed;
 		}
 		else m_Velocity.x = 0;
@@ -102,10 +102,10 @@ void Mario::Update(float elapsedSec, Level& level)
 		{
 			if (pStates[SDL_SCANCODE_LSHIFT])
 			{
-				if (m_Velocity.x < m_WalkSpeed) m_Velocity.x = m_WalkSpeed;
-				if (m_Velocity.x < m_SprintSpeed) m_Velocity.x += m_SprintAcceleration * elapsedSec;
+				if (m_Velocity.x <= m_WalkSpeed) m_Velocity.x = m_WalkSpeed;
+				if (m_Velocity.x <= m_SprintSpeed) m_Velocity.x += m_SprintAcceleration * elapsedSec;
 			}
-			else if (m_Velocity.x > m_SpeedTreshHold) m_Velocity.x -= m_SprintDeceleration * elapsedSec;
+			else if (m_Velocity.x >= m_SpeedTreshHold) m_Velocity.x -= m_SprintDeceleration * elapsedSec;
 			else m_Velocity.x = m_WalkSpeed;
 		}
 		else m_Velocity.x = 0;

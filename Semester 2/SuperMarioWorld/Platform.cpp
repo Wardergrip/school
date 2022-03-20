@@ -12,14 +12,14 @@ Platform::Platform(const Rectf& rect)
 	m_Vertices.push_back(Point2f{ rect.left,rect.bottom });
 }
 
-void Platform::DebugDraw(const Color4f& col) const
+void Platform::DebugDraw(const Color4f& col, float lineThickness) const
 {
 	SetColor(col);
 	for (size_t i{ 0 }; i < m_Vertices.size(); ++i)
 	{
 		if ((i + 1) < m_Vertices.size())
 		{
-			DrawLine(m_Vertices[i], m_Vertices[i + 1]);
+			DrawLine(m_Vertices[i], m_Vertices[i + 1], lineThickness);
 		}
 	}
 }

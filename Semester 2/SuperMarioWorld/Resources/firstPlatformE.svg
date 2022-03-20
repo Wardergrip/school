@@ -3,11 +3,11 @@
 
 <svg
    version="1.1"
-   id="svg148"
-   width="11399"
-   height="349"
-   viewBox="0 0 11399 349"
-   sodipodi:docname="firstPlatformE.svg"
+   id="svg9"
+   width="5120"
+   height="432"
+   viewBox="0 0 5120 432"
+   sodipodi:docname="SecondAttempt.svg"
    inkscape:version="1.1.2 (b8e25be833, 2022-02-05)"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
@@ -15,9 +15,9 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:svg="http://www.w3.org/2000/svg">
   <defs
-     id="defs152" />
+     id="defs13" />
   <sodipodi:namedview
-     id="namedview150"
+     id="namedview11"
      pagecolor="#505050"
      bordercolor="#eeeeee"
      borderopacity="1"
@@ -25,29 +25,28 @@
      inkscape:pageopacity="0"
      inkscape:pagecheckerboard="0"
      showgrid="false"
-     inkscape:zoom="0.24265286"
-     inkscape:cx="3092.8957"
-     inkscape:cy="323.50741"
+     inkscape:zoom="1.3335937"
+     inkscape:cx="338.55888"
+     inkscape:cy="380.55067"
      inkscape:window-width="1920"
      inkscape:window-height="1001"
      inkscape:window-x="-9"
      inkscape:window-y="-9"
      inkscape:window-maximized="1"
-     inkscape:current-layer="g154" />
+     inkscape:current-layer="g15" />
   <g
      inkscape:groupmode="layer"
      inkscape:label="Image"
-     id="g154">
+     id="g15">
     <image
-       width="11399"
-       height="349"
+       width="5120"
+       height="432"
        preserveAspectRatio="none"
-       xlink:href="firstPlatform.png"
-       id="image156" />
+       xlink:href="../Level.png"
+       id="image17" />
     <path
-       style="fill:#000000"
-       d="M 0.5,199.5 5851,198.99966 V 149.00778 L 6100.5,148.5 6101.0349,99 H 6300 V 51.01265 L 6450.5,50.5 6451.0343,0 h 698.956 l 0.5097,199.5 3750.5,0.50053 V 101 h 498 V 349 H -0.01273234 Z"
-       id="path158"
-       sodipodi:nodetypes="ccccccccccccccccc" />
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 0,384.46397 h 1872.478 v -15.86409 h 79.7657 v -16.12185 h 64.2531 v -16.07498 h 47.7563 v -15.6532 h 223.2104 v 63.66438 H 3488.294 v -32.14498 h 158.9354 v 79.60026 H 0.09373169 Z"
+       id="path245" />
   </g>
 </svg>

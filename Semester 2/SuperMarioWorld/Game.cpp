@@ -9,6 +9,7 @@
 #include "Coin.h"
 #include "FireFlower.h"
 #include "Mushroom.h"
+#include "HUD.h"
 
 Game::Game( const Window& window ) 
 	:m_Window{ window }
@@ -27,7 +28,8 @@ void Game::Initialize( )
 {
 	m_pMainMenu = new MainMenu(m_Window, MainMenu::State::playing);
 	m_pLevel = new Level(m_Player);
-	m_Camera.SetLevelBoundaries(Rectf{0,0,m_Window.width * 4,m_Window.height});
+	m_Camera.SetLevelBoundaries(Rectf{0,0,m_pLevel->GetFurthestXValue() + 250.f,m_Window.height});
+	m_pHUD = new HUD(m_Player,m_Window);
 }
 
 void Game::Cleanup( )
@@ -36,6 +38,8 @@ void Game::Cleanup( )
 	m_pMainMenu = nullptr;
 	delete m_pLevel;
 	m_pLevel = nullptr;
+	delete m_pHUD;
+	m_pHUD = nullptr;
 }
 
 void Game::Update( float elapsedSec )
@@ -75,6 +79,7 @@ void Game::Draw( ) const
 		m_Player.Draw();
 	}
 	glPopMatrix();
+	m_pHUD->Draw();
 }
 
 void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )

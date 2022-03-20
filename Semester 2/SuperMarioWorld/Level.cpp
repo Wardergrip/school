@@ -21,10 +21,9 @@ Level::Level(Player& player)
 	,m_pBackgroundTexture{new Texture("Resources/Background.png")}
 {
 	m_Vertices.push_back(std::vector<Point2f>{});
-	PushDemoLevel();
-	//if(!SVGParser::GetVerticesFromSvgFile("Resources/firstPlatformE.svg", m_Vertices)) throw "Something went wrong";
+	//PushDemoLevel();
+	if(!SVGParser::GetVerticesFromSvgFile("Resources/firstPlatformE.svg", m_Vertices)) throw "Something went wrong";
 	PushDemoPickUps();
-	//std::cout << m_Vertices.at(0).at(0).x << ' ' << m_Vertices.at(0).at(0).y << '\n';
 }
 
 Level::~Level()
@@ -61,24 +60,27 @@ void Level::Draw(const Point2f& cameraLoc, bool debugDraw) const
 	glPopMatrix();
 
 	DrawPickUps();
-	if (debugDraw) DebugDraw();
+	if (debugDraw) DebugDraw(Color4f{1,0,0,1},2.f);
 }
 
-void Level::DebugDraw(const Color4f& col) const
+void Level::DebugDraw(const Color4f& col, float lineThickness) const
 {
 	if (!m_EnableDebugDraw) return;
 	SetColor(col);
-	for (size_t i{ 0 }; i < m_Vertices[0].size(); ++i)
+	for (size_t i{ 0 }; i < m_Vertices.size(); ++i)
 	{
-		if ((i + 1) < m_Vertices[0].size())
+		for (size_t j{ 0 }; j < m_Vertices[i].size(); ++j)
 		{
-			DrawLine(m_Vertices[0][i], m_Vertices[0][i + 1]);
+			if ((j + 1) < m_Vertices[i].size())
+			{
+				DrawLine(m_Vertices[i][j], m_Vertices[i][j + 1], lineThickness);
+			}
 		}
 	}
 	for (size_t i{ 0 }; i < m_pPlatforms.size(); ++i)
 	{
 		if (!m_pPlatforms[i]) continue;
-		m_pPlatforms[i]->DebugDraw();
+		m_pPlatforms[i]->DebugDraw(col, lineThickness);
 	}
 }
 
@@ -138,25 +140,26 @@ bool Level::IsOnTop(Rectf& other)
 	HitInfo HI{};
 	// How deep does the ray go under the shape
 	float offSet{ 1 };
-	if (Raycast(m_Vertices[0], Point2f{other.left,other.bottom + 6}, Point2f{other.left,other.bottom - offSet}, HI))
+	for (size_t i{ 0 }; i < m_Vertices.size(); ++i)
 	{
-		// Following line may induce jitters
-		other.bottom += offSet * (1 - HI.lambda);
-		return true;
+		if (Raycast(m_Vertices[i], Point2f{other.left,other.bottom + 6}, Point2f{other.left,other.bottom - offSet}, HI))
+		{
+			// Following line may induce jitters
+			other.bottom += offSet * (1 - HI.lambda);
+			return true;
+		}
+		else if (Raycast(m_Vertices[i], Point2f{other.left + other.width,other.bottom + 6}, Point2f{other.left + other.width,other.bottom - offSet}, HI))
+		{
+			other.bottom += offSet * (1 - HI.lambda);
+			return true;
+		}
 	}
-	else if (Raycast(m_Vertices[0], Point2f{other.left + other.width,other.bottom + 6}, Point2f{other.left + other.width,other.bottom - offSet}, HI))
-	{
-		other.bottom += offSet * (1 - HI.lambda);
-		return true;
-	}
-	else
-	{
+
 		for (size_t i{ 0 }; i < m_pPlatforms.size(); ++i)
 		{
 			if (!m_pPlatforms[i]) continue;
 			else if (m_pPlatforms[i]->IsOnTop(other)) return true;
 		}
-	}
 	return false;
 }
 
@@ -168,26 +171,26 @@ bool Level::IsOnTop(const Rectf& other, HitInfo& hi, const Vector2f& velocity)
 	// Faster falling = longer raycast (deeper in charachter)
 	float upwardsOffset{velocity.y / 50.0f};
 	if (upwardsOffset < 8) upwardsOffset = 8;
-	if (Raycast(m_Vertices[0], Point2f{other.left,other.bottom + upwardsOffset}, Point2f{other.left,other.bottom - downwardsOffSet}, HI))
+	for (size_t i{ 0 }; i < m_Vertices.size(); ++i)
 	{
-		hi = HI;
-		return true;
-	}
-	else if (Raycast(m_Vertices[0], Point2f{other.left + other.width,other.bottom + upwardsOffset }, Point2f{other.left + other.width,other.bottom - downwardsOffSet}, HI))
-	{
-		hi = HI;
-		return true;
-	}
-	else
-	{
-		for (size_t i{0}; i < m_pPlatforms.size(); ++i)
+		if (Raycast(m_Vertices[i], Point2f{other.left,other.bottom + upwardsOffset}, Point2f{other.left,other.bottom - downwardsOffSet}, HI))
 		{
-			if (!m_pPlatforms[i]) continue;
-			else if (m_pPlatforms[i]->IsOnTop(other,HI))
-			{
-				hi = HI;
-				return true;
-			}
+			hi = HI;
+			return true;
+		}
+		else if (Raycast(m_Vertices[i], Point2f{other.left + other.width,other.bottom + upwardsOffset }, Point2f{other.left + other.width,other.bottom - downwardsOffSet}, HI))
+		{
+			hi = HI;
+			return true;
+		}
+	}
+	for (size_t i{0}; i < m_pPlatforms.size(); ++i)
+	{
+		if (!m_pPlatforms[i]) continue;
+		else if (m_pPlatforms[i]->IsOnTop(other,HI))
+		{
+			hi = HI;
+			return true;
 		}
 	}
 	return false;
@@ -206,17 +209,35 @@ bool Level::IsHorizontallyTouching(const Rectf& other, HitInfo& hi, const Vector
 	Point2f leftTop{ other.left - sidewaysOffset,other.bottom + other.height }, rightTop{ other.left + other.width + sidewaysOffset,other.bottom + other.height };
 	Point2f leftBot{ other.left - sidewaysOffset,other.bottom + offsetBL }, rightBot{ other.left + other.width + sidewaysOffset,other.bottom + offsetBL };
 
-	if (Raycast(m_Vertices[0], leftBot, rightBot, HI))
+	for (size_t i{ 0 }; i < m_Vertices.size(); ++i)
 	{
-		hi = HI;
-		return true;
-	}
-	else if (Raycast(m_Vertices[0], leftTop, rightTop, HI))
-	{
-		hi = HI;
-		return true;
+		if (Raycast(m_Vertices[i], leftBot, rightBot, HI))
+		{
+			hi = HI;
+			return true;
+		}
+		else if (Raycast(m_Vertices[i], leftTop, rightTop, HI))
+		{
+			hi = HI;
+			return true;
+		}
 	}
 	return false;
+}
+
+float Level::GetFurthestXValue()
+{
+	float highest{};
+
+	for (size_t i{ 0 }; i < m_Vertices.size(); ++i)
+	{
+		for (size_t j{ 0 }; j < m_Vertices[i].size(); ++j)
+		{
+			if (m_Vertices[i][j].x > highest) highest = m_Vertices[i][j].x;
+		}
+	}
+
+	return highest;
 }
 
 void Level::PushDemoLevel()

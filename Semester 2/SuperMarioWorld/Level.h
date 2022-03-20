@@ -15,7 +15,7 @@ public:
 	~Level();
 
 	void Draw(const Point2f& cameraLoc, bool debugDraw = false) const;
-	void DebugDraw(const Color4f& col = Color4f{1,0,0,1}) const;
+	void DebugDraw(const Color4f& col = Color4f{1,0,0,1}, float lineThickness = 1) const;
 
 	void DrawPickUps() const;
 	void UpdatePickUps(float elapsedSec, Mario* mario);
@@ -27,6 +27,8 @@ public:
 	bool IsOnTop(Rectf& other);
 	bool IsOnTop(const Rectf& other, utils::HitInfo& hi, const Vector2f& velocity);
 	bool IsHorizontallyTouching(const Rectf& other, utils::HitInfo& hi, const Vector2f& velocity) const;
+
+	float GetFurthestXValue();
 
 private:
 	bool m_EnableDebugDraw;
