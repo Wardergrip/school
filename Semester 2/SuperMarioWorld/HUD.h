@@ -15,8 +15,13 @@ public:
 
 
 private:
+	void DrawChar(const Point2f& pos, char charachter, bool scaleChar = false) const;
+	void DrawString(const Point2f& pos, const std::string& message, bool scaleChar = true) const;
+	void DrawString(const Point2f& pos, int number, bool scaleChar = true) const;
+
 	void DrawMario(const Point2f& pos = {}) const;
 	void DrawX(const Point2f& pos = {}) const;
+	void DrawCoin(const Point2f& pos = {}) const;
 	void DrawLives(const Point2f& pos = {}) const;
 	void DrawHolder(const Point2f& pos = {}) const;
 
