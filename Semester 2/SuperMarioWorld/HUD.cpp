@@ -35,12 +35,21 @@ HUD::~HUD()
 
 void HUD::Draw() const
 {
-	Point2f marioInfoPoint{ 30,m_WindowRef.height - 20 - 32.f };
+#pragma region StaticUI
+	Point2f marioInfoPoint{ 30,m_WindowRef.height - 20 - 16.f * m_Scale};
 	Point2f holderPoint{ m_WindowRef.width / 2 - m_pPowerUpHold->GetWidth() / 8, m_WindowRef.height - m_pPowerUpHold->GetHeight() };
+	Point2f timePoint{ 400,m_WindowRef.height - 20 - 16.f * m_Scale };
+	Point2f coinPoint{ 500,m_WindowRef.height - 20 - 16.f * m_Scale };
 	DrawMario(marioInfoPoint);
-	DrawX(Point2f{marioInfoPoint.x + 20.f, marioInfoPoint.y - 16.f});
-	DrawLives(Point2f{marioInfoPoint.x + 45.f, marioInfoPoint.y - 16.f});
+	DrawX(Point2f{marioInfoPoint.x + 10.f * m_Scale, marioInfoPoint.y - 8.f * m_Scale });
+	DrawLives(Point2f{marioInfoPoint.x + 22.f * m_Scale, marioInfoPoint.y - 8.f * m_Scale });
 	DrawHolder(holderPoint);
+	DrawTime(timePoint);
+	DrawTimeAmount(Point2f{timePoint.x,timePoint.y - 8.f * m_Scale});
+	DrawCoinAmount(coinPoint);
+	DrawScore(Point2f{ coinPoint.x,coinPoint.y - 8.f * m_Scale });
+#pragma endregion
+
 }
 
 void HUD::DrawChar(const Point2f& pos, char charachter, bool scaleChar) const
@@ -152,4 +161,46 @@ void HUD::DrawHolder(const Point2f& pos) const
 		m_pPowerUpHold->Draw(Point2f{},srcRect);
 	}
 	glPopMatrix();
+}
+
+void HUD::DrawTime(const Point2f& pos) const
+{
+	Rectf srcRect{0,8.f,24.f,8.f};
+	glPushMatrix();
+	{
+		glTranslatef(pos.x, pos.y, 0);
+		glScalef(m_Scale, m_Scale, 1);
+		m_pScoreTextures->Draw(Point2f{}, srcRect);
+	}
+	glPopMatrix();
+}
+
+void HUD::DrawTimeAmount(const Point2f& pos) const
+{
+	Rectf srcRect{ 0,24.f,8.f,8.f };
+	std::string timeStr{std::to_string(m_PlayerRef.GetTime())};
+
+	glPushMatrix();
+	{
+		glTranslatef(pos.x, pos.y, 0);
+		glScalef(m_Scale, m_Scale, 1);
+		for (int i{ 0 }; i < timeStr.length(); ++i)
+		{
+			srcRect.left = float(timeStr[i] - '0') * srcRect.width;
+			m_pFont->Draw(Point2f{ i * 8.f, 0 }, srcRect);
+		}
+	}
+	glPopMatrix();
+}
+
+void HUD::DrawCoinAmount(const Point2f& pos) const
+{
+	DrawCoin(pos);
+	DrawX(Point2f{pos.x + 10.f * m_Scale,pos.y});
+	DrawString(Point2f{ pos.x + 24.f * m_Scale, pos.y }, m_PlayerRef.GetCoinAmount());
+}
+
+void HUD::DrawScore(const Point2f& pos) const
+{
+	DrawString(pos, m_PlayerRef.GetScore());
 }

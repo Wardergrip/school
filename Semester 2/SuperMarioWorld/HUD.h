@@ -24,6 +24,10 @@ private:
 	void DrawCoin(const Point2f& pos = {}) const;
 	void DrawLives(const Point2f& pos = {}) const;
 	void DrawHolder(const Point2f& pos = {}) const;
+	void DrawTime(const Point2f& pos = {}) const;
+	void DrawTimeAmount(const Point2f& pos = {}) const;
+	void DrawCoinAmount(const Point2f& pos = {}) const;
+	void DrawScore(const Point2f& pos = {}) const;
 
 	static const float m_Scale;
 	const Player& m_PlayerRef;

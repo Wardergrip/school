@@ -24,6 +24,7 @@ public:
 	unsigned int GetScore() const;
 	int GetLives() const;
 	int GetCoinAmount() const;
+	unsigned int GetTime() const;
 
 	Mario* GetpMario() const;
 	Rectf GetMarioRect() const;
@@ -33,6 +34,9 @@ public:
 
 private:
 	Mario* m_pMario;
+
+	unsigned int m_Time;
+	float m_Increment;
 
 	unsigned int m_Score;
 	int m_Lives;

@@ -10,6 +10,8 @@ Player::Player()
 	,m_Lives{3}
 	,m_CoinAmount{0}
 	,m_BigCoinAmount{0}
+	,m_Increment{0}
+	,m_Time{300}
 {
 	m_pMario = new Mario();
 }
@@ -27,7 +29,16 @@ void Player::Draw() const
 
 void Player::Update(float elapsedSec, Level& level)
 {
+	if (m_Time == 0) return;
+
 	m_pMario->Update(elapsedSec, level);
+
+	m_Increment += elapsedSec;
+	if (m_Increment >= 1)
+	{
+		m_Increment -= 1.f;
+		--m_Time;
+	}
 }
 
 void Player::AddScore(unsigned int score)
@@ -94,6 +105,11 @@ int Player::GetLives() const
 int Player::GetCoinAmount() const
 {
 	return m_CoinAmount;
+}
+
+unsigned int Player::GetTime() const
+{
+	return m_Time;
 }
 
 Mario* Player::GetpMario() const
