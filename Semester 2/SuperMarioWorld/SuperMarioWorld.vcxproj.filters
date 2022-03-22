@@ -19,6 +19,9 @@
     <Filter Include="MainMenu">
       <UniqueIdentifier>{da70934c-f091-4503-89bf-c4dbfa43be1f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Koopa Files">
+      <UniqueIdentifier>{7a417d99-d702-41c8-9672-517e8e61b7d0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp">
@@ -103,7 +106,13 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="KoopaBase.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Koopa Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Koopa.cpp">
+      <Filter>Koopa Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Shell.cpp">
+      <Filter>Koopa Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -186,7 +195,13 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="KoopaBase.h">
-      <Filter>Header Files</Filter>
+      <Filter>Koopa Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Koopa.h">
+      <Filter>Koopa Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Shell.h">
+      <Filter>Koopa Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

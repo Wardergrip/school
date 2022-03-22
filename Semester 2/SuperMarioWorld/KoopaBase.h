@@ -2,6 +2,7 @@
 #include "GameObject.h"
 class Texture;
 class Level;
+class Mario;
 class KoopaBase : public GameObject
 {
 public:
@@ -16,10 +17,11 @@ public:
 	virtual ~KoopaBase();
 
 	void Draw() const;
-	virtual void Update(float elapsedSec);
+	virtual void Update(float elapsedSec, Mario* pMario);
 	void UpdateMovement(float elapsedSec);
 
 	void SetPosition(const Point2f& pos);
+	void SetVelocity(const Vector2f& vel);
 
 	// Get the positional Rect of the koopa
 	Rectf GetRect() const;

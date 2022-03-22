@@ -81,7 +81,7 @@ void KoopaBase::Draw() const
 	glPopMatrix();
 }
 
-void KoopaBase::Update(float elapsedSec)
+void KoopaBase::Update(float elapsedSec, Mario* pMario)
 {
 	UpdateMovement(elapsedSec);
 }
@@ -113,6 +113,11 @@ void KoopaBase::UpdateMovement(float elapsedSec)
 void KoopaBase::SetPosition(const Point2f& pos)
 {
 	m_Position = pos;
+}
+
+void KoopaBase::SetVelocity(const Vector2f& vel)
+{
+	m_Velocity = vel;
 }
 
 Rectf KoopaBase::GetRect() const

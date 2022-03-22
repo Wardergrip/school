@@ -15,6 +15,9 @@ public:
 	void Update(float elapsedSec, Level& level);
 	void UpdateAnim(float elapsedSec);
 	void Jump();
+	void Hurt();
+
+	float GetHorDirection() const;
 
 	Point2f GetPureLocation() const;
 	Point2f GetMiddleBotLocation() const;

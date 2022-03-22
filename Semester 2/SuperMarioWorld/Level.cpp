@@ -9,7 +9,7 @@
 #include "Coin.h"
 #include "Platform.h"
 #include "Mario.h"
-#include "KoopaBase.h"
+#include "Shell.h"
 using namespace utils;
 #include <iostream>
 
@@ -21,12 +21,14 @@ Level::Level(Player& player)
 	,m_pPlatforms{}
 	,m_pBackgroundTexture{new Texture("Resources/Background.png")}
 {
+	KoopaBase::InitLevelRef(this);
 	m_Vertices.push_back(std::vector<Point2f>{});
 	//PushDemoLevel();
 	if(!SVGParser::GetVerticesFromSvgFile("Resources/firstPlatformE.svg", m_Vertices)) throw "Something went wrong";
 	ScaleLevel(2.f);
 	PushDemoPickUps();
-	KoopaBase::InitLevelRef(this);
+	m_pShell = new Shell(KoopaBase::Color::red);
+	m_pShell->SetPosition(Point2f{300,150});
 }
 
 Level::~Level()
@@ -48,6 +50,8 @@ Level::~Level()
 	}
 	delete m_pBackgroundTexture;
 	m_pBackgroundTexture = nullptr;
+	delete m_pShell;
+	m_pShell = nullptr;
 }
 
 void Level::Draw(const Point2f& cameraLoc, bool debugDraw) const
@@ -62,6 +66,7 @@ void Level::Draw(const Point2f& cameraLoc, bool debugDraw) const
 	}
 	glPopMatrix();
 
+	m_pShell->Draw();
 	DrawPickUps();
 	if (debugDraw) DebugDraw(Color4f{1,0,0,1},2.f);
 }
@@ -121,6 +126,7 @@ void Level::UpdatePickUps(float elapsedSec, Mario* mario)
 			m_pPickUps[i] = nullptr;
 		}
 	}
+	m_pShell->Update(elapsedSec,m_Player.GetpMario());
 }
 
 void Level::Push_back(const Point2f& p)

@@ -6,7 +6,7 @@ class PickUp;
 class Platform;
 class Player;
 class Mario;
-class KoopaBase;
+class Shell;
 class Level final
 {
 public:
@@ -41,6 +41,8 @@ private:
 	std::vector<Platform*> m_pPlatforms;
 
 	Texture* m_pBackgroundTexture;
+
+	Shell* m_pShell;
 
 	// Scale the level. vectorAmount indicates until what idx the vectors should be scaled.
 	// -1 will scale all vectors.

@@ -203,6 +203,16 @@ void Mario::Jump()
 	if (!m_IsInAir) m_Velocity.y = m_JumpSpeed;
 }
 
+void Mario::Hurt()
+{
+	
+}
+
+float Mario::GetHorDirection() const
+{
+	return m_HorizontalDirection;
+}
+
 Point2f Mario::GetPureLocation() const
 {
 	return m_Position;
