@@ -74,3 +74,19 @@ bool Platform::IsOnTop(const Rectf& other, HitInfo& hi)
 	}
 	return false;
 }
+
+bool Platform::IsFullyOnTop(const Rectf& other)
+{
+	HitInfo HI{};
+	float offSet{ 1 };
+	bool firstCheck{ false };
+	if (Raycast(m_Vertices, Point2f{ other.left,other.bottom + other.height / 2 }, Point2f{ other.left,other.bottom - offSet }, HI))
+	{
+		firstCheck = true;
+	}
+	if (Raycast(m_Vertices, Point2f{ other.left + other.width,other.bottom + other.height / 2 }, Point2f{ other.left + other.width,other.bottom - offSet }, HI))
+	{
+		return firstCheck;
+	}
+	return false;
+}

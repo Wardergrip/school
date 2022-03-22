@@ -14,6 +14,7 @@ public:
 
 	bool IsOnTop(Rectf& other);
 	bool IsOnTop(const Rectf& other, utils::HitInfo& hi);
+	bool IsFullyOnTop(const Rectf& other);
 private:
 	std::vector<Point2f> m_Vertices;
 };

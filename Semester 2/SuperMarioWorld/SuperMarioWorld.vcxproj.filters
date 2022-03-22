@@ -102,6 +102,9 @@
     <ClCompile Include="HUD.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="KoopaBase.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -180,6 +183,9 @@
       <Filter>MainMenu</Filter>
     </ClInclude>
     <ClInclude Include="HUD.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="KoopaBase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

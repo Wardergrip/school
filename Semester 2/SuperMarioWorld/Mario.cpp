@@ -21,10 +21,10 @@ Mario::Mario()
 	,m_Velocity{0,0}
 	,m_HorizontalDirection{1}
 	,m_SprintAcceleration{100}
-	,m_SprintDeceleration{200}
+	,m_SprintDeceleration{250}
 	,m_WalkSpeed{150}
 	,m_SprintSpeed{400}
-	,m_JumpSpeed{700}
+	,m_JumpSpeed{820}
 	,m_IsInAir{false}
 {
 	m_Rect = Rectf{0,(m_pTexture->GetHeight() / 3),m_pTexture->GetWidth() / 14,m_pTexture->GetHeight() / 3};
@@ -56,7 +56,7 @@ void Mario::Update(float elapsedSec, Level& level)
 {
 	HitInfo HIv{}, HIh{};
 	const bool onTop{ level.IsOnTop(GetRect(),HIv,m_Velocity) };
-	const bool isHorTouch{ level.IsHorizontallyTouching(GetRect(),HIh,m_Velocity) };
+	const bool isHorTouch{ level.IsHorizontallyTouching(GetRect(),HIh,m_Velocity, m_HorizontalDirection) };
 	if (!onTop || m_Velocity.y > 0)
 	{
 		m_Velocity += m_Gravity * elapsedSec;
@@ -110,6 +110,20 @@ void Mario::Update(float elapsedSec, Level& level)
 		}
 		else m_Velocity.x = 0;
 		m_HorizontalDirection = -1;
+	}
+	else if (pStates[SDL_SCANCODE_LSHIFT])
+	{
+		if (isHorTouch && m_HorizontalDirection >= 0.5f)
+		{
+			m_Position.x -= (1 - HIh.lambda);
+			m_Velocity.x = 0;
+		}
+		else if (isHorTouch && m_HorizontalDirection <= -0.5f)
+		{
+			m_Position.x += (1 - HIh.lambda);
+			m_Velocity.x = 0;
+		}
+		else if (m_Velocity.x > 0) m_Velocity.x -= m_SprintDeceleration * elapsedSec;
 	}
 	else m_Velocity.x = 0;
 

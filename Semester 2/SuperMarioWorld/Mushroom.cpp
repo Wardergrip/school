@@ -25,7 +25,7 @@ void Mushroom::Update(float elapsedSec)
 		m_Position.y += (1 - HIv.lambda);
 	}
 	else m_Velocity += m_Gravity * elapsedSec;
-	if (m_LevelRef->IsHorizontallyTouching(r, HIh, m_Velocity))
+	if (m_LevelRef->IsHorizontallyTouching(r, HIh, m_Velocity,(m_Velocity.x) / std::abs(m_Velocity.x)))
 	{
 		m_Velocity.x = -m_Velocity.x;
 	}

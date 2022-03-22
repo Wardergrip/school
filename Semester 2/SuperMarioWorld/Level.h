@@ -6,6 +6,7 @@ class PickUp;
 class Platform;
 class Player;
 class Mario;
+class KoopaBase;
 class Level final
 {
 public:
@@ -26,7 +27,8 @@ public:
 
 	bool IsOnTop(Rectf& other);
 	bool IsOnTop(const Rectf& other, utils::HitInfo& hi, const Vector2f& velocity);
-	bool IsHorizontallyTouching(const Rectf& other, utils::HitInfo& hi, const Vector2f& velocity) const;
+	bool IsFullyOnTop(const Rectf& other, const Vector2f& velocity);
+	bool IsHorizontallyTouching(const Rectf& other, utils::HitInfo& hi, const Vector2f& velocity, float horDirection) const;
 
 	float GetFurthestXValue();
 
@@ -39,6 +41,10 @@ private:
 	std::vector<Platform*> m_pPlatforms;
 
 	Texture* m_pBackgroundTexture;
+
+	// Scale the level. vectorAmount indicates until what idx the vectors should be scaled.
+	// -1 will scale all vectors.
+	void ScaleLevel(float scale, int vectorAmount = -1);
 
 	void PushDemoLevel();
 	void PushDemoPickUps();

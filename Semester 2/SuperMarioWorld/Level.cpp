@@ -9,6 +9,7 @@
 #include "Coin.h"
 #include "Platform.h"
 #include "Mario.h"
+#include "KoopaBase.h"
 using namespace utils;
 #include <iostream>
 
@@ -23,7 +24,9 @@ Level::Level(Player& player)
 	m_Vertices.push_back(std::vector<Point2f>{});
 	//PushDemoLevel();
 	if(!SVGParser::GetVerticesFromSvgFile("Resources/firstPlatformE.svg", m_Vertices)) throw "Something went wrong";
+	ScaleLevel(2.f);
 	PushDemoPickUps();
+	KoopaBase::InitLevelRef(this);
 }
 
 Level::~Level()
@@ -196,18 +199,61 @@ bool Level::IsOnTop(const Rectf& other, HitInfo& hi, const Vector2f& velocity)
 	return false;
 }
 
-bool Level::IsHorizontallyTouching(const Rectf& other, HitInfo& hi, const Vector2f& velocity) const
+bool Level::IsFullyOnTop(const Rectf& other, const Vector2f& velocity)
+{
+	HitInfo HI{};
+	// This is the offset to determine how deep the raycast goes
+	float downwardsOffSet{ 1 };
+	// Faster falling = longer raycast (deeper in charachter)
+	float upwardsOffset{ velocity.y / 50.0f };
+	if (upwardsOffset < 8) upwardsOffset = 8;
+	for (size_t i{ 0 }; i < m_Vertices.size(); ++i)
+	{
+		bool firstCheck{ false };
+		if (Raycast(m_Vertices[i], Point2f{ other.left,other.bottom + upwardsOffset }, Point2f{ other.left,other.bottom - downwardsOffSet }, HI))
+		{
+			firstCheck = true;
+		}
+		if (Raycast(m_Vertices[i], Point2f{ other.left + other.width,other.bottom + upwardsOffset }, Point2f{ other.left + other.width,other.bottom - downwardsOffSet }, HI))
+		{
+			return firstCheck;
+		}
+	}
+	for (size_t i{ 0 }; i < m_pPlatforms.size(); ++i)
+	{
+		if (!m_pPlatforms[i]) continue;
+		else if (m_pPlatforms[i]->IsFullyOnTop(other))
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+bool Level::IsHorizontallyTouching(const Rectf& other, HitInfo& hi, const Vector2f& velocity, float horDirection) const
 {
 	HitInfo HI{};
 	const float velX{std::abs(velocity.x)};
 	// This offset is to make sure that clipping vertically isn't seen as a touch
 	float offsetBL{ 1 };
 	// Sprinting = longer raycast (further out of charachter)
-	float sidewaysOffset{ velX / 30.0f };
+	float sidewaysOffset{ velX / 50.0f };
 	if (sidewaysOffset < 1) sidewaysOffset = 1;
 	// Raycast points
-	Point2f leftTop{ other.left - sidewaysOffset,other.bottom + other.height }, rightTop{ other.left + other.width + sidewaysOffset,other.bottom + other.height };
-	Point2f leftBot{ other.left - sidewaysOffset,other.bottom + offsetBL }, rightBot{ other.left + other.width + sidewaysOffset,other.bottom + offsetBL };
+	Point2f leftTop{ other.left - sidewaysOffset,other.bottom + other.height };
+	Point2f rightTop{ other.left + other.width + sidewaysOffset,other.bottom + other.height };
+	Point2f leftBot{ other.left - sidewaysOffset,other.bottom + offsetBL };
+	Point2f rightBot{ other.left + other.width + sidewaysOffset,other.bottom + offsetBL };
+	if (horDirection >= 0.5f)
+	{
+		leftTop.x += other.width / 2;
+		leftBot.x += other.width / 2;
+	}
+	else if (horDirection <= -0.5f)
+	{
+		rightTop.x -= other.width / 2;
+		rightBot.x -= other.width / 2;
+	}
 
 	for (size_t i{ 0 }; i < m_Vertices.size(); ++i)
 	{
@@ -238,6 +284,21 @@ float Level::GetFurthestXValue()
 	}
 
 	return highest;
+}
+
+void Level::ScaleLevel(float scale, int vectorAmount)
+{
+	size_t loopAmount{};
+	if (vectorAmount <= -1) loopAmount = m_Vertices.size();
+	else loopAmount = size_t(vectorAmount) ;
+	for (int i{ 0 }; i < loopAmount; ++i)
+	{
+		for (int j{ 0 }; j < m_Vertices[i].size(); ++j)
+		{
+			m_Vertices[i][j].x *= scale;
+			m_Vertices[i][j].y *= scale;
+		}
+	}
 }
 
 void Level::PushDemoLevel()
