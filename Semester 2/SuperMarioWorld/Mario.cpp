@@ -28,6 +28,7 @@ Mario::Mario()
 	,m_JumpSpeed{820}
 	,m_IsInAir{false}
 	,m_pShell{nullptr}
+	,m_LoseShell{false}
 {
 	m_Rect = Rectf{0,(m_pTexture->GetHeight() / 3),m_pTexture->GetWidth() / 14,m_pTexture->GetHeight() / 3};
 }
@@ -160,7 +161,7 @@ void Mario::Update(float elapsedSec, Level& level)
 
 		if (!pStates[SDL_SCANCODE_LSHIFT])
 		{
-			GiveShell();
+			m_LoseShell = true;
 		}
 	}
 }
@@ -247,10 +248,14 @@ void Mario::SetShell(Shell* pShell)
 
 Shell* Mario::GiveShell()
 {
+	m_pShell->Throw(m_HorizontalDirection,m_Velocity);
+	if (m_HorizontalDirection > 0.5f) m_pShell->SetPosition(Point2f{ m_Position.x + GetRect().width,m_Position.y });
+	else if (m_HorizontalDirection < -0.5f) m_pShell->SetPosition(Point2f{ m_Position.x - GetRect().width,m_Position.y });
+
 	Shell* pS{ m_pShell };
-	delete m_pShell;
 	m_pShell = nullptr;
 	m_IsGrabbing = false;
+	m_LoseShell = false;
 	return pS;
 }
 
@@ -279,6 +284,11 @@ Rectf Mario::GetRect() const
 	Rectf r{ m_Position.x,m_Position.y,m_Scale * m_Rect.width,m_Scale * m_Rect.height };
 	if (!m_Duck) return r;
 	return Rectf{r.left,r.bottom,r.width,r.height * 0.55f};
+}
+
+bool Mario::IsTryingToThrowShell() const
+{
+	return m_LoseShell;
 }
 
 void Mario::Grow()

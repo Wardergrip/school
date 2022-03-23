@@ -19,6 +19,7 @@ public:
 	void Jump();
 	void BounceJump();
 	void Hurt();
+	void Grow();
 
 	void SetShell(Shell* pShell);
 	Shell* GiveShell();
@@ -30,7 +31,7 @@ public:
 
 	Rectf GetRect() const;
 
-	void Grow();
+	bool IsTryingToThrowShell() const;
 
 private:
 	// Animation stuff
@@ -77,5 +78,6 @@ private:
 
 	// Other stuff
 	Shell* m_pShell;
+	bool m_LoseShell;
 };
 

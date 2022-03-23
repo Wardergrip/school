@@ -135,6 +135,7 @@ void Level::UpdatePickUps(float elapsedSec, Mario* mario)
 			m_pShell = nullptr;
 		}
 	}
+	if (m_Player.GetpMario()->IsTryingToThrowShell()) m_pShell = m_Player.GetpMario()->GiveShell();
 }
 
 void Level::Push_back(const Point2f& p)

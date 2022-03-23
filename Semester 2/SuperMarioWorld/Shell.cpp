@@ -22,10 +22,11 @@ void Shell::Kick(float horizontalDirection)
 	m_Velocity.x = horizontalDirection * m_KickSpeed;
 }
 
-void Shell::Throw(float horizontalDirection)
+void Shell::Throw(float horizontalDirection, const Vector2f& velocity)
 {
 	m_Grab = false;
 	Kick(horizontalDirection);
+	if (m_Velocity.x < velocity.x) m_Velocity.x = velocity.x;
 }
 
 void Shell::Update(float elapsedSec, const Player& player)

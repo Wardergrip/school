@@ -6,7 +6,7 @@ public:
 	explicit Shell(Color col = Color::green);
 
 	void Kick(float horizontalDirection);
-	void Throw(float horizontalDirection);
+	void Throw(float horizontalDirection, const Vector2f& velocity);
 
 	void Update(float elapsedSec, const Player& player) override;
 
