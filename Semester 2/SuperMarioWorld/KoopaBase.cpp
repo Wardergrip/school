@@ -81,7 +81,7 @@ void KoopaBase::Draw() const
 	glPopMatrix();
 }
 
-void KoopaBase::Update(float elapsedSec, Mario* pMario)
+void KoopaBase::Update(float elapsedSec, const Player& player)
 {
 	UpdateMovement(elapsedSec);
 }
@@ -128,7 +128,8 @@ Rectf KoopaBase::GetRect() const
 Rectf KoopaBase::GetTopHitbox() const
 {
 	Rectf r{ GetRect() };
-	return Rectf{m_Position.x, m_Position.y + r.height *0.9f,r.width,r.height * 0.2f};
+	float horOffset{ 10 };
+	return Rectf{m_Position.x + horOffset, m_Position.y + r.height *0.9f,r.width - 2 * horOffset,r.height * 0.2f};
 }
 
 Rectf KoopaBase::GetSidesHitbox() const

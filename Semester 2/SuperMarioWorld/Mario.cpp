@@ -3,6 +3,7 @@
 #include "utils.h"
 #include "level.h"
 #include "Texture.h"
+#include "Shell.h"
 #include <iostream>
 using namespace utils;
 
@@ -26,6 +27,7 @@ Mario::Mario()
 	,m_SprintSpeed{400}
 	,m_JumpSpeed{820}
 	,m_IsInAir{false}
+	,m_pShell{nullptr}
 {
 	m_Rect = Rectf{0,(m_pTexture->GetHeight() / 3),m_pTexture->GetWidth() / 14,m_pTexture->GetHeight() / 3};
 }
@@ -34,10 +36,23 @@ Mario::~Mario()
 {
 	delete m_pTexture;
 	m_pTexture = nullptr;
+
+	if (m_pShell) delete m_pShell;
+	m_pShell = nullptr;
 }
 
 void Mario::Draw() const
 {	
+	if (m_pShell)
+	{
+		glPushMatrix();
+		{
+			if (m_HorizontalDirection < 0) glTranslatef(m_pShell->GetRect().width - GetRect().width / 4 + 2*m_Position.x, 0, 0);
+			glScalef(m_HorizontalDirection, 1, 1);
+			m_pShell->Draw();
+		}
+		glPopMatrix();
+	}
 	glPushMatrix();
 	{
 		glTranslatef(m_Position.x, m_Position.y,0);
@@ -137,6 +152,17 @@ void Mario::Update(float elapsedSec, Level& level)
 	m_Position.x += m_HorizontalDirection * m_Velocity.x * elapsedSec;
 	m_Position.y += m_Velocity.y * elapsedSec;
 	UpdateAnim(elapsedSec);
+
+	if (m_pShell)
+	{
+		m_pShell->SetPosition(Point2f{m_Position.x + 12,m_Position.y + 5});
+		if (m_Duck) m_pShell->SetPosition(Point2f{ m_Position.x + 12,m_Position.y});
+
+		if (!pStates[SDL_SCANCODE_LSHIFT])
+		{
+			GiveShell();
+		}
+	}
 }
 
 void Mario::UpdateAnim(float elapsedSec)
@@ -203,9 +229,34 @@ void Mario::Jump()
 	if (!m_IsInAir) m_Velocity.y = m_JumpSpeed;
 }
 
+void Mario::BounceJump()
+{
+	m_Velocity.y = m_JumpSpeed * 0.5f;
+}
+
 void Mario::Hurt()
 {
-	
+	std::cout << "Ouch!\n";
+}
+
+void Mario::SetShell(Shell* pShell)
+{
+	m_pShell = pShell;
+	m_IsGrabbing = true;
+}
+
+Shell* Mario::GiveShell()
+{
+	Shell* pS{ m_pShell };
+	delete m_pShell;
+	m_pShell = nullptr;
+	m_IsGrabbing = false;
+	return pS;
+}
+
+Shell* Mario::GetShell() const
+{
+	return m_pShell;
 }
 
 float Mario::GetHorDirection() const

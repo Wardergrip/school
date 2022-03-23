@@ -3,11 +3,14 @@
 class Shell final : public KoopaBase
 {
 public:
-	Shell(Color col = Color::green);
+	explicit Shell(Color col = Color::green);
 
 	void Kick(float horizontalDirection);
+	void Throw(float horizontalDirection);
 
-	void Update(float elapsedSec, Mario* pMario);
+	void Update(float elapsedSec, const Player& player) override;
+
+	bool IsGrabbed() const;
 
 private:
 	static int m_FramesPerSec;
@@ -15,5 +18,7 @@ private:
 
 	float m_AnimTime;
 	int m_CurrentFrame;
+
+	bool m_Grab;
 };
 

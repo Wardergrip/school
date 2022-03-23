@@ -2,7 +2,7 @@
 #include "GameObject.h"
 class Texture;
 class Level;
-class Mario;
+class Player;
 class KoopaBase : public GameObject
 {
 public:
@@ -11,13 +11,13 @@ public:
 
 	static void InitLevelRef(Level* pLevelRef);
 
-	KoopaBase(Color col = Color::green, Type type = Type::shelled);
+	explicit KoopaBase(Color col = Color::green, Type type = Type::shelled);
 	KoopaBase(const KoopaBase& k) = delete;
 	KoopaBase& operator=(const KoopaBase& k) = delete;
 	virtual ~KoopaBase();
 
 	void Draw() const;
-	virtual void Update(float elapsedSec, Mario* pMario);
+	virtual void Update(float elapsedSec, const Player& player);
 	void UpdateMovement(float elapsedSec);
 
 	void SetPosition(const Point2f& pos);

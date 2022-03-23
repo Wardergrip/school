@@ -50,7 +50,7 @@ Level::~Level()
 	}
 	delete m_pBackgroundTexture;
 	m_pBackgroundTexture = nullptr;
-	delete m_pShell;
+	if (m_pShell) delete m_pShell;
 	m_pShell = nullptr;
 }
 
@@ -66,7 +66,7 @@ void Level::Draw(const Point2f& cameraLoc, bool debugDraw) const
 	}
 	glPopMatrix();
 
-	m_pShell->Draw();
+	if (m_pShell) m_pShell->Draw();
 	DrawPickUps();
 	if (debugDraw) DebugDraw(Color4f{1,0,0,1},2.f);
 }
@@ -126,7 +126,15 @@ void Level::UpdatePickUps(float elapsedSec, Mario* mario)
 			m_pPickUps[i] = nullptr;
 		}
 	}
-	m_pShell->Update(elapsedSec,m_Player.GetpMario());
+	if (m_pShell)
+	{
+		m_pShell->Update(elapsedSec, m_Player);
+		if (m_pShell->IsGrabbed())
+		{
+			m_Player.GetpMario()->SetShell(m_pShell);
+			m_pShell = nullptr;
+		}
+	}
 }
 
 void Level::Push_back(const Point2f& p)

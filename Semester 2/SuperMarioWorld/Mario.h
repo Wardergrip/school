@@ -3,6 +3,7 @@
 #include "Vector2f.h"
 class Texture;
 class Level;
+class Shell;
 class Mario final : public GameObject
 {
 public:
@@ -14,9 +15,14 @@ public:
 	void Draw() const;
 	void Update(float elapsedSec, Level& level);
 	void UpdateAnim(float elapsedSec);
+
 	void Jump();
+	void BounceJump();
 	void Hurt();
 
+	void SetShell(Shell* pShell);
+	Shell* GiveShell();
+	Shell* GetShell() const;
 	float GetHorDirection() const;
 
 	Point2f GetPureLocation() const;
@@ -69,5 +75,7 @@ private:
 
 	bool m_IsInAir;
 
+	// Other stuff
+	Shell* m_pShell;
 };
 
