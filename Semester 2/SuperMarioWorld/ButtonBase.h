@@ -6,6 +6,8 @@ public:
 	explicit ButtonBase(Texture* pTexture = nullptr);
 	ButtonBase(const ButtonBase& b) = delete;
 	ButtonBase& operator=(const ButtonBase& b) = delete;
+	ButtonBase(ButtonBase&& b) = delete;
+	ButtonBase& operator=(ButtonBase&& b) = delete;
 	virtual ~ButtonBase();
 
 	void Draw() const;

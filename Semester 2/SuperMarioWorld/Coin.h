@@ -6,6 +6,8 @@ public:
 	explicit Coin(Type type, const Point2f& spawnPos = {});
 	Coin(const Coin& c) = delete;
 	Coin& operator=(const Coin& c) = delete;
+	Coin(Coin&& c) = delete;
+	Coin& operator=(Coin&& c) = delete;
 	virtual ~Coin();
 	
 	virtual void UpdateAnim(float elapsedSec) override;

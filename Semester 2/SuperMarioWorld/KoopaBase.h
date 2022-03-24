@@ -14,6 +14,8 @@ public:
 	explicit KoopaBase(Color col = Color::green, Type type = Type::shelled);
 	KoopaBase(const KoopaBase& k) = delete;
 	KoopaBase& operator=(const KoopaBase& k) = delete;
+	KoopaBase(KoopaBase&& k) = delete;
+	KoopaBase& operator=(KoopaBase&& k) = delete;
 	virtual ~KoopaBase();
 
 	void Draw() const;

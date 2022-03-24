@@ -9,6 +9,8 @@ public:
 	explicit Player();
 	Player(const Player& p) = delete;
 	Player& operator=(const Player& p) = delete;
+	Player(Player&& p) = delete;
+	Player& operator=(Player&& p) = delete;
 	~Player();
 
 	void Draw() const;

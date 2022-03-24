@@ -8,6 +8,8 @@ public:
 	explicit HUD(const Player& player, const Window& window);
 	HUD(const HUD& h) = delete;
 	HUD& operator=(const HUD& h) = delete;
+	HUD(HUD&& h) = delete;
+	HUD& operator=(HUD&& h) = delete;
 	~HUD();
 
 	void Draw() const;

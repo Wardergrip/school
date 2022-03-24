@@ -10,6 +10,8 @@ public:
 	explicit Mario();
 	Mario(const Mario& m) = delete;
 	Mario& operator=(const Mario& m) = delete;
+	Mario(Mario&& m) = delete;
+	Mario& operator=(Mario&& m) = delete;
 	~Mario();
 
 	void Draw() const;

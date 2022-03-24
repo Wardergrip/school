@@ -10,6 +10,8 @@ public:
 	explicit PickUp(Type type, Texture* texture, int horAmount, float maxSec = 1.0f, int vertAmount = 1, int row = 1);
 	PickUp(const PickUp& p) = delete;
 	PickUp& operator=(const PickUp& p) = delete;
+	PickUp(PickUp&& p) = delete;
+	PickUp& operator=(PickUp&& p) = delete;
 	virtual ~PickUp();
 
 	void Draw() const;

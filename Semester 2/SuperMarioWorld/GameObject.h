@@ -8,6 +8,8 @@ public:
     explicit GameObject();
     GameObject(const GameObject& g) = delete;
     GameObject& operator=(const GameObject& g) = delete;
+    GameObject(GameObject&& g) = delete;
+    GameObject& operator=(GameObject&& g) = delete;
     virtual ~GameObject();
 
     static const float m_Scale;

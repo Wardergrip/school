@@ -21,6 +21,8 @@ public:
 	explicit MainMenu(const Window& window, State startingState);
 	MainMenu(const MainMenu& m) = delete;
 	MainMenu& operator=(const MainMenu& m) = delete;
+	MainMenu(MainMenu&& m) = delete;
+	MainMenu& operator=(MainMenu&& m) = delete;
 	~MainMenu();
 	
 	void Draw() const;

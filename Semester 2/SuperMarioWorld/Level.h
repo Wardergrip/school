@@ -13,6 +13,8 @@ public:
 	explicit Level(Player& player);
 	Level(const Level& l) = delete;
 	Level& operator=(const Level& l) = delete;
+	Level(Level&& l) = delete;
+	Level& operator=(Level&& l) = delete;
 	~Level();
 
 	void Draw(const Point2f& cameraLoc, bool debugDraw = false) const;
