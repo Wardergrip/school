@@ -128,12 +128,13 @@ Rectf KoopaBase::GetRect() const
 Rectf KoopaBase::GetTopHitbox() const
 {
 	Rectf r{ GetRect() };
-	float horOffset{ 10 };
+	float horOffset{ 1 };
 	return Rectf{m_Position.x + horOffset, m_Position.y + r.height *0.9f,r.width - 2 * horOffset,r.height * 0.2f};
 }
 
 Rectf KoopaBase::GetSidesHitbox() const
 {
 	Rectf r{ GetRect() };
-	return Rectf{ m_Position.x - r.width * 0.1f,m_Position.y,r.width + r.width * 0.1f,r.height * 0.9f };
+	float horOutScale{ 0.2f };
+	return Rectf{ m_Position.x - r.width * horOutScale,m_Position.y,r.width + r.width * horOutScale,r.height * 0.9f };
 }

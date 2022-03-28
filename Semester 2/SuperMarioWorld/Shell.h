@@ -8,9 +8,13 @@ public:
 	void Kick(float horizontalDirection);
 	void Throw(float horizontalDirection, const Vector2f& velocity);
 
+	void Draw() const override;
 	void Update(float elapsedSec, const Player& player) override;
 
 	bool IsGrabbed() const;
+	float GetYPos() const;
+
+	void SetDeathStatus(bool status);
 
 private:
 	static int m_FramesPerSec;
@@ -20,5 +24,6 @@ private:
 	int m_CurrentFrame;
 
 	bool m_Grab;
+	bool m_IsDead;
 };
 

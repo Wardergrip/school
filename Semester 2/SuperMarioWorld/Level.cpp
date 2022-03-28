@@ -10,6 +10,7 @@
 #include "Platform.h"
 #include "Mario.h"
 #include "Shell.h"
+#include "Koopa.h"
 using namespace utils;
 #include <iostream>
 
@@ -20,19 +21,30 @@ Level::Level(Player& player)
 	,m_pPickUps{}
 	,m_pPlatforms{}
 	,m_pBackgroundTexture{new Texture("Resources/Background.png")}
+	,m_pShells{}
+	,m_pKoopas{}
 {
 	KoopaBase::InitLevelRef(this);
 	m_Vertices.push_back(std::vector<Point2f>{});
 	//PushDemoLevel();
 	if(!SVGParser::GetVerticesFromSvgFile("Resources/firstPlatformE.svg", m_Vertices)) throw "Something went wrong";
-	ScaleLevel(2.f);
+	ScaleLevel(m_Player.GetpMario()->m_Scale);
 	PushDemoPickUps();
-	m_pShell = new Shell(KoopaBase::Color::red);
-	m_pShell->SetPosition(Point2f{300,150});
+
+	m_pKoopas.reserve(16);
+	m_pKoopas.push_back(new Koopa(KoopaBase::Color::red));
+	m_pKoopas[0]->SetPosition(Point2f{ 500,150 });
+
+	m_pShells.reserve(8);
+	m_pShells.push_back(new Shell(KoopaBase::Color::red));
+	m_pShells[0]->SetPosition(Point2f{300,150});
 }
 
 Level::~Level()
 {
+	delete m_pBackgroundTexture;
+	m_pBackgroundTexture = nullptr;
+
 	for (size_t i{ 0 }; i < m_Vertices.size(); ++i)
 	{
 		m_Vertices[i].clear();
@@ -48,10 +60,16 @@ Level::~Level()
 		delete m_pPlatforms[i];
 		m_pPlatforms[i] = nullptr;
 	}
-	delete m_pBackgroundTexture;
-	m_pBackgroundTexture = nullptr;
-	if (m_pShell) delete m_pShell;
-	m_pShell = nullptr;
+	for (size_t i{ 0 }; i < m_pShells.size(); ++i)
+	{
+		delete m_pShells[i];
+		m_pShells[i] = nullptr;
+	}
+	for (size_t i{ 0 }; i < m_pKoopas.size(); ++i)
+	{
+		delete m_pKoopas[i];
+		m_pKoopas[i] = nullptr;
+	}
 }
 
 void Level::Draw(const Point2f& cameraLoc, bool debugDraw) const
@@ -66,8 +84,16 @@ void Level::Draw(const Point2f& cameraLoc, bool debugDraw) const
 	}
 	glPopMatrix();
 
-	if (m_pShell) m_pShell->Draw();
 	DrawPickUps();
+	for (Koopa* k : m_pKoopas)
+	{
+		if (k) k->Draw();
+	}
+	for (Shell* s : m_pShells)
+	{
+		if (s) s->Draw();
+	}
+	//if (m_pKoopa) m_pKoopa->Draw();
 	if (debugDraw) DebugDraw(Color4f{1,0,0,1},2.f);
 }
 
@@ -101,8 +127,9 @@ void Level::DrawPickUps() const
 	}
 }
 
-void Level::UpdatePickUps(float elapsedSec, Mario* mario)
+void Level::UpdateContent(float elapsedSec, Mario* mario)
 {
+	// Update PickUps
 	for (size_t i{ 0 }; i < m_pPickUps.size(); ++i)
 	{
 		if (m_pPickUps[i] == nullptr) continue;
@@ -126,16 +153,39 @@ void Level::UpdatePickUps(float elapsedSec, Mario* mario)
 			m_pPickUps[i] = nullptr;
 		}
 	}
-	if (m_pShell)
+	// Update Shells
+	if (m_Player.GetpMario()->IsTryingToThrowShell())
 	{
-		m_pShell->Update(elapsedSec, m_Player);
-		if (m_pShell->IsGrabbed())
+		bool isPointerPushed{ false };
+		for (size_t i{ 0 }; i < m_pShells.size(); ++i)
 		{
-			m_Player.GetpMario()->SetShell(m_pShell);
-			m_pShell = nullptr;
+			if (m_pShells[i] != nullptr) continue;
+			m_pShells[i] = m_Player.GetpMario()->GiveShell();
+			isPointerPushed = true;
+		}
+		if (!isPointerPushed) m_pShells.push_back(m_Player.GetpMario()->GiveShell());
+	}
+	for (size_t i{0};i<m_pShells.size();++i)
+	{
+		if (m_pShells[i] == nullptr) continue;
+		m_pShells[i]->Update(elapsedSec, m_Player);
+		if (m_pShells[i]->IsGrabbed())
+		{
+			m_Player.GetpMario()->SetShell(m_pShells[i]);
+			m_pShells[i] = nullptr;
 		}
 	}
-	if (m_Player.GetpMario()->IsTryingToThrowShell()) m_pShell = m_Player.GetpMario()->GiveShell();
+	// Update Koopas
+	for (size_t i{ 0 }; i < m_pKoopas.size(); ++i)
+	{
+		if (m_pKoopas[i] == nullptr) continue;
+		m_pKoopas[i]->Update(elapsedSec, m_Player);
+		if (m_pKoopas[i]->IsDead())
+		{
+			delete m_pKoopas[i];
+			m_pKoopas[i] = nullptr;
+		}
+	}
 }
 
 void Level::Push_back(const Point2f& p)
@@ -288,7 +338,7 @@ bool Level::IsHorizontallyTouching(const Rectf& other, HitInfo& hi, const Vector
 
 float Level::GetFurthestXValue()
 {
-	float highest{};
+	float highest{0};
 
 	for (size_t i{ 0 }; i < m_Vertices.size(); ++i)
 	{
@@ -335,7 +385,7 @@ void Level::PushDemoPickUps()
 {
 	for (float i{ 0 }; i < 10; ++i)
 	{
-		Push_back(new Coin(Coin::Type::coin, Point2f{100 + 20 * i,100 }));
+		Push_back(new Coin(Coin::Type::coin, Point2f{100 + 20 * i,200 }));
 	}
 	Push_back(new Mushroom(PickUp::Type::normalMushroom, this, Point2f{ 10,200 }));
 }

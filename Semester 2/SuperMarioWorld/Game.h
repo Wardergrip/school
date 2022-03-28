@@ -46,4 +46,6 @@ private:
 	void Initialize( );
 	void Cleanup( );
 	void ClearBackground( ) const;
+
+	void DisplayInfo();
 };

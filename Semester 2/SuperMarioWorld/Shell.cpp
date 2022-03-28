@@ -4,6 +4,7 @@
 #include "Mario.h"
 #include <iostream>
 #include "utils.h"
+#include "Texture.h"
 using namespace utils;
 
 int Shell::m_FramesPerSec{ 8 };
@@ -14,6 +15,7 @@ Shell::Shell(Color col)
 	,m_AnimTime{0}
 	,m_CurrentFrame{0}
 	,m_Grab{false}
+	,m_IsDead{false}
 {
 }
 
@@ -24,13 +26,50 @@ void Shell::Kick(float horizontalDirection)
 
 void Shell::Throw(float horizontalDirection, const Vector2f& velocity)
 {
+	float amplifier{ 1.5f };
 	m_Grab = false;
 	Kick(horizontalDirection);
-	if (m_Velocity.x < velocity.x) m_Velocity.x = velocity.x;
+	if (horizontalDirection > 0.5f)
+	{
+		if (m_Velocity.x < (velocity.x * amplifier))
+		{
+			m_Velocity.x = velocity.x * amplifier;
+		}
+	}
+	else if (horizontalDirection < -0.5f)
+	{
+		if (m_Velocity.x > (-velocity.x * amplifier))
+		{
+			m_Velocity.x = -velocity.x * amplifier;
+		}
+	}
+
+}
+
+void Shell::Draw() const
+{
+	glPushMatrix();
+	{
+		glTranslatef(m_Position.x, m_Position.y, 0);
+		glScalef(m_Scale, m_Scale, 1);
+		if (m_IsDead)
+		{
+			glScalef(1, -1, 1);
+		}
+		m_pKoopaTexture->Draw(Point2f{}, m_Rect);
+	}
+	glPopMatrix();
 }
 
 void Shell::Update(float elapsedSec, const Player& player)
 {
+	if (m_IsDead)
+	{
+		m_Velocity += m_Gravity * elapsedSec;
+		m_Position += m_Velocity * elapsedSec;
+		return;
+	}
+	const Uint8* pStates = SDL_GetKeyboardState(nullptr);
 	Mario* pMario{ player.GetpMario() };
 
 	if (IsOverlapping(pMario->GetRect(), this->GetTopHitbox()))
@@ -39,15 +78,21 @@ void Shell::Update(float elapsedSec, const Player& player)
 		else m_Velocity.x = 0;
 		pMario->BounceJump();
 	}
-	else if (IsOverlapping(pMario->GetRect(), this->GetRect()))
+	else if (IsOverlapping(pMario->GetRect(), this->GetSidesHitbox()))
 	{
 		if (m_Velocity.x > 1 || m_Velocity.x < -1)
 		{
-			if ((pMario->GetHorDirection() > 1 && m_Velocity.x > 1) || (pMario->GetHorDirection() < -1 && m_Velocity.x < -1))
+			if (((pMario->GetHorDirection() > 1) && (m_Velocity.x > 1)) || ((pMario->GetHorDirection() < -1) && (m_Velocity.x < -1)))
 			{
 				pMario->Hurt();
 			}
-			else m_Grab = true;
+			else if (pStates[SDL_SCANCODE_LSHIFT])
+			{
+				m_Grab = true;
+				m_AnimTime = 0;
+				m_CurrentFrame = 0;
+			}
+			else pMario->Hurt();
 		}
 		else Kick(pMario->GetHorDirection());
 	}
@@ -69,4 +114,15 @@ void Shell::Update(float elapsedSec, const Player& player)
 bool Shell::IsGrabbed() const
 {
 	return m_Grab;
+}
+
+float Shell::GetYPos() const
+{
+	return m_Position.y;
+}
+
+void Shell::SetDeathStatus(bool status)
+{
+	m_IsDead = status;
+	if (m_IsDead) m_Velocity.y = 400;
 }

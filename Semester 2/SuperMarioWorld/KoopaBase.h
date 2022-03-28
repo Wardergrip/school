@@ -18,7 +18,7 @@ public:
 	KoopaBase& operator=(KoopaBase&& k) = delete;
 	virtual ~KoopaBase();
 
-	void Draw() const;
+	virtual void Draw() const;
 	virtual void Update(float elapsedSec, const Player& player);
 	void UpdateMovement(float elapsedSec);
 

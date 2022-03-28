@@ -73,6 +73,8 @@ void Mario::Update(float elapsedSec, Level& level)
 	HitInfo HIv{}, HIh{};
 	const bool onTop{ level.IsOnTop(GetRect(),HIv,m_Velocity) };
 	const bool isHorTouch{ level.IsHorizontallyTouching(GetRect(),HIh,m_Velocity, m_HorizontalDirection) };
+	const Uint8 *pStates = SDL_GetKeyboardState( nullptr );
+
 	if (!onTop || m_Velocity.y > 0)
 	{
 		m_Velocity += m_Gravity * elapsedSec;
@@ -84,7 +86,6 @@ void Mario::Update(float elapsedSec, Level& level)
 		m_Velocity.y = 0;
 		m_IsInAir = false;
 	}
-	const Uint8 *pStates = SDL_GetKeyboardState( nullptr );
 	// Trying to move right
 	if (pStates[SDL_SCANCODE_RIGHT])
 	{
@@ -249,8 +250,8 @@ void Mario::SetShell(Shell* pShell)
 Shell* Mario::GiveShell()
 {
 	m_pShell->Throw(m_HorizontalDirection,m_Velocity);
-	if (m_HorizontalDirection > 0.5f) m_pShell->SetPosition(Point2f{ m_Position.x + GetRect().width,m_Position.y });
-	else if (m_HorizontalDirection < -0.5f) m_pShell->SetPosition(Point2f{ m_Position.x - GetRect().width,m_Position.y });
+	if (m_HorizontalDirection > 0.5f) m_pShell->SetPosition(Point2f{ m_Position.x + GetRect().width + 10,m_Position.y });
+	else if (m_HorizontalDirection < -0.5f) m_pShell->SetPosition(Point2f{ m_Position.x - GetRect().width - 10,m_Position.y });
 
 	Shell* pS{ m_pShell };
 	m_pShell = nullptr;

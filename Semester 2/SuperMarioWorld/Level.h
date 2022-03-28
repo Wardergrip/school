@@ -7,6 +7,7 @@ class Platform;
 class Player;
 class Mario;
 class Shell;
+class Koopa;
 class Level final
 {
 public:
@@ -21,7 +22,7 @@ public:
 	void DebugDraw(const Color4f& col = Color4f{1,0,0,1}, float lineThickness = 1) const;
 
 	void DrawPickUps() const;
-	void UpdatePickUps(float elapsedSec, Mario* mario);
+	void UpdateContent(float elapsedSec, Mario* mario);
 
 	void Push_back(const Point2f& p);
 	void Push_back(PickUp* pu);
@@ -44,7 +45,8 @@ private:
 
 	Texture* m_pBackgroundTexture;
 
-	Shell* m_pShell;
+	std::vector<Shell*> m_pShells;
+	std::vector<Koopa*> m_pKoopas;
 
 	// Scale the level. vectorAmount indicates until what idx the vectors should be scaled.
 	// -1 will scale all vectors.

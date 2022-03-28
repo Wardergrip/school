@@ -58,7 +58,7 @@ void Game::Update( float elapsedSec )
 
 	if (m_pMainMenu->m_State != MainMenu::State::playing) return;
 	m_Player.Update(elapsedSec, *m_pLevel);
-	m_pLevel->UpdatePickUps(elapsedSec, m_Player.GetpMario());
+	m_pLevel->UpdateContent(elapsedSec, m_Player.GetpMario());
 	m_Camera.UpdateTransitioning(m_Player.GetMarioRect(), elapsedSec);
 }
 
@@ -97,19 +97,12 @@ void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )
 void Game::ProcessKeyUpEvent( const SDL_KeyboardEvent& e )
 {
 	//std::cout << "KEYUP event: " << e.keysym.sym << std::endl;
-	//switch ( e.keysym.sym )
-	//{
-	//case SDLK_LEFT:
-	//	//std::cout << "Left arrow key released\n";
-	//	break;
-	//case SDLK_RIGHT:
-	//	//std::cout << "`Right arrow key released\n";
-	//	break;
-	//case SDLK_1:
-	//case SDLK_KP_1:
-	//	//std::cout << "Key 1 released\n";
-	//	break;
-	//}
+	switch ( e.keysym.sym )
+	{
+	case SDLK_i:
+		DisplayInfo();
+		break;
+	}
 }
 
 void Game::ProcessMouseMotionEvent( const SDL_MouseMotionEvent& e )
@@ -157,4 +150,17 @@ void Game::ClearBackground( ) const
 {
 	glClearColor( 0.0f, 0.0f, 0.3f, 1.0f );
 	glClear( GL_COLOR_BUFFER_BIT );
+}
+
+void Game::DisplayInfo()
+{
+	std::cout << "\n" 
+		<< "Welcome to SuperMarioWorld!\n"
+		<< "---------------------------\n"
+		<< "Left & right arrow keys: moving left and right respectively\n"
+		<< "Up arrow key: look up\n"
+		<< "Down arrow key: duck\n"
+		<< "Spacebar: jump\n"
+		<< "Left shift: sprinting/grabbing (Hold)\n"
+		;
 }
