@@ -5,6 +5,7 @@
 
 #include "Texture.h"
 #include "Level.h"
+#include "KoopaBase.h"
 //#include "Mario.h"
 #include "Coin.h"
 #include "FireFlower.h"
@@ -101,6 +102,11 @@ void Game::ProcessKeyUpEvent( const SDL_KeyboardEvent& e )
 	{
 	case SDLK_i:
 		DisplayInfo();
+		break;
+	case SDLK_d:
+		std::cout << "[DEBUG] KoopaBaseHitBoxes ";
+		if(KoopaBase::SwitchHitBoxDraw()) std::cout << "ENABLED\n";
+		else std::cout << "DISABLED\n";
 		break;
 	}
 }

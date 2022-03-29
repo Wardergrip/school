@@ -9,6 +9,7 @@ using namespace utils;
 Texture* KoopaBase::m_pKoopaTexture{ nullptr };
 unsigned int KoopaBase::m_Instances{ 0 };
 Level* KoopaBase::m_pLevelRef{ nullptr };
+bool KoopaBase::m_DrawHitBoxes{ false };
 
 void KoopaBase::InitLevelRef(Level* pLevelRef)
 {
@@ -120,6 +121,12 @@ void KoopaBase::SetVelocity(const Vector2f& vel)
 	m_Velocity = vel;
 }
 
+bool KoopaBase::SwitchHitBoxDraw()
+{
+	m_DrawHitBoxes = !m_DrawHitBoxes;
+	return m_DrawHitBoxes;
+}
+
 Rectf KoopaBase::GetRect() const
 {
 	return Rectf{ m_Position.x,m_Position.y,m_Rect.width * m_Scale,m_Rect.height * m_Scale};
@@ -136,5 +143,18 @@ Rectf KoopaBase::GetSidesHitbox() const
 {
 	Rectf r{ GetRect() };
 	float horOutScale{ 0.2f };
-	return Rectf{ m_Position.x - r.width * horOutScale,m_Position.y,r.width + r.width * horOutScale,r.height * 0.9f };
+	return Rectf{ m_Position.x - r.width * horOutScale,m_Position.y,r.width  +  2 * r.width * horOutScale  ,r.height * 0.9f};
+}
+
+KoopaBase::Type KoopaBase::GetType() const
+{
+	return m_Type;
+}
+
+void KoopaBase::DrawHitboxes() const
+{
+	SetColor(Color4f{ 1,0,0,1 });
+	DrawRect(GetSidesHitbox(), 2.f);
+	SetColor(Color4f{ 1,1,0,1 });
+	DrawRect(GetTopHitbox(), 2.f);
 }

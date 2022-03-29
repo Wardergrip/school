@@ -1,5 +1,7 @@
 #pragma once
 #include "KoopaBase.h"
+#include "Koopa.h"
+#include <vector>
 class Shell final : public KoopaBase
 {
 public:
@@ -10,8 +12,12 @@ public:
 
 	void Draw() const override;
 	void Update(float elapsedSec, const Player& player) override;
+	// Returns idx of the koopa hit
+	int UpdateShellKoopaCollisions(std::vector<Koopa*>& pKs);
+	void UpdateShellCollisions(std::vector<Shell*>& pSs);
 
 	bool IsGrabbed() const;
+	bool IsGoingIn() const;
 	float GetYPos() const;
 
 	void SetDeathStatus(bool status);
@@ -24,6 +30,7 @@ private:
 	int m_CurrentFrame;
 
 	bool m_Grab;
+	bool m_GoIn;
 	bool m_IsDead;
 };
 

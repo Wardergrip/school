@@ -129,6 +129,17 @@ void Level::DrawPickUps() const
 
 void Level::UpdateContent(float elapsedSec, Mario* mario)
 {
+	// CLEANUP
+	for (size_t i{ 0 }; i < m_pShells.size(); ++i)
+	{
+		if (m_pShells[i] == nullptr) continue;
+		if (m_pShells[i]->GetYPos() < -300)
+		{
+			delete m_pShells[i];
+			m_pShells[i] = nullptr;
+		}
+	}
+
 	// Update PickUps
 	for (size_t i{ 0 }; i < m_pPickUps.size(); ++i)
 	{
@@ -173,6 +184,15 @@ void Level::UpdateContent(float elapsedSec, Mario* mario)
 		{
 			m_Player.GetpMario()->SetShell(m_pShells[i]);
 			m_pShells[i] = nullptr;
+			continue;
+		}
+		m_pShells[i]->UpdateShellCollisions(m_pShells);
+		int j{ m_pShells[i]->UpdateShellKoopaCollisions(m_pKoopas) };
+		if (j == -1) continue;
+		if (m_pShells[i]->IsGoingIn())
+		{
+			m_pKoopas[j]->SetShell(m_pShells[i]);
+			m_pShells[i] = nullptr;
 		}
 	}
 	// Update Koopas
@@ -184,6 +204,17 @@ void Level::UpdateContent(float elapsedSec, Mario* mario)
 		{
 			delete m_pKoopas[i];
 			m_pKoopas[i] = nullptr;
+		}
+		else if (m_pKoopas[i]->IsWantingToGiveShell())
+		{
+			bool isPointerPushed{ false };
+			for (size_t i{ 0 }; i < m_pShells.size(); ++i)
+			{
+				if (m_pShells[i] != nullptr) continue;
+				m_pShells[i] = m_pKoopas[i]->GiveShell();
+				isPointerPushed = true;
+			}
+			if (!isPointerPushed) m_pShells.push_back(m_pKoopas[i]->GiveShell());
 		}
 	}
 }

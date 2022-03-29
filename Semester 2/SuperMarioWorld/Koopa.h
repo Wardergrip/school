@@ -14,16 +14,19 @@ public:
 	void Draw() const override;
 	void Update(float elapsedSec, const Player& player) override;
 
-	void Hurt();
+	void AboutToDie();
 
 	Shell* GetShell() const;
 	bool IsDead() const;
+	bool IsWantingToGiveShell() const;
 	Shell* GiveShell();
+	void SetShell(Shell* pShell);
 
 private:
 	Shell* m_pShell;
 	bool m_IsDead;
 	bool m_IsHurt;
+	bool m_IsGivingShell;
 
 	// Anim stuff
 	static int m_FramesPerSec;

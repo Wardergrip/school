@@ -16,6 +16,7 @@ Shell::Shell(Color col)
 	,m_CurrentFrame{0}
 	,m_Grab{false}
 	,m_IsDead{false}
+	,m_GoIn{false}
 {
 }
 
@@ -59,6 +60,8 @@ void Shell::Draw() const
 		m_pKoopaTexture->Draw(Point2f{}, m_Rect);
 	}
 	glPopMatrix();
+
+	if (m_DrawHitBoxes) DrawHitboxes();
 }
 
 void Shell::Update(float elapsedSec, const Player& player)
@@ -94,6 +97,12 @@ void Shell::Update(float elapsedSec, const Player& player)
 			}
 			else pMario->Hurt();
 		}
+		else if (pStates[SDL_SCANCODE_LSHIFT])
+		{
+			m_Grab = true;
+			m_AnimTime = 0;
+			m_CurrentFrame = 0;
+		}
 		else Kick(pMario->GetHorDirection());
 	}
 
@@ -111,9 +120,51 @@ void Shell::Update(float elapsedSec, const Player& player)
 	m_Rect.left = 3 * m_Rect.width + m_CurrentFrame * m_Rect.width;
 }
 
+int Shell::UpdateShellKoopaCollisions(std::vector<Koopa*>& pKs)
+{
+	for (size_t i{0}; i < pKs.size(); ++i)
+	{
+		if (pKs[i] == nullptr) continue;
+		else if (pKs[i]->GetType() == Type::shelled) continue;
+		if (IsOverlapping(pKs[i]->GetRect(), GetRect()))
+		{
+			if (m_Velocity.x > 1 || m_Velocity.x < -1)
+			{
+				pKs[i]->AboutToDie();
+			}
+			else m_GoIn = true;
+			return int(i);
+		}
+	}
+	return -1;
+}
+
+void Shell::UpdateShellCollisions(std::vector<Shell*>& pSs)
+{
+	for (size_t i{ 0 }; i < pSs.size(); ++i)
+	{
+		if (pSs[i] == nullptr) continue;
+		else if (pSs[i] == this) continue;
+		if (IsOverlapping(pSs[i]->GetRect(), GetRect()))
+		{
+			if (m_Velocity.x > 1 || m_Velocity.x < -1)
+			{
+				pSs[i]->m_IsDead = true;
+				std::cout << "Shell x shell hit\n";
+			}
+			else m_IsDead = true;
+		}
+	}
+}
+
 bool Shell::IsGrabbed() const
 {
 	return m_Grab;
+}
+
+bool Shell::IsGoingIn() const
+{
+	return m_GoIn;
 }
 
 float Shell::GetYPos() const

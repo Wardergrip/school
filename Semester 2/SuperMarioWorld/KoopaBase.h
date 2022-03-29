@@ -20,24 +20,31 @@ public:
 
 	virtual void Draw() const;
 	virtual void Update(float elapsedSec, const Player& player);
-	void UpdateMovement(float elapsedSec);
+	virtual void UpdateMovement(float elapsedSec);
+
 
 	void SetPosition(const Point2f& pos);
 	void SetVelocity(const Vector2f& vel);
+
+	static bool SwitchHitBoxDraw();
 
 	// Get the positional Rect of the koopa
 	Rectf GetRect() const;
 	Rectf GetTopHitbox() const;
 	Rectf GetSidesHitbox() const;
+	Type GetType() const;
 
 protected:
 	static Texture* m_pKoopaTexture;
 	static unsigned int m_Instances;
 	static Level* m_pLevelRef;
+	static bool m_DrawHitBoxes;
 	Color m_Color;
 	Type m_Type;
 
 	Point2f m_Position;
 	Vector2f m_Velocity;
+
+	void DrawHitboxes() const;
 };
 
