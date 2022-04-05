@@ -16,6 +16,9 @@ public:
 	void Draw() const;
 	void Update(float elapsedSec, Level& level);
 
+	void ResetAll();
+	void SoftReset();
+
 	void AddScore( unsigned int score );
 	void AddLife();
 	void AddCoin();
@@ -27,6 +30,8 @@ public:
 	int GetLives() const;
 	int GetCoinAmount() const;
 	unsigned int GetTime() const;
+	bool IsGameOver() const;
+	bool IsSoftReset() const;
 
 	Mario* GetpMario() const;
 	Rectf GetMarioRect() const;
@@ -44,5 +49,8 @@ private:
 	int m_Lives;
 	int m_CoinAmount;
 	int m_BigCoinAmount;
+
+	bool m_GameOver;
+	bool m_SoftReset;
 };
 

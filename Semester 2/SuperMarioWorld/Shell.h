@@ -16,6 +16,8 @@ public:
 	int UpdateShellKoopaCollisions(std::vector<Koopa*>& pKs);
 	void UpdateShellCollisions(std::vector<Shell*>& pSs);
 
+	void SetGrabbed(bool grabbed);
+
 	bool IsGrabbed() const;
 	bool IsGoingIn() const;
 	float GetYPos() const;

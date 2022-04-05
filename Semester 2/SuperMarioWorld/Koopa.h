@@ -15,6 +15,7 @@ public:
 	void Update(float elapsedSec, const Player& player) override;
 
 	void AboutToDie();
+	void ForceDie();
 
 	Shell* GetShell() const;
 	bool IsDead() const;

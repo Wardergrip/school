@@ -70,16 +70,24 @@ void Koopa::Update(float elapsedSec, const Player& player)
 		{
 			AboutToDie();
 			pMario->BounceJump();
+			m_Rect.left = -m_Rect.width; // Doesn't work?
 		}
 		else if (m_Type == Type::shelled) m_IsGivingShell = true;
 	}
 	else if (IsOverlapping(pMario->GetRect(), GetSidesHitbox()))
 	{
-		pMario->Hurt();
+		if(!pMario->GetShell()) pMario->Hurt();
+		else
+		{
+			AboutToDie();
+			m_pShell->SetDeathStatus(true);
+			pMario->GetShell()->SetDeathStatus(true);
+			m_pLevelRef->Push_back(pMario->GiveShell());
+		}
 	}
 	UpdateMovement(elapsedSec);
 	UpdateAnim(elapsedSec);
-}
+}                                 
 
 void Koopa::AboutToDie()
 {
@@ -90,6 +98,11 @@ void Koopa::AboutToDie()
 	m_IsHurt = true;
 }
 
+void Koopa::ForceDie()
+{
+	m_IsDead = true;
+}
+
 Shell* Koopa::GiveShell()
 {
 	Shell* pS{ m_pShell };
@@ -98,6 +111,8 @@ Shell* Koopa::GiveShell()
 	m_IsGivingShell = false;
 	m_Type = Type::naked;
 	m_Rect.left = 8 * m_Rect.width;
+	m_Rect.height = 0.6f * m_Rect.height;
+	this->SetPosition(Point2f{ m_Position.x - 50, m_Position.y });
 	return pS;
 }
 
@@ -105,6 +120,8 @@ void Koopa::SetShell(Shell* pShell)
 {
 	if (m_pShell != nullptr) throw "Trying to replace current shell\n";
 	m_pShell = pShell;
+	m_Type = Type::shelled;
+	m_Rect.height = 27.f;
 }
 
 void Koopa::UpdateAnim(float elapsedSec)

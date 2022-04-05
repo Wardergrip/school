@@ -59,6 +59,19 @@ void Game::Update( float elapsedSec )
 
 	if (m_pMainMenu->m_State != MainMenu::State::playing) return;
 	m_Player.Update(elapsedSec, *m_pLevel);
+	if (m_Player.IsSoftReset())
+	{
+		m_Player.SoftReset();
+		delete m_pLevel;
+		m_pLevel = new Level(m_Player);
+	}
+	else if (m_Player.IsGameOver())
+	{
+		delete m_pLevel;
+		m_pLevel = new Level(m_Player);
+		m_Player.ResetAll();
+		m_pMainMenu->m_State = MainMenu::State::titlescreen;
+	}
 	m_pLevel->UpdateContent(elapsedSec, m_Player.GetpMario());
 	m_Camera.UpdateTransitioning(m_Player.GetMarioRect(), elapsedSec);
 }

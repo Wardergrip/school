@@ -142,7 +142,7 @@ Rectf KoopaBase::GetTopHitbox() const
 Rectf KoopaBase::GetSidesHitbox() const
 {
 	Rectf r{ GetRect() };
-	float horOutScale{ 0.2f };
+	float horOutScale{ 0.1f };
 	return Rectf{ m_Position.x - r.width * horOutScale,m_Position.y,r.width  +  2 * r.width * horOutScale  ,r.height * 0.9f};
 }
 

@@ -125,12 +125,17 @@ int Shell::UpdateShellKoopaCollisions(std::vector<Koopa*>& pKs)
 	for (size_t i{0}; i < pKs.size(); ++i)
 	{
 		if (pKs[i] == nullptr) continue;
-		else if (pKs[i]->GetType() == Type::shelled) continue;
+		else if (pKs[i]->GetType() != Type::shelled) ; // Empty statement, it skips the else so it goes over to the next if
+		else continue;
 		if (IsOverlapping(pKs[i]->GetRect(), GetRect()))
 		{
 			if (m_Velocity.x > 1 || m_Velocity.x < -1)
 			{
-				pKs[i]->AboutToDie();
+				if (pKs[i]->GetType() == Type::naked)
+				{
+					pKs[i]->ForceDie();
+				}
+				else pKs[i]->AboutToDie();
 			}
 			else m_GoIn = true;
 			return int(i);
@@ -155,6 +160,11 @@ void Shell::UpdateShellCollisions(std::vector<Shell*>& pSs)
 			else m_IsDead = true;
 		}
 	}
+}
+
+void Shell::SetGrabbed(bool grabbed)
+{
+	m_Grab = grabbed;
 }
 
 bool Shell::IsGrabbed() const

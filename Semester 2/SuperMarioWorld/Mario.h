@@ -7,6 +7,8 @@ class Shell;
 class Mario final : public GameObject
 {
 public:
+	enum class Stage { dead, small, big, fire };
+
 	explicit Mario();
 	Mario(const Mario& m) = delete;
 	Mario& operator=(const Mario& m) = delete;
@@ -34,11 +36,14 @@ public:
 	Rectf GetRect() const;
 
 	bool IsTryingToThrowShell() const;
+	Stage GetStage() const;
+	bool IsFullyDead() const;
 
 private:
 	// Animation stuff
 	enum class AnimState
 	{
+		dead = -1,
 		neutral = 0,
 		lookUp = 1,
 		duck = 2,
@@ -52,7 +57,8 @@ private:
 		spinJump1 = 10,spinJump2 = 11,spinJump3 = 12,spinJump4 = 13,
 		victory = 17
 	};
-	Texture* m_pTexture;
+	Texture* m_pSmallMarioTexture;
+	Texture* m_pDeadGrowTexture;
 	bool m_IsGrabbing;
 	bool m_LookUp;
 	bool m_Duck;
@@ -81,5 +87,7 @@ private:
 	// Other stuff
 	Shell* m_pShell;
 	bool m_LoseShell;
+	bool m_IsFullyDead;
+	Stage m_Stage;
 };
 

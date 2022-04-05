@@ -27,6 +27,7 @@ public:
 	void Push_back(const Point2f& p);
 	void Push_back(PickUp* pu);
 	void Push_back(Platform* p);
+	void Push_back(Shell* s);
 
 	bool IsOnTop(Rectf& other);
 	bool IsOnTop(const Rectf& other, utils::HitInfo& hi, const Vector2f& velocity);
@@ -44,6 +45,7 @@ private:
 	std::vector<Platform*> m_pPlatforms;
 
 	Texture* m_pBackgroundTexture;
+	Texture* m_pLevelTexture;
 
 	std::vector<Shell*> m_pShells;
 	std::vector<Koopa*> m_pKoopas;

@@ -6,14 +6,9 @@
 #include "Level.h"
 
 Player::Player()
-	:m_Score{0}
-	,m_Lives{3}
-	,m_CoinAmount{0}
-	,m_BigCoinAmount{0}
-	,m_Increment{0}
-	,m_Time{300}
+	:m_pMario{nullptr}
 {
-	m_pMario = new Mario();
+	ResetAll();
 }
 
 Player::~Player()
@@ -33,12 +28,47 @@ void Player::Update(float elapsedSec, Level& level)
 
 	m_pMario->Update(elapsedSec, level);
 
+	if (m_pMario->IsFullyDead())
+	{
+		if (!ReduceLive())
+		{
+			m_GameOver = true;
+		}
+		else
+		{
+			m_SoftReset = true;
+		}
+	}
+
 	m_Increment += elapsedSec;
 	if (m_Increment >= 1)
 	{
 		m_Increment -= 1.f;
 		--m_Time;
 	}
+}
+
+void Player::ResetAll()
+{
+	if (m_pMario) delete m_pMario;
+
+	m_Score = 0;
+	m_Lives = 3;
+	m_CoinAmount = 0;
+	m_BigCoinAmount = 0;
+	m_Increment = 0;
+	m_Time = 300;
+	m_GameOver = false;
+	m_SoftReset = false;
+
+	m_pMario = new Mario();
+}
+
+void Player::SoftReset()
+{
+	if (m_pMario) delete m_pMario;
+	m_pMario = new Mario();
+	m_SoftReset = false;
 }
 
 void Player::AddScore(unsigned int score)
@@ -110,6 +140,16 @@ int Player::GetCoinAmount() const
 unsigned int Player::GetTime() const
 {
 	return m_Time;
+}
+
+bool Player::IsGameOver() const
+{
+	return m_GameOver;
+}
+
+bool Player::IsSoftReset() const
+{
+	return m_SoftReset;
 }
 
 Mario* Player::GetpMario() const

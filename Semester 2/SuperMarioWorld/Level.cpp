@@ -21,13 +21,14 @@ Level::Level(Player& player)
 	,m_pPickUps{}
 	,m_pPlatforms{}
 	,m_pBackgroundTexture{new Texture("Resources/Background.png")}
+	,m_pLevelTexture{new Texture("Resources/Level.png")}
 	,m_pShells{}
 	,m_pKoopas{}
 {
 	KoopaBase::InitLevelRef(this);
 	m_Vertices.push_back(std::vector<Point2f>{});
 	//PushDemoLevel();
-	if(!SVGParser::GetVerticesFromSvgFile("Resources/firstPlatformE.svg", m_Vertices)) throw "Something went wrong";
+	if(!SVGParser::GetVerticesFromSvgFile("Resources/thirdAttempt.svg", m_Vertices)) throw "Something went wrong";
 	ScaleLevel(m_Player.GetpMario()->m_Scale);
 	PushDemoPickUps();
 
@@ -35,7 +36,7 @@ Level::Level(Player& player)
 	m_pKoopas.push_back(new Koopa(KoopaBase::Color::red));
 	m_pKoopas[0]->SetPosition(Point2f{ 500,150 });
 
-	m_pShells.reserve(8);
+	m_pShells.reserve(16);
 	m_pShells.push_back(new Shell(KoopaBase::Color::red));
 	m_pShells[0]->SetPosition(Point2f{300,150});
 }
@@ -44,6 +45,8 @@ Level::~Level()
 {
 	delete m_pBackgroundTexture;
 	m_pBackgroundTexture = nullptr;
+	delete m_pLevelTexture;
+	m_pLevelTexture = nullptr;
 
 	for (size_t i{ 0 }; i < m_Vertices.size(); ++i)
 	{
@@ -83,7 +86,12 @@ void Level::Draw(const Point2f& cameraLoc, bool debugDraw) const
 		}
 	}
 	glPopMatrix();
-
+	glPushMatrix();
+	{
+		glScalef(GameObject::m_Scale, GameObject::m_Scale, 1);
+		m_pLevelTexture->Draw();
+	}
+	glPopMatrix();
 	DrawPickUps();
 	for (Koopa* k : m_pKoopas)
 	{
@@ -132,14 +140,15 @@ void Level::UpdateContent(float elapsedSec, Mario* mario)
 	// CLEANUP
 	for (size_t i{ 0 }; i < m_pShells.size(); ++i)
 	{
+		//std::cout << "Shell[" << i << "] :" << m_pShells[i] << '\n';
 		if (m_pShells[i] == nullptr) continue;
 		if (m_pShells[i]->GetYPos() < -300)
 		{
+			//std::cout << "Cleaning up shell idx " << i << '\n';
 			delete m_pShells[i];
 			m_pShells[i] = nullptr;
 		}
 	}
-
 	// Update PickUps
 	for (size_t i{ 0 }; i < m_pPickUps.size(); ++i)
 	{
@@ -167,24 +176,25 @@ void Level::UpdateContent(float elapsedSec, Mario* mario)
 	// Update Shells
 	if (m_Player.GetpMario()->IsTryingToThrowShell())
 	{
-		bool isPointerPushed{ false };
-		for (size_t i{ 0 }; i < m_pShells.size(); ++i)
-		{
-			if (m_pShells[i] != nullptr) continue;
-			m_pShells[i] = m_Player.GetpMario()->GiveShell();
-			isPointerPushed = true;
-		}
-		if (!isPointerPushed) m_pShells.push_back(m_Player.GetpMario()->GiveShell());
+		Push_back(m_Player.GetpMario()->GiveShell());
 	}
-	for (size_t i{0};i<m_pShells.size();++i)
+	for (size_t i{0}; i < m_pShells.size(); ++i)
 	{
 		if (m_pShells[i] == nullptr) continue;
 		m_pShells[i]->Update(elapsedSec, m_Player);
 		if (m_pShells[i]->IsGrabbed())
 		{
-			m_Player.GetpMario()->SetShell(m_pShells[i]);
-			m_pShells[i] = nullptr;
-			continue;
+			if (m_Player.GetpMario()->GetShell())
+			{
+				m_pShells[i]->SetGrabbed(false);
+				m_pShells[i]->Kick(m_Player.GetpMario()->GetHorDirection());
+			}
+			else
+			{
+				m_Player.GetpMario()->SetShell(m_pShells[i]);
+				m_pShells[i] = nullptr;
+				continue;
+			}
 		}
 		m_pShells[i]->UpdateShellCollisions(m_pShells);
 		int j{ m_pShells[i]->UpdateShellKoopaCollisions(m_pKoopas) };
@@ -211,10 +221,16 @@ void Level::UpdateContent(float elapsedSec, Mario* mario)
 			for (size_t i{ 0 }; i < m_pShells.size(); ++i)
 			{
 				if (m_pShells[i] != nullptr) continue;
+				if (isPointerPushed) continue;
 				m_pShells[i] = m_pKoopas[i]->GiveShell();
 				isPointerPushed = true;
 			}
-			if (!isPointerPushed) m_pShells.push_back(m_pKoopas[i]->GiveShell());
+			if (!isPointerPushed)
+			{
+				m_pShells.push_back(m_pKoopas[i]->GiveShell());
+				std::cout << "Pushed in m_pShells[" << i << "]" << m_pShells[i] << '\n';
+				std::cout << "The Koopa has " << m_pKoopas[i]->GetShell() << '\n';
+			}
 		}
 	}
 }
@@ -232,6 +248,18 @@ void Level::Push_back(PickUp* pu)
 void Level::Push_back(Platform* p)
 {
 	m_pPlatforms.push_back(p);
+}
+
+void Level::Push_back(Shell* s)
+{
+	bool isPointerPushed{ false };
+	for (size_t i{ 0 }; i < m_pShells.size(); ++i)
+	{
+		if (m_pShells[i] != nullptr) continue;
+		m_pShells[i] = s;
+		isPointerPushed = true;
+	}
+	if (!isPointerPushed) m_pShells.push_back(s);
 }
 
 bool Level::IsOnTop(Rectf& other)
