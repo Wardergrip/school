@@ -90,3 +90,42 @@ bool Platform::IsFullyOnTop(const Rectf& other)
 	}
 	return false;
 }
+
+bool Platform::IsHorizontallyTouching(const Rectf& other, HitInfo& hi, const Vector2f& velocity, float horDirection) const
+{
+	HitInfo HI{};
+	const float velX{ std::abs(velocity.x) };
+	// This offset is to make sure that clipping vertically isn't seen as a touch
+	float offsetBL{ 1 };
+	// Sprinting = longer raycast (further out of charachter)
+	float sidewaysOffset{ velX / 50.0f };
+	if (sidewaysOffset < 1) sidewaysOffset = 1;
+	// Raycast points
+	Point2f leftTop{ other.left - sidewaysOffset,other.bottom + other.height };
+	Point2f rightTop{ other.left + other.width + sidewaysOffset,other.bottom + other.height };
+	Point2f leftBot{ other.left - sidewaysOffset,other.bottom + offsetBL };
+	Point2f rightBot{ other.left + other.width + sidewaysOffset,other.bottom + offsetBL };
+
+	if (horDirection >= 0.5f)
+	{
+		leftTop.x += other.width / 2;
+		leftBot.x += other.width / 2;
+	}
+	else if (horDirection <= -0.5f)
+	{
+		rightTop.x -= other.width / 2;
+		rightBot.x -= other.width / 2;
+	}
+
+	if (Raycast(m_Vertices, leftBot, rightBot, HI))
+	{
+		hi = HI;
+		return true;
+	}
+	else if (Raycast(m_Vertices, leftTop, rightTop, HI))
+	{
+		hi = HI;
+		return true;
+	}
+	return false;
+}

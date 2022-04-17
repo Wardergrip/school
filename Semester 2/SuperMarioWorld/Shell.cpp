@@ -17,12 +17,17 @@ Shell::Shell(Color col)
 	,m_Grab{false}
 	,m_IsDead{false}
 	,m_GoIn{false}
+	,m_MarioUp{false}
 {
 }
 
 void Shell::Kick(float horizontalDirection)
 {
-	m_Velocity.x = horizontalDirection * m_KickSpeed;
+	if (!m_MarioUp) m_Velocity.x = horizontalDirection * m_KickSpeed;
+	else
+	{
+		m_Velocity.y = m_KickSpeed*4;
+	}
 }
 
 void Shell::Throw(float horizontalDirection, const Vector2f& velocity)
@@ -44,7 +49,7 @@ void Shell::Throw(float horizontalDirection, const Vector2f& velocity)
 			m_Velocity.x = -velocity.x * amplifier;
 		}
 	}
-
+	m_MarioUp = false;
 }
 
 void Shell::Draw() const
@@ -165,6 +170,11 @@ void Shell::UpdateShellCollisions(std::vector<Shell*>& pSs)
 void Shell::SetGrabbed(bool grabbed)
 {
 	m_Grab = grabbed;
+}
+
+void Shell::SetUpStatus(bool status)
+{
+	m_MarioUp = status;
 }
 
 bool Shell::IsGrabbed() const

@@ -29,7 +29,7 @@ void Game::Initialize( )
 {
 	m_pMainMenu = new MainMenu(m_Window, MainMenu::State::playing);
 	m_pLevel = new Level(m_Player);
-	m_Camera.SetLevelBoundaries(Rectf{0,0,m_pLevel->GetFurthestXValue() + 250.f,m_Window.height});
+	m_Camera.SetLevelBoundaries(Rectf{0,0,m_pLevel->GetFurthestXValue(),m_Window.height});
 	m_pHUD = new HUD(m_Player,m_Window);
 }
 
@@ -119,6 +119,11 @@ void Game::ProcessKeyUpEvent( const SDL_KeyboardEvent& e )
 	case SDLK_d:
 		std::cout << "[DEBUG] KoopaBaseHitBoxes ";
 		if(KoopaBase::SwitchHitBoxDraw()) std::cout << "ENABLED\n";
+		else std::cout << "DISABLED\n";
+		break;
+	case SDLK_g:
+		std::cout << "[DEBUG] Level ";
+		if (m_pLevel->SwitchDebugDrawLevel()) std::cout << "ENABLED\n";
 		else std::cout << "DISABLED\n";
 		break;
 	}

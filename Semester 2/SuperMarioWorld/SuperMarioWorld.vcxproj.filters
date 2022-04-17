@@ -114,6 +114,9 @@
     <ClCompile Include="Shell.cpp">
       <Filter>Koopa Files</Filter>
     </ClCompile>
+    <ClCompile Include="MysteryBox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -202,6 +205,9 @@
     </ClInclude>
     <ClInclude Include="Shell.h">
       <Filter>Koopa Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MysteryBox.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

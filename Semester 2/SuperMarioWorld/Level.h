@@ -8,6 +8,7 @@ class Player;
 class Mario;
 class Shell;
 class Koopa;
+class MysteryBox;
 class Level final
 {
 public:
@@ -34,7 +35,9 @@ public:
 	bool IsFullyOnTop(const Rectf& other, const Vector2f& velocity);
 	bool IsHorizontallyTouching(const Rectf& other, utils::HitInfo& hi, const Vector2f& velocity, float horDirection) const;
 
-	float GetFurthestXValue();
+	bool SwitchDebugDrawLevel();
+
+	float GetFurthestXValue() const;
 
 private:
 	bool m_EnableDebugDraw;
@@ -43,6 +46,7 @@ private:
 	std::vector<std::vector<Point2f>> m_Vertices;
 	std::vector<PickUp*> m_pPickUps;
 	std::vector<Platform*> m_pPlatforms;
+	std::vector<MysteryBox*> m_pMysteryBoxes;
 
 	Texture* m_pBackgroundTexture;
 	Texture* m_pLevelTexture;
@@ -53,6 +57,9 @@ private:
 	// Scale the level. vectorAmount indicates until what idx the vectors should be scaled.
 	// -1 will scale all vectors.
 	void ScaleLevel(float scale, int vectorAmount = -1);
+
+	void PushPlatforms();
+	void PushPickups();
 
 	void PushDemoLevel();
 	void PushDemoPickUps();

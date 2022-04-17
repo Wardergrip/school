@@ -11,6 +11,7 @@
 #include "Mario.h"
 #include "Shell.h"
 #include "Koopa.h"
+#include "MysteryBox.h"
 using namespace utils;
 #include <iostream>
 
@@ -28,9 +29,11 @@ Level::Level(Player& player)
 	KoopaBase::InitLevelRef(this);
 	m_Vertices.push_back(std::vector<Point2f>{});
 	//PushDemoLevel();
+	//PushDemoPickUps();
 	if(!SVGParser::GetVerticesFromSvgFile("Resources/thirdAttempt.svg", m_Vertices)) throw "Something went wrong";
 	ScaleLevel(m_Player.GetpMario()->m_Scale);
-	PushDemoPickUps();
+	PushPlatforms();
+	PushPickups();
 
 	m_pKoopas.reserve(16);
 	m_pKoopas.push_back(new Koopa(KoopaBase::Color::red));
@@ -39,6 +42,12 @@ Level::Level(Player& player)
 	m_pShells.reserve(16);
 	m_pShells.push_back(new Shell(KoopaBase::Color::red));
 	m_pShells[0]->SetPosition(Point2f{300,150});
+
+	m_pMysteryBoxes.reserve(28);
+	m_pMysteryBoxes.push_back(new MysteryBox(Point2f{ 1066,168 }, new Coin(PickUp::Type::coin)));
+	m_pPlatforms.push_back(new Platform(Rectf{ 1066,168,16.f * GameObject::m_Scale,16.f * GameObject::m_Scale }));
+	m_pMysteryBoxes.push_back(new MysteryBox(Point2f{ 1120,168 }, new Mushroom(PickUp::Type::normalMushroom, this)));
+	m_pPlatforms.push_back(new Platform(Rectf{ 1120,168,16.f * GameObject::m_Scale,16.f * GameObject::m_Scale }));
 }
 
 Level::~Level()
@@ -73,6 +82,12 @@ Level::~Level()
 		delete m_pKoopas[i];
 		m_pKoopas[i] = nullptr;
 	}
+	for (size_t i{ 0 }; i < m_pMysteryBoxes.size(); ++i)
+	{
+		delete m_pMysteryBoxes[i];
+		m_pMysteryBoxes[i] = nullptr;
+	}
+
 }
 
 void Level::Draw(const Point2f& cameraLoc, bool debugDraw) const
@@ -82,7 +97,7 @@ void Level::Draw(const Point2f& cameraLoc, bool debugDraw) const
 		glScalef(2.5f, 2.5f, 1);
 		for (int i{ 0 }; i < 8; ++i)
 		{
-			m_pBackgroundTexture->Draw(Point2f{ -cameraLoc.x * 0.05f - 100 + i * m_pBackgroundTexture->GetWidth(),0});
+			m_pBackgroundTexture->Draw(Point2f{ cameraLoc.x * 0.1f - 500 + i * m_pBackgroundTexture->GetWidth(),0});
 		}
 	}
 	glPopMatrix();
@@ -100,6 +115,10 @@ void Level::Draw(const Point2f& cameraLoc, bool debugDraw) const
 	for (Shell* s : m_pShells)
 	{
 		if (s) s->Draw();
+	}
+	for (MysteryBox* m : m_pMysteryBoxes)
+	{
+		if (m) m->Draw();
 	}
 	//if (m_pKoopa) m_pKoopa->Draw();
 	if (debugDraw) DebugDraw(Color4f{1,0,0,1},2.f);
@@ -138,17 +157,18 @@ void Level::DrawPickUps() const
 void Level::UpdateContent(float elapsedSec, Mario* mario)
 {
 	// CLEANUP
-	for (size_t i{ 0 }; i < m_pShells.size(); ++i)
-	{
-		//std::cout << "Shell[" << i << "] :" << m_pShells[i] << '\n';
-		if (m_pShells[i] == nullptr) continue;
-		if (m_pShells[i]->GetYPos() < -300)
-		{
-			//std::cout << "Cleaning up shell idx " << i << '\n';
-			delete m_pShells[i];
-			m_pShells[i] = nullptr;
-		}
-	}
+	//for (size_t i{ 0 }; i < m_pShells.size(); ++i)
+	//{
+	//	//std::cout << "Shell[" << i << "] :" << m_pShells[i] << '\n';
+	//	if (m_pShells[i] == nullptr) continue;
+	//	else if (m_pShells[i]->GetYPos() < -300)
+	//	{
+	//		//std::cout << "Cleaning up shell idx " << i << '\n';
+	//		delete m_pShells[i];
+	//		m_pShells[i] = nullptr;
+	//	}
+	//}
+
 	// Update PickUps
 	for (size_t i{ 0 }; i < m_pPickUps.size(); ++i)
 	{
@@ -233,6 +253,24 @@ void Level::UpdateContent(float elapsedSec, Mario* mario)
 			}
 		}
 	}
+	// Update MysteryBoxes
+	for (size_t i{ 0 }; i < m_pMysteryBoxes.size(); ++i)
+	{
+		m_pMysteryBoxes[i]->Update(elapsedSec);
+		if (m_pMysteryBoxes[i]->IsOverlappingBottomHitbox(m_Player.GetpMario()->GetRect()))
+		{
+			m_pMysteryBoxes[i]->Bump();
+			m_Player.GetpMario()->BumpHead();
+		}
+		if (m_pMysteryBoxes[i]->IsWantingToGivePickUp())
+		{
+			if (m_pMysteryBoxes[i]->GetPickUp()->GetType() == PickUp::Type::coin)
+			{
+				delete m_pMysteryBoxes[i]->GivePickUp();
+			}
+			else Push_back(m_pMysteryBoxes[i]->GivePickUp());
+		}
+	}
 }
 
 void Level::Push_back(const Point2f& p)
@@ -242,7 +280,14 @@ void Level::Push_back(const Point2f& p)
 
 void Level::Push_back(PickUp* pu)
 {
-	m_pPickUps.push_back(pu);
+	bool isPointerPushed{ false };
+	for (size_t i{ 0 }; i < m_pPickUps.size(); ++i)
+	{
+		if (m_pPickUps[i] != nullptr) continue;
+		m_pPickUps[i] = pu;
+		isPointerPushed = true;
+	}
+	if (!isPointerPushed) m_pPickUps.push_back(pu);
 }
 
 void Level::Push_back(Platform* p)
@@ -282,11 +327,11 @@ bool Level::IsOnTop(Rectf& other)
 		}
 	}
 
-		for (size_t i{ 0 }; i < m_pPlatforms.size(); ++i)
-		{
-			if (!m_pPlatforms[i]) continue;
-			else if (m_pPlatforms[i]->IsOnTop(other)) return true;
-		}
+	for (size_t i{ 0 }; i < m_pPlatforms.size(); ++i)
+	{
+		if (!m_pPlatforms[i]) continue;
+		else if (m_pPlatforms[i]->IsOnTop(other)) return true;
+	}
 	return false;
 }
 
@@ -392,10 +437,25 @@ bool Level::IsHorizontallyTouching(const Rectf& other, HitInfo& hi, const Vector
 			return true;
 		}
 	}
+	for (size_t i{ 0 }; i < m_pPlatforms.size(); ++i)
+	{
+		if (!m_pPlatforms[i]) continue;
+		else if (m_pPlatforms[i]->IsHorizontallyTouching(other,HI,velocity,horDirection))
+		{
+			hi = HI;
+			return true;
+		}
+	}
 	return false;
 }
 
-float Level::GetFurthestXValue()
+bool Level::SwitchDebugDrawLevel()
+{
+	m_EnableDebugDraw = !m_EnableDebugDraw;
+	return m_EnableDebugDraw;
+}
+
+float Level::GetFurthestXValue() const
 {
 	float highest{0};
 
@@ -422,6 +482,47 @@ void Level::ScaleLevel(float scale, int vectorAmount)
 			m_Vertices[i][j].x *= scale;
 			m_Vertices[i][j].y *= scale;
 		}
+	}
+}
+
+void Level::PushPlatforms()
+{
+	Push_back(new Platform(Point2f{ 535,165 }, 440, 1));
+	Push_back(new Platform(Point2f{ 1235,195 }, 190, 1));
+
+	Push_back(new Platform(Point2f{ 5240,165 }, 130, 1));
+	Push_back(new Platform(Point2f{ 5295,250 }, 220, 1));
+	Push_back(new Platform(Point2f{ 5460,165 }, 165, 1));
+
+	Push_back(new Platform(Point2f{ 5938,220 }, 274, 1));
+}
+
+void Level::PushPickups()
+{
+	Push_back(new Coin(PickUp::Type::coin, Point2f{ 2157,170 }));
+	Push_back(new Coin(PickUp::Type::coin, Point2f{ 2184,200 }));
+	Push_back(new Coin(PickUp::Type::bigCoin, Point2f{ 2212,205 }));
+	Push_back(new Coin(PickUp::Type::coin, Point2f{ 2240,195 }));
+	Push_back(new Coin(PickUp::Type::coin, Point2f{ 2267,170 }));
+
+	Push_back(new Coin(PickUp::Type::bigCoin, Point2f{ 3024,206 }));
+
+	Push_back(new Coin(PickUp::Type::coin, Point2f{ 4004,280 }));
+	Push_back(new Coin(PickUp::Type::coin, Point2f{ 4032,310 }));
+	Push_back(new Coin(PickUp::Type::coin, Point2f{ 4065,310 }));
+	Push_back(new Coin(PickUp::Type::bigCoin, Point2f{ 4090,320 }));
+
+	Push_back(new Coin(PickUp::Type::coin, Point2f{ 6020,306 }));
+	Push_back(new Coin(PickUp::Type::coin, Point2f{ 6051,306 }));
+	Push_back(new Coin(PickUp::Type::coin, Point2f{ 6076,306 }));
+	Push_back(new Coin(PickUp::Type::bigCoin, Point2f{ 6130,310 }));
+
+	Push_back(new Coin(PickUp::Type::coin, Point2f{ 7980,130 }));
+	Push_back(new Coin(PickUp::Type::coin, Point2f{ 8000,160 }));
+	Push_back(new Coin(PickUp::Type::coin, Point2f{ 8020,200 }));
+	for (float i{ 0 }; i < 10; ++i)
+	{
+		Push_back(new Coin(PickUp::Type::coin, Point2f{ 8050 + i*30,220 }));
 	}
 }
 

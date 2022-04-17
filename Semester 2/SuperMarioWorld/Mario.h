@@ -22,6 +22,7 @@ public:
 
 	void Jump();
 	void BounceJump();
+	void BumpHead();
 	void Hurt();
 	void Grow();
 

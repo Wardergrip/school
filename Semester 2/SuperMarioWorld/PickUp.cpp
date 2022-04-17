@@ -64,6 +64,11 @@ PickUp::Type PickUp::GetType() const
 	return m_Type;
 }
 
+void PickUp::SetPosition(const Point2f& pos)
+{
+	m_Position = pos;
+}
+
 void PickUp::AdjustRectToTexture(int horAmount, float maxSec, int vertAmount, int row)
 {
 	m_Rect = Rectf{ 0,m_pTexture->GetHeight() - (row * (m_pTexture->GetHeight() / vertAmount)),m_pTexture->GetWidth() / horAmount,m_pTexture->GetHeight() / vertAmount };

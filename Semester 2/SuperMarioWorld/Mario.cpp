@@ -166,6 +166,12 @@ void Mario::Update(float elapsedSec, Level& level)
 	if (pStates[SDL_SCANCODE_DOWN]) m_Duck = true;
 	else m_Duck = false;
 
+	// Prevent slow drifting when standing still and holding shift
+	if (pStates[SDL_SCANCODE_LSHIFT] && !(pStates[SDL_SCANCODE_LEFT] || pStates[SDL_SCANCODE_RIGHT]))
+	{
+		if (m_Velocity.x < 10) m_Velocity.x = 0;
+	}
+
 	m_Position.x += m_HorizontalDirection * m_Velocity.x * elapsedSec;
 	m_Position.y += m_Velocity.y * elapsedSec;
 	UpdateAnim(elapsedSec);
@@ -259,7 +265,13 @@ void Mario::Jump()
 
 void Mario::BounceJump()
 {
+	if (m_Stage == Stage::dead) return;
 	m_Velocity.y = m_JumpSpeed * 0.5f;
+}
+
+void Mario::BumpHead()
+{
+	m_Velocity.y = 0;
 }
 
 void Mario::Hurt()
@@ -291,9 +303,12 @@ void Mario::SetShell(Shell* pShell)
 
 Shell* Mario::GiveShell()
 {
+	m_pShell->SetUpStatus(m_LookUp);
 	m_pShell->Throw(m_HorizontalDirection,m_Velocity);
-	if (m_HorizontalDirection > 0.5f) m_pShell->SetPosition(Point2f{ m_Position.x + GetRect().width + 10,m_Position.y });
-	else if (m_HorizontalDirection < -0.5f) m_pShell->SetPosition(Point2f{ m_Position.x - GetRect().width - 10,m_Position.y });
+	float verticalOffsetPlacement{ 0 };
+	if (m_LookUp) verticalOffsetPlacement = 2;
+	if (m_HorizontalDirection > 0.5f) m_pShell->SetPosition(Point2f{ m_Position.x + GetRect().width + 10,m_Position.y + verticalOffsetPlacement });
+	else if (m_HorizontalDirection < -0.5f) m_pShell->SetPosition(Point2f{ m_Position.x - GetRect().width - 10,m_Position.y +verticalOffsetPlacement});
 
 	Shell* pS{ m_pShell };
 	m_pShell = nullptr;

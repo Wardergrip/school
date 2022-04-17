@@ -17,6 +17,7 @@ public:
 	void UpdateShellCollisions(std::vector<Shell*>& pSs);
 
 	void SetGrabbed(bool grabbed);
+	void SetUpStatus(bool status);
 
 	bool IsGrabbed() const;
 	bool IsGoingIn() const;
@@ -34,5 +35,6 @@ private:
 	bool m_Grab;
 	bool m_GoIn;
 	bool m_IsDead;
+	bool m_MarioUp;
 };
 

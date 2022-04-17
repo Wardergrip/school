@@ -17,8 +17,11 @@ public:
 	void Draw() const;
 	virtual void Update(float elapsedSec);
 	virtual void UpdateAnim(float elapsedSec);
+
 	bool IsOverlapping(const Rectf& other) const;
 	Type GetType() const;
+
+	void SetPosition(const Point2f& pos);
 
 protected:
 	const Type m_Type;

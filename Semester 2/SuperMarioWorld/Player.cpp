@@ -169,6 +169,9 @@ void Player::ProcessKeyDownEvent(const SDL_KeyboardEvent& e)
 	case SDLK_SPACE:
 		m_pMario->Jump();
 		break;
+	case SDLK_o:
+		std::cout << "MarioPos [" << m_pMario->GetPureLocation().x << ", " << m_pMario->GetPureLocation().y << "]\n";
+		break;
 	}
 }
 
