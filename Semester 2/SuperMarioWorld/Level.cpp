@@ -37,7 +37,16 @@ Level::Level(Player& player)
 
 	m_pKoopas.reserve(16);
 	m_pKoopas.push_back(new Koopa(KoopaBase::Color::red));
-	m_pKoopas[0]->SetPosition(Point2f{ 500,150 });
+	/*m_pKoopas.push_back(new Koopa(KoopaBase::Color::red));
+	m_pKoopas.push_back(new Koopa(KoopaBase::Color::red));
+	m_pKoopas.push_back(new Koopa(KoopaBase::Color::red));
+	m_pKoopas.push_back(new Koopa(KoopaBase::Color::red));
+	m_pKoopas.push_back(new Koopa(KoopaBase::Color::red));
+	*/m_pKoopas[0]->SetPosition(Point2f{ 570,166 });/*
+	m_pKoopas[1]->SetPosition(Point2f{ 600,166 });
+	m_pKoopas[2]->SetPosition(Point2f{ 630,166 });
+	m_pKoopas[3]->SetPosition(Point2f{ 660,166 });
+	m_pKoopas[4]->SetPosition(Point2f{ 680,166 });*/
 
 	m_pShells.reserve(16);
 	m_pShells.push_back(new Shell(KoopaBase::Color::red));
@@ -241,6 +250,7 @@ void Level::UpdateContent(float elapsedSec, Mario* mario)
 			for (size_t i{ 0 }; i < m_pShells.size(); ++i)
 			{
 				if (m_pShells[i] != nullptr) continue;
+				if (m_pKoopas[i]->GetShell() == nullptr) continue;
 				if (isPointerPushed) continue;
 				m_pShells[i] = m_pKoopas[i]->GiveShell();
 				isPointerPushed = true;
@@ -248,8 +258,6 @@ void Level::UpdateContent(float elapsedSec, Mario* mario)
 			if (!isPointerPushed)
 			{
 				m_pShells.push_back(m_pKoopas[i]->GiveShell());
-				std::cout << "Pushed in m_pShells[" << i << "]" << m_pShells[i] << '\n';
-				std::cout << "The Koopa has " << m_pKoopas[i]->GetShell() << '\n';
 			}
 		}
 	}

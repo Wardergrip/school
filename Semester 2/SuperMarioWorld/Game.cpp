@@ -27,7 +27,7 @@ Game::~Game( )
 
 void Game::Initialize( )
 {
-	m_pMainMenu = new MainMenu(m_Window, MainMenu::State::playing);
+	m_pMainMenu = new MainMenu(m_Window, MainMenu::State::titlescreen);
 	m_pLevel = new Level(m_Player);
 	m_Camera.SetLevelBoundaries(Rectf{0,0,m_pLevel->GetFurthestXValue(),m_Window.height});
 	m_pHUD = new HUD(m_Player,m_Window);
@@ -178,13 +178,15 @@ void Game::ClearBackground( ) const
 
 void Game::DisplayInfo()
 {
-	std::cout << "\n" 
+	std::cout << "\n"
 		<< "Welcome to SuperMarioWorld!\n"
 		<< "---------------------------\n"
 		<< "Left & right arrow keys: moving left and right respectively\n"
 		<< "Up arrow key: look up\n"
 		<< "Down arrow key: duck\n"
 		<< "Spacebar: jump\n"
-		<< "Left shift: sprinting/grabbing (Hold)\n"
+		<< "Left shift: sprinting/grabbing (Hold)\n\n"
+		<< "DEV: Press D to see KoopaBase hitboxes\n"
+		<< "To disable main menu, change starting state in Game.cpp of the MainMenu object to off\n"
 		;
 }

@@ -160,6 +160,7 @@ void MainMenu::CheckClicks(const SDL_MouseButtonEvent& e)
 		else if (m_pIsQWERTYButton->IsInside(mousePos) && m_State == State::settings)
 		{
 			m_IsQWERTY = !m_IsQWERTY;
+			std::cout << "I could not think of any interesting settings so I thought of this one, however, later realised I don't use much keybinds that are affected by this.\n";
 		}
 		break;
 	case SDL_BUTTON_RIGHT:

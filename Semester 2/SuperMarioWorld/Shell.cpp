@@ -130,17 +130,20 @@ int Shell::UpdateShellKoopaCollisions(std::vector<Koopa*>& pKs)
 	for (size_t i{0}; i < pKs.size(); ++i)
 	{
 		if (pKs[i] == nullptr) continue;
-		else if (pKs[i]->GetType() != Type::shelled) ; // Empty statement, it skips the else so it goes over to the next if
-		else continue;
-		if (IsOverlapping(pKs[i]->GetRect(), GetRect()))
+		else if (pKs[i]->GetType() == Type::shell) continue;
+		if (IsOverlapping(pKs[i]->GetRect(), this->GetRect()))
 		{
 			if (m_Velocity.x > 1 || m_Velocity.x < -1)
 			{
 				if (pKs[i]->GetType() == Type::naked)
 				{
 					pKs[i]->ForceDie();
+					std::cout << "Force die on Koopa idx " << i << '\n';
 				}
-				else pKs[i]->AboutToDie();
+				else
+				{
+					pKs[i]->AboutToDie();
+				}
 			}
 			else m_GoIn = true;
 			return int(i);

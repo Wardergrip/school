@@ -93,7 +93,11 @@ void Koopa::AboutToDie()
 {
 	if (!m_IsHurt)
 	{
-		if (m_pShell) m_pShell->SetPosition(m_Position);
+		if (m_pShell)
+		{
+			m_pShell->SetPosition(m_Position);
+			m_pShell->SetDeathStatus(true);
+		}
 	}
 	m_IsHurt = true;
 }
