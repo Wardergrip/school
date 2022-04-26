@@ -39,8 +39,13 @@ public:
 
 	void DebugPrintAllStats() const;
 
+	void SetLastCheckPointPos(const Point2f& pos);
+	Point2f GetLastCheckPointPos() const;
+
 private:
 	Mario* m_pMario;
+
+	Point2f m_LastCheckPointPos;
 
 	unsigned int m_Time;
 	float m_Increment;

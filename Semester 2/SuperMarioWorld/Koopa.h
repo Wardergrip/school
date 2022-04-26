@@ -4,7 +4,7 @@ class Shell;
 class Koopa final : public KoopaBase
 {
 public:
-	explicit Koopa(Color color = Color::green);
+	explicit Koopa(Color color = Color::green, Type type = Type::shelled);
 	Koopa(const Koopa& k) = delete;
 	Koopa& operator=(const Koopa& k) = delete;
 	Koopa(Koopa&& k) = delete;

@@ -27,7 +27,7 @@ Game::~Game( )
 
 void Game::Initialize( )
 {
-	m_pMainMenu = new MainMenu(m_Window, MainMenu::State::titlescreen);
+	m_pMainMenu = new MainMenu(m_Window, MainMenu::State::playing);
 	m_pLevel = new Level(m_Player);
 	m_Camera.SetLevelBoundaries(Rectf{0,0,m_pLevel->GetFurthestXValue(),m_Window.height});
 	m_pHUD = new HUD(m_Player,m_Window);

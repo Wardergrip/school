@@ -69,7 +69,6 @@ KoopaBase::~KoopaBase()
 		delete m_pKoopaTexture;
 		m_pKoopaTexture = nullptr;
 	}
-	std::cout << "KoopaBase destructor, type: " << int(m_Type) << "\n";
 }
 
 void KoopaBase::Draw() const

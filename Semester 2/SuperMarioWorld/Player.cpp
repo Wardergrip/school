@@ -58,16 +58,19 @@ void Player::ResetAll()
 	m_BigCoinAmount = 0;
 	m_Increment = 0;
 	m_Time = 300;
+	m_LastCheckPointPos = Point2f{ 4020, 300 };
 	m_GameOver = false;
 	m_SoftReset = false;
 
 	m_pMario = new Mario();
+	m_pMario->SetPosition(m_LastCheckPointPos);
 }
 
 void Player::SoftReset()
 {
 	if (m_pMario) delete m_pMario;
 	m_pMario = new Mario();
+	m_pMario->SetPosition(m_LastCheckPointPos);
 	m_SoftReset = false;
 }
 
@@ -181,4 +184,14 @@ void Player::DebugPrintAllStats() const
 	std::cout << "Lives: " << m_Lives << '\n';
 	std::cout << "Coins: " << m_CoinAmount << '\n';
 	std::cout << "Dragon coins: " << m_BigCoinAmount << '\n';
+}
+
+void Player::SetLastCheckPointPos(const Point2f& pos)
+{
+	m_LastCheckPointPos = pos;
+}
+
+Point2f Player::GetLastCheckPointPos() const
+{
+	return m_LastCheckPointPos;
 }

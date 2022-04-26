@@ -9,6 +9,7 @@ class Mario;
 class Shell;
 class Koopa;
 class MysteryBox;
+class CheckPoint;
 class Level final
 {
 public:
@@ -47,6 +48,7 @@ private:
 	std::vector<PickUp*> m_pPickUps;
 	std::vector<Platform*> m_pPlatforms;
 	std::vector<MysteryBox*> m_pMysteryBoxes;
+	std::vector<CheckPoint*> m_pCheckPoints;
 
 	Texture* m_pBackgroundTexture;
 	Texture* m_pLevelTexture;

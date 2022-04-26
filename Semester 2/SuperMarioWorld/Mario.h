@@ -7,7 +7,7 @@ class Shell;
 class Mario final : public GameObject
 {
 public:
-	enum class Stage { dead, small, big, fire };
+	enum class Stage { dead, small, growing, shrinking, big, upgrading, downgrading, fire };
 
 	explicit Mario();
 	Mario(const Mario& m) = delete;
@@ -27,6 +27,7 @@ public:
 	void Grow();
 
 	void SetShell(Shell* pShell);
+	void SetPosition(const Point2f& pos);
 	Shell* GiveShell();
 	Shell* GetShell() const;
 	float GetHorDirection() const;
@@ -59,6 +60,7 @@ private:
 		victory = 17
 	};
 	Texture* m_pSmallMarioTexture;
+	Texture* m_pBigMarioTexture;
 	Texture* m_pDeadGrowTexture;
 	bool m_IsGrabbing;
 	bool m_LookUp;
@@ -69,6 +71,8 @@ private:
 
 	const float m_SpeedTreshHold;
 	const float m_MaxSpeed;
+
+	bool m_InvurnableFlickerBool;
 
 	bool IsAtWalkingSpeed();
 	bool IsAtRunningSpeed();
@@ -89,6 +93,9 @@ private:
 	Shell* m_pShell;
 	bool m_LoseShell;
 	bool m_IsFullyDead;
+	bool m_IsInvurnable;
 	Stage m_Stage;
+	const float m_InvurnableMaxTime;
+	float m_InvurnableElapsedSec;
 };
 

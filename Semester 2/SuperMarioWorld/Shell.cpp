@@ -90,7 +90,7 @@ void Shell::Update(float elapsedSec, const Player& player)
 	{
 		if (m_Velocity.x > 1 || m_Velocity.x < -1)
 		{
-			if (((pMario->GetHorDirection() > 1) && (m_Velocity.x > 1)) || ((pMario->GetHorDirection() < -1) && (m_Velocity.x < -1)))
+			if (((pMario->GetHorDirection() > 0.5f) && (m_Velocity.x < -1)) || ((pMario->GetHorDirection() < -0.5f) && (m_Velocity.x > 1)))
 			{
 				pMario->Hurt();
 			}
@@ -130,7 +130,6 @@ int Shell::UpdateShellKoopaCollisions(std::vector<Koopa*>& pKs)
 	for (size_t i{0}; i < pKs.size(); ++i)
 	{
 		if (pKs[i] == nullptr) continue;
-		else if (pKs[i]->GetType() == Type::shell) continue;
 		if (IsOverlapping(pKs[i]->GetRect(), this->GetRect()))
 		{
 			if (m_Velocity.x > 1 || m_Velocity.x < -1)
@@ -138,15 +137,17 @@ int Shell::UpdateShellKoopaCollisions(std::vector<Koopa*>& pKs)
 				if (pKs[i]->GetType() == Type::naked)
 				{
 					pKs[i]->ForceDie();
-					std::cout << "Force die on Koopa idx " << i << '\n';
 				}
 				else
 				{
 					pKs[i]->AboutToDie();
 				}
 			}
-			else m_GoIn = true;
-			return int(i);
+			else if (!pKs[i]->GetShell())
+			{
+				m_GoIn = true;
+				return int(i);
+			}
 		}
 	}
 	return -1;

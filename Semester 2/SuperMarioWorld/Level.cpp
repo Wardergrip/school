@@ -12,6 +12,7 @@
 #include "Shell.h"
 #include "Koopa.h"
 #include "MysteryBox.h"
+#include "CheckPoint.h"
 using namespace utils;
 #include <iostream>
 
@@ -35,28 +36,42 @@ Level::Level(Player& player)
 	PushPlatforms();
 	PushPickups();
 
+#pragma region FirstPlatform with Koopas
 	m_pKoopas.reserve(16);
 	m_pKoopas.push_back(new Koopa(KoopaBase::Color::red));
-	/*m_pKoopas.push_back(new Koopa(KoopaBase::Color::red));
 	m_pKoopas.push_back(new Koopa(KoopaBase::Color::red));
 	m_pKoopas.push_back(new Koopa(KoopaBase::Color::red));
 	m_pKoopas.push_back(new Koopa(KoopaBase::Color::red));
 	m_pKoopas.push_back(new Koopa(KoopaBase::Color::red));
-	*/m_pKoopas[0]->SetPosition(Point2f{ 570,166 });/*
+	m_pKoopas.push_back(new Koopa(KoopaBase::Color::red));
+	m_pKoopas[0]->SetPosition(Point2f{ 570,166 });
 	m_pKoopas[1]->SetPosition(Point2f{ 600,166 });
 	m_pKoopas[2]->SetPosition(Point2f{ 630,166 });
 	m_pKoopas[3]->SetPosition(Point2f{ 660,166 });
-	m_pKoopas[4]->SetPosition(Point2f{ 680,166 });*/
+	m_pKoopas[4]->SetPosition(Point2f{ 680,166 });
+	m_pKoopas[5]->SetPosition(Point2f{ 700,166 });
+#pragma endregion
 
 	m_pShells.reserve(16);
 	m_pShells.push_back(new Shell(KoopaBase::Color::red));
 	m_pShells[0]->SetPosition(Point2f{300,150});
+
+	m_pShells.push_back(new Shell(KoopaBase::Color::red));
+	m_pShells[1]->SetPosition(Point2f{ 2220,87 });
+	m_pKoopas.push_back(new Koopa(KoopaBase::Color::red, KoopaBase::Type::naked));
+	m_pKoopas[6]->SetPosition(Point2f{ 2260,87 });
+	m_pShells.push_back(new Shell(KoopaBase::Color::green));
+	m_pShells[2]->SetPosition(Point2f{3024,87});
+	m_pKoopas.push_back(new Koopa(KoopaBase::Color::green,KoopaBase::Type::naked));
+	m_pKoopas[7]->SetPosition(Point2f{ 3050,87 });
 
 	m_pMysteryBoxes.reserve(28);
 	m_pMysteryBoxes.push_back(new MysteryBox(Point2f{ 1066,168 }, new Coin(PickUp::Type::coin)));
 	m_pPlatforms.push_back(new Platform(Rectf{ 1066,168,16.f * GameObject::m_Scale,16.f * GameObject::m_Scale }));
 	m_pMysteryBoxes.push_back(new MysteryBox(Point2f{ 1120,168 }, new Mushroom(PickUp::Type::normalMushroom, this)));
 	m_pPlatforms.push_back(new Platform(Rectf{ 1120,168,16.f * GameObject::m_Scale,16.f * GameObject::m_Scale }));
+
+	m_pCheckPoints.push_back(new CheckPoint(Point2f{4486,84}));
 }
 
 Level::~Level()
@@ -96,6 +111,11 @@ Level::~Level()
 		delete m_pMysteryBoxes[i];
 		m_pMysteryBoxes[i] = nullptr;
 	}
+	for (size_t i{ 0 }; i < m_pCheckPoints.size(); ++i)
+	{
+		delete m_pCheckPoints[i];
+		m_pCheckPoints[i] = nullptr;
+	}
 
 }
 
@@ -116,6 +136,10 @@ void Level::Draw(const Point2f& cameraLoc, bool debugDraw) const
 		m_pLevelTexture->Draw();
 	}
 	glPopMatrix();
+	for (CheckPoint* c : m_pCheckPoints)
+	{
+		if (c) c->Draw();
+	}
 	DrawPickUps();
 	for (Koopa* k : m_pKoopas)
 	{
@@ -177,7 +201,7 @@ void Level::UpdateContent(float elapsedSec, Mario* mario)
 	//		m_pShells[i] = nullptr;
 	//	}
 	//}
-
+	if (mario->GetStage() == Mario::Stage::dead) return;
 	// Update PickUps
 	for (size_t i{ 0 }; i < m_pPickUps.size(); ++i)
 	{
@@ -279,6 +303,11 @@ void Level::UpdateContent(float elapsedSec, Mario* mario)
 			else Push_back(m_pMysteryBoxes[i]->GivePickUp());
 		}
 	}
+	// Update checkpoints
+	for (CheckPoint* c : m_pCheckPoints)
+	{
+		if (c) c->Update(elapsedSec,&m_Player);
+	}
 }
 
 void Level::Push_back(const Point2f& p)
@@ -309,6 +338,7 @@ void Level::Push_back(Shell* s)
 	for (size_t i{ 0 }; i < m_pShells.size(); ++i)
 	{
 		if (m_pShells[i] != nullptr) continue;
+		if (isPointerPushed) continue;
 		m_pShells[i] = s;
 		isPointerPushed = true;
 	}

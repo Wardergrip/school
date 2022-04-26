@@ -11,6 +11,7 @@ Mario::Mario()
 	:GameObject()
 	,m_pSmallMarioTexture{new Texture{"Resources/SmallMarioSheet.png"}}
 	,m_pDeadGrowTexture{new Texture{"Resources/DeathAndGrow.png"}}
+	,m_pBigMarioTexture{new Texture{"Resources/BigMarioSheet.png"}}
 	,m_IsGrabbing{false}
 	,m_LookUp{false}
 	,m_Duck{false}
@@ -19,6 +20,7 @@ Mario::Mario()
 	,m_FramesPerSec{10}
 	,m_SpeedTreshHold{200}
 	,m_MaxSpeed{500}
+	,m_InvurnableFlickerBool{ false }
 	,m_Position{20,300}
 	,m_Velocity{0,0}
 	,m_HorizontalDirection{1}
@@ -31,7 +33,10 @@ Mario::Mario()
 	,m_pShell{nullptr}
 	,m_LoseShell{false}
 	,m_IsFullyDead{false}
+	,m_IsInvurnable{false}
 	,m_Stage{Stage::small}
+	,m_InvurnableMaxTime{2.f}
+	,m_InvurnableElapsedSec{0}
 {
 	m_Rect = Rectf{0,(m_pSmallMarioTexture->GetHeight() / 3),m_pSmallMarioTexture->GetWidth() / 14,m_pSmallMarioTexture->GetHeight() / 3};
 }
@@ -40,6 +45,9 @@ Mario::~Mario()
 {
 	delete m_pSmallMarioTexture;
 	m_pSmallMarioTexture = nullptr;
+
+	delete m_pBigMarioTexture;
+	m_pBigMarioTexture = nullptr;
 
 	delete m_pDeadGrowTexture;
 	m_pDeadGrowTexture = nullptr;
@@ -65,7 +73,11 @@ void Mario::Draw() const
 		glTranslatef(m_Position.x, m_Position.y,0);
 		if (m_HorizontalDirection > 0) glTranslatef(GetRect().width,0,0);
 		glScalef(m_Scale * -m_HorizontalDirection, m_Scale, 0);
-		if (!(m_Stage == Stage::dead)) m_pSmallMarioTexture->Draw(Point2f{ 0,0 }, m_Rect);
+		if ((m_Stage == Stage::small))
+		{
+			if (!m_InvurnableFlickerBool) m_pSmallMarioTexture->Draw(Point2f{ 0,0 }, m_Rect);
+		}
+		else if ((m_Stage == Stage::big)) m_pBigMarioTexture->Draw(Point2f{ 0,0 }, m_Rect);
 		else m_pDeadGrowTexture->Draw(Point2f{ 0,0 }, Rectf{ 0,0,m_Rect.width,m_Rect.height });
 	}
 	glPopMatrix();
@@ -79,7 +91,7 @@ void Mario::Update(float elapsedSec, Level& level)
 {
 	if (m_Stage == Stage::dead)
 	{
-		m_Velocity.y += m_Gravity.y * elapsedSec;
+		m_Velocity.y += (m_Gravity.y/3.f) * elapsedSec;
 		m_Position.y += m_Velocity.y * elapsedSec;
 		if (m_Position.y <= 0) m_IsFullyDead = true;
 		return;
@@ -188,6 +200,18 @@ void Mario::Update(float elapsedSec, Level& level)
 			m_LoseShell = true;
 		}
 	}
+
+	if (m_IsInvurnable)
+	{
+		m_InvurnableElapsedSec += elapsedSec;
+		m_InvurnableFlickerBool = !m_InvurnableFlickerBool;
+		if (m_InvurnableMaxTime <= m_InvurnableElapsedSec)
+		{
+			m_IsInvurnable = false;
+			m_InvurnableFlickerBool = false;
+			m_InvurnableElapsedSec = 0.f;
+		}
+	}
 }
 
 void Mario::UpdateAnim(float elapsedSec)
@@ -196,10 +220,20 @@ void Mario::UpdateAnim(float elapsedSec)
 	if (m_IsInAir && m_Velocity.y > 0)
 	{
 		m_CurrentAnim = AnimState::jump;
+		if (m_Stage == Stage::big)
+		{
+			m_CurrentAnim = AnimState(int(m_CurrentAnim) + 2);
+			if (IsAtRunningSpeed()) m_CurrentAnim = AnimState(11);
+		}
 	}
 	else if (m_IsInAir)
 	{
 		m_CurrentAnim = AnimState::fall;
+		if (m_Stage == Stage::big)
+		{
+			m_CurrentAnim = AnimState(int(m_CurrentAnim) + 2);
+			if (IsAtRunningSpeed()) m_CurrentAnim = AnimState(11);
+		}
 	}
 	else if (IsAtWalkingSpeed())
 	{
@@ -207,8 +241,18 @@ void Mario::UpdateAnim(float elapsedSec)
 		if (m_AnimTime >= (1.0f / m_FramesPerSec))
 		{
 			m_AnimTime = 0;
-			if (m_CurrentAnim == AnimState::neutral) m_CurrentAnim = AnimState::walk;
-			else m_CurrentAnim = AnimState::neutral;
+			switch (m_Stage)
+			{
+			case Mario::Stage::small:
+				if (m_CurrentAnim == AnimState::neutral) m_CurrentAnim = AnimState::walk;
+				else m_CurrentAnim = AnimState::neutral;
+				break;
+			case Mario::Stage::big:
+				if (m_CurrentAnim == AnimState::neutral) m_CurrentAnim = AnimState::walk;
+				else if (m_CurrentAnim == AnimState::walk) m_CurrentAnim = AnimState::run;
+				else m_CurrentAnim = AnimState::neutral;
+				break;
+			}
 		}
 	}
 	else if (IsAtRunningSpeed())
@@ -217,8 +261,18 @@ void Mario::UpdateAnim(float elapsedSec)
 		if (m_AnimTime >= (1.0f / (m_FramesPerSec * frameSpeedMultiplier)))
 		{
 			m_AnimTime = 0;
-			if (m_CurrentAnim == AnimState::runNeutral) m_CurrentAnim = AnimState::run;
-			else m_CurrentAnim = AnimState::runNeutral;
+			switch (m_Stage)
+			{
+			case Stage::small:
+				if (m_CurrentAnim == AnimState::runNeutral) m_CurrentAnim = AnimState::run;
+				else m_CurrentAnim = AnimState::runNeutral;
+				break;
+			case Stage::big:
+				if (m_CurrentAnim == AnimState(7)) m_CurrentAnim = AnimState(6);
+				else if (m_CurrentAnim == AnimState(6)) m_CurrentAnim = AnimState(5);
+				else m_CurrentAnim = AnimState(7);
+				break;
+			}
 		}
 	}
 	else if (m_LookUp) m_CurrentAnim = AnimState::lookUp;
@@ -228,7 +282,10 @@ void Mario::UpdateAnim(float elapsedSec)
 	if (m_IsGrabbing)
 	{
 		bool wasRunNeutral{ false };
-		switch (m_CurrentAnim)
+		switch (m_Stage)
+		{
+		case Stage::small:
+			switch (m_CurrentAnim)
 		{
 		case Mario::AnimState::neutral:
 			break;
@@ -240,21 +297,52 @@ void Mario::UpdateAnim(float elapsedSec)
 			break;
 		case Mario::AnimState::duck:
 			break;
-		case Mario::AnimState::walk:
-			break;
 		default:
 			m_CurrentAnim = AnimState::walk;
 			break;
 		}
+			break;
+		case Stage::big:
+			switch (m_CurrentAnim)
+			{
+			case AnimState(5):
+			case AnimState(6):
+				m_CurrentAnim = AnimState::run;
+				break;
+			}
+			break;
+		}
 		// % 7 is safety measure
 		m_Rect.left = (int(m_CurrentAnim) % 7) * m_Rect.width;
-		m_Rect.bottom = 2 * (m_pSmallMarioTexture->GetHeight() / 3);
+		switch (m_Stage)
+		{
+		case Mario::Stage::dead:
+			m_Rect.bottom = 2 * (m_pSmallMarioTexture->GetHeight() / 3);
+			break;
+		case Mario::Stage::small:
+			m_Rect.bottom = 2 * (m_pSmallMarioTexture->GetHeight() / 3);
+			break;
+		case Mario::Stage::big:
+			m_Rect.bottom = 2 * (m_pBigMarioTexture->GetHeight() / 3);
+			break;
+		}
 		if (wasRunNeutral) m_CurrentAnim = AnimState::runNeutral;
 	}
 	else
 	{
 		m_Rect.left = int(m_CurrentAnim) * m_Rect.width;
-		m_Rect.bottom = (m_pSmallMarioTexture->GetHeight() / 3);
+		switch (m_Stage)
+		{
+		case Mario::Stage::dead:
+			m_Rect.bottom = (m_pSmallMarioTexture->GetHeight() / 3);
+			break;
+		case Mario::Stage::small:
+			m_Rect.bottom = (m_pSmallMarioTexture->GetHeight() / 3);
+			break;
+		case Mario::Stage::big:
+			m_Rect.bottom = (m_pBigMarioTexture->GetHeight() / 3);
+			break;
+		}
 	}
 }
 
@@ -276,7 +364,7 @@ void Mario::BumpHead()
 
 void Mario::Hurt()
 {
-	std::cout << "Ouch!\n";
+	if (m_IsInvurnable) return;
 	switch (m_Stage)
 	{
 	case Mario::Stage::dead:
@@ -285,12 +373,17 @@ void Mario::Hurt()
 		m_Stage = Stage::dead;
 		m_Velocity.x = 0;
 		m_Velocity.y = 100;
+		std::cout << "Small\n";
 		break;
 	case Mario::Stage::big:
 		m_Stage = Stage::small;
+		m_IsInvurnable = true;
+		m_Rect.height = m_pSmallMarioTexture->GetHeight() / 3;
+		m_Rect.width = m_pSmallMarioTexture->GetWidth() / 14;
 		break;
 	case Mario::Stage::fire:
 		m_Stage = Stage::big;
+		m_IsInvurnable = true;
 		break;
 	}
 }
@@ -299,6 +392,11 @@ void Mario::SetShell(Shell* pShell)
 {
 	m_pShell = pShell;
 	m_IsGrabbing = true;
+}
+
+void Mario::SetPosition(const Point2f& pos)
+{
+	m_Position = pos;
 }
 
 Shell* Mario::GiveShell()
@@ -361,7 +459,12 @@ bool Mario::IsFullyDead() const
 
 void Mario::Grow()
 {
-	if (m_Stage == Stage::small) m_Stage = Stage::big;
+	if (m_Stage == Stage::small)
+	{
+		m_Stage = Stage::big;
+		m_Rect.width = 18.f;
+		m_Rect.height = 32.f;
+	}
 }
 
 bool Mario::IsAtWalkingSpeed()

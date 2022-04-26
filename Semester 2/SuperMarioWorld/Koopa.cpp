@@ -11,9 +11,9 @@ using namespace utils;
 
 int Koopa::m_FramesPerSec{ 6 };
 
-Koopa::Koopa(Color color)
-	:KoopaBase(color,Type::shelled)
-	,m_pShell{new Shell(color)}
+Koopa::Koopa(Color color, Type type)
+	:KoopaBase(color,type)
+	,m_pShell{nullptr}
 	,m_IsDead{false}
 	,m_IsHurt{false}
 	,m_IsGivingShell{false}
@@ -22,6 +22,7 @@ Koopa::Koopa(Color color)
 {
 	float walkSpeed{-50.f};
 	m_Velocity.x = walkSpeed;
+	if (type == Type::shelled) m_pShell = new Shell(color);
 }
 
 Koopa::~Koopa()
