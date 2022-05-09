@@ -13,6 +13,7 @@
 #include "Koopa.h"
 #include "MysteryBox.h"
 #include "CheckPoint.h"
+#include "Endgoal.h"
 using namespace utils;
 #include <iostream>
 
@@ -26,7 +27,15 @@ Level::Level(Player& player)
 	,m_pLevelTexture{new Texture("Resources/Level.png")}
 	,m_pShells{}
 	,m_pKoopas{}
+	,m_pMysteryBoxes{}
 {
+	m_pPickUps.reserve(16);
+	m_pPlatforms.reserve(30);
+	m_pPlatforms.reserve(30);
+	m_pShells.reserve(16);
+	m_pKoopas.reserve(16);
+	m_pMysteryBoxes.reserve(20);
+
 	KoopaBase::InitLevelRef(this);
 	m_Vertices.push_back(std::vector<Point2f>{});
 	//PushDemoLevel();
@@ -37,7 +46,6 @@ Level::Level(Player& player)
 	PushPickups();
 
 #pragma region FirstPlatform with Koopas
-	m_pKoopas.reserve(16);
 	m_pKoopas.push_back(new Koopa(KoopaBase::Color::red));
 	m_pKoopas.push_back(new Koopa(KoopaBase::Color::red));
 	m_pKoopas.push_back(new Koopa(KoopaBase::Color::red));
@@ -52,7 +60,6 @@ Level::Level(Player& player)
 	m_pKoopas[5]->SetPosition(Point2f{ 700,166 });
 #pragma endregion
 
-	m_pShells.reserve(16);
 	m_pShells.push_back(new Shell(KoopaBase::Color::red));
 	m_pShells[0]->SetPosition(Point2f{300,150});
 
@@ -65,13 +72,13 @@ Level::Level(Player& player)
 	m_pKoopas.push_back(new Koopa(KoopaBase::Color::green,KoopaBase::Type::naked));
 	m_pKoopas[7]->SetPosition(Point2f{ 3050,87 });
 
-	m_pMysteryBoxes.reserve(28);
 	m_pMysteryBoxes.push_back(new MysteryBox(Point2f{ 1066,168 }, new Coin(PickUp::Type::coin)));
 	m_pPlatforms.push_back(new Platform(Rectf{ 1066,168,16.f * GameObject::m_Scale,16.f * GameObject::m_Scale }));
 	m_pMysteryBoxes.push_back(new MysteryBox(Point2f{ 1120,168 }, new Mushroom(PickUp::Type::normalMushroom, this)));
 	m_pPlatforms.push_back(new Platform(Rectf{ 1120,168,16.f * GameObject::m_Scale,16.f * GameObject::m_Scale }));
 
 	m_pCheckPoints.push_back(new CheckPoint(Point2f{4486,84}));
+	m_pCheckPoints.push_back(new Endgoal(Point2f{ 8421, 84 }));
 }
 
 Level::~Level()

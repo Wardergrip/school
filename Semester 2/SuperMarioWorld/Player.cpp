@@ -58,7 +58,7 @@ void Player::ResetAll()
 	m_BigCoinAmount = 0;
 	m_Increment = 0;
 	m_Time = 300;
-	m_LastCheckPointPos = Point2f{ 4020, 300 };
+	m_LastCheckPointPos = Point2f{ 20, 300 };
 	m_GameOver = false;
 	m_SoftReset = false;
 
@@ -194,4 +194,26 @@ void Player::SetLastCheckPointPos(const Point2f& pos)
 Point2f Player::GetLastCheckPointPos() const
 {
 	return m_LastCheckPointPos;
+}
+
+void Player::Win()
+{
+	std::cout << "You finished the game with\n"
+		<< "Score: " << m_Score << '\n'
+		<< "Lives: " << m_Lives << '\n'
+		<< "Coins: " << m_CoinAmount << '\n'
+		<< "Dragoncoins: " << m_BigCoinAmount << '\n'
+		<< "With " << m_Time << " seconds left\n";
+
+	m_GameOver = true;
+}
+
+std::string Player::ToXML() const
+{
+	std::string output;
+	std::string helper{ '\"' };
+	output += "<personalbest\n";
+	output += "		";
+	output += "time=" + helper + m_Time + helper;
+	return output;
 }

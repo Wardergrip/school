@@ -156,6 +156,7 @@
     <ClCompile Include="CheckPoint.cpp" />
     <ClCompile Include="Coin.cpp" />
     <ClCompile Include="Core.cpp" />
+    <ClCompile Include="Endgoal.cpp" />
     <ClCompile Include="FireFlower.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObject.cpp" />
@@ -195,6 +196,7 @@
     <ClInclude Include="CheckPoint.h" />
     <ClInclude Include="Coin.h" />
     <ClInclude Include="Core.h" />
+    <ClInclude Include="Endgoal.h" />
     <ClInclude Include="FireFlower.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />

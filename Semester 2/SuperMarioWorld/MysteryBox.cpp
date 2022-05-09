@@ -95,6 +95,10 @@ Rectf MysteryBox::GetBottomHitbox() const
 
 bool MysteryBox::IsWantingToGivePickUp() const
 {
+	if (m_pPickUp == nullptr)
+	{
+		return false;
+	}
 	return m_WantsToGive;
 }
 

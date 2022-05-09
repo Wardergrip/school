@@ -42,6 +42,8 @@ public:
 	void SetLastCheckPointPos(const Point2f& pos);
 	Point2f GetLastCheckPointPos() const;
 
+	void Win();
+
 private:
 	Mario* m_pMario;
 
@@ -57,5 +59,7 @@ private:
 
 	bool m_GameOver;
 	bool m_SoftReset;
+
+	std::string ToXML() const;
 };
 

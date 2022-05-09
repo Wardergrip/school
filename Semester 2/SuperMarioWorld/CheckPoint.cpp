@@ -68,9 +68,7 @@ void CheckPoint::Update(float elapsedSec, Player* player)
 	if (IsOverlapping(marioRect, this->GetRect()))
 	{
 		m_IsTriggered = true;
-		if (player->GetLastCheckPointPos().x > 4400.f) return;
-		player->GetpMario()->Grow();
-		player->SetLastCheckPointPos(GetPosition());
+		TriggerLogic(player);
 	}
 
 	// Bar logic
@@ -95,4 +93,11 @@ Rectf CheckPoint::GetRect() const
 Point2f CheckPoint::GetPosition() const
 {
 	return m_Position;
+}
+
+void CheckPoint::TriggerLogic(Player* player)
+{
+	if (player->GetLastCheckPointPos().x > 4400.f) return;
+	player->GetpMario()->Grow();
+	player->SetLastCheckPointPos(GetPosition());
 }

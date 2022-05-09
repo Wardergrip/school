@@ -28,5 +28,7 @@ protected:
 	Rectf m_BarRect;
 	Point2f m_BarPos;
 	float m_VerticalVelocity;
+
+	virtual void TriggerLogic(Player* player);
 };
 

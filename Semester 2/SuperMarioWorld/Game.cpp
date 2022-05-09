@@ -2,14 +2,9 @@
 #include "Game.h"
 #include "MainMenu.h"
 #include <iostream>
-
+#include "KoopaBase.h"
 #include "Texture.h"
 #include "Level.h"
-#include "KoopaBase.h"
-//#include "Mario.h"
-#include "Coin.h"
-#include "FireFlower.h"
-#include "Mushroom.h"
 #include "HUD.h"
 
 Game::Game( const Window& window ) 
@@ -58,6 +53,7 @@ void Game::Update( float elapsedSec )
 	m_pMainMenu->Update(elapsedSec);
 
 	if (m_pMainMenu->m_State != MainMenu::State::playing) return;
+
 	m_Player.Update(elapsedSec, *m_pLevel);
 	if (m_Player.IsSoftReset())
 	{
@@ -72,6 +68,7 @@ void Game::Update( float elapsedSec )
 		m_Player.ResetAll();
 		m_pMainMenu->m_State = MainMenu::State::titlescreen;
 	}
+
 	m_pLevel->UpdateContent(elapsedSec, m_Player.GetpMario());
 	m_Camera.UpdateTransitioning(m_Player.GetMarioRect(), elapsedSec);
 }
