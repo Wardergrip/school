@@ -7,9 +7,9 @@ class MysteryBox final : public GameObject
 public:
 	explicit MysteryBox(const Point2f& pos = {}, PickUp* pPickUp = nullptr);
 	MysteryBox(MysteryBox& m) = delete;
-	MysteryBox& operator=(MysteryBox& m) = delete;
+	MysteryBox& operator=(const MysteryBox& m) = delete;
 	MysteryBox(MysteryBox&& m) = delete;
-	MysteryBox& operator=(MysteryBox&& m) = delete;
+	MysteryBox& operator=(const MysteryBox&& m) = delete;
 	~MysteryBox();
 
 	void Draw() const;

@@ -5,6 +5,11 @@ class MenuButton final : public ButtonBase
 public:
 	explicit MenuButton();
 	explicit MenuButton(Texture* pTexture);
+	MenuButton(const MenuButton& m) = delete;
+	MenuButton& operator=(const MenuButton& m) = delete;
+	MenuButton(MenuButton&& m) = delete;
+	MenuButton& operator=(MenuButton&& m) = delete;
+	~MenuButton() = default;
 
 	void SetActive(bool isActive);
 

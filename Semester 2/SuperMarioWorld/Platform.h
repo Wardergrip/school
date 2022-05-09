@@ -6,6 +6,11 @@ class Platform final
 public:
 	explicit Platform(const Rectf& rect);
 	explicit Platform(const Point2f& start, float length, float downwardsThickness = 2.0f);
+	Platform(const Platform& p) = delete;
+	Platform& operator=(const Platform& p) = delete;
+	Platform(Platform&& p) = delete;
+	Platform& operator=(Platform&& p) = delete;
+	~Platform() = default;
 
 	void DebugDraw(const Color4f& col = Color4f{1,0,0,1}, float lineThickness = 1) const;
 

@@ -7,8 +7,8 @@ class CheckPoint : public GameObject
 {
 public:
 	explicit CheckPoint(const Point2f& pos);
-	CheckPoint(CheckPoint& c) = delete;
-	CheckPoint& operator=(CheckPoint& c) = delete;
+	CheckPoint(const CheckPoint& c) = delete;
+	CheckPoint& operator=(const CheckPoint& c) = delete;
 	CheckPoint(CheckPoint&& c) = delete;
 	CheckPoint& operator=(CheckPoint&& c) = delete;
 	virtual ~CheckPoint();

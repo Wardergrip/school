@@ -6,6 +6,11 @@ class Shell final : public KoopaBase
 {
 public:
 	explicit Shell(Color col = Color::green);
+	Shell(const Shell& s) = delete;
+	Shell& operator=(const Shell& s) = delete;
+	Shell(Shell&& s) = delete;
+	Shell& operator=(const Shell& s) = delete;
+	~Shell() = default;
 
 	void Kick(float horizontalDirection);
 	void Throw(float horizontalDirection, const Vector2f& velocity);
