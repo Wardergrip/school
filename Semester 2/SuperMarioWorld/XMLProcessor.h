@@ -13,18 +13,23 @@ public:
 	~XMLProcessor() = delete;
 
 	// Returns entire file in string format
-	static bool ReadFile(const std::string& filename, std::string& output);
+	static bool ReadFile(std::string& output);
 	// Returns a vector with all personalBest values. For an empty vector, use PBelement enum
 	// for easy access.
-	static bool ReadValues(const std::string& filename, std::vector<int>& output);
+	static bool ReadValues(std::vector<int>& output);
 	// Save XML to a file
-	static void SaveToFile(const std::string& XML, const std::string& filename);
+	static void SaveToFile(const std::string& XML);
 	// Get an int value out of a string
 	static int GetAttributeValue(const std::string& attrName, const std::string& element);
 	// Compare if the new input is better than the saved values. If a new personal best is noticed
 	// the file is overwritten.
-	static bool SavePersonalBest(const std::string& XML, const std::string& filename);
+	static bool SavePersonalBest(const std::string& XML);
 	// Will clear the file and write a default file with all values being 0
-	static void WipeAndCleanSave(const std::string& filename);
+	static void WipeAndCleanSave();
+
+	static void ChangeFilePath(const std::string& filepath);
+
+private:
+	static std::string m_FilePath;
 };
 

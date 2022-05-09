@@ -4,6 +4,7 @@
 
 #include "Mario.h"
 #include "Level.h"
+#include "XMLProcessor.h"
 
 Player::Player()
 	:m_pMario{nullptr}
@@ -33,6 +34,15 @@ void Player::Update(float elapsedSec, Level& level)
 		if (!ReduceLive())
 		{
 			m_GameOver = true;
+			std::cout << "Checking personalbest...\n";
+			if (XMLProcessor::SavePersonalBest(ToXML()))
+			{
+				std::cout << "Saved new personal best\n";
+			}
+			else
+			{
+				std::cout << "Kept old personal best\n";
+			}
 		}
 		else
 		{
@@ -204,6 +214,16 @@ void Player::Win()
 		<< "Coins: " << m_CoinAmount << '\n'
 		<< "Dragoncoins: " << m_BigCoinAmount << '\n'
 		<< "With " << m_Time << " seconds left\n";
+	
+	std::cout << "Checking personalbest...\n";
+	if (XMLProcessor::SavePersonalBest(ToXML()))
+	{
+		std::cout << "Saved new personal best\n";
+	}
+	else
+	{
+		std::cout << "Kept old personal best\n";
+	}
 
 	m_GameOver = true;
 }

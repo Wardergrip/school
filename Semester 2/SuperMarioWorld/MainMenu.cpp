@@ -119,7 +119,7 @@ void MainMenu::Draw() const
 
 		m_pIsQWERTYButton->Draw();
 
-		m_pCreditsTexture->Draw(Point2f{ 10,10 });
+		m_pCreditsTexture->Draw(Point2f{ 50,50 });
 	}
 	// Fading 
 	if (m_TransitioningTo == State::playing)

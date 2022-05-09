@@ -24,13 +24,16 @@ Game::~Game( )
 
 void Game::Initialize( )
 {
-	m_pMainMenu = new MainMenu(m_Window, MainMenu::State::playing);
+	m_pMainMenu = new MainMenu(m_Window, MainMenu::State::titlescreen);
 	m_pLevel = new Level(m_Player);
 	m_Camera.SetLevelBoundaries(Rectf{0,0,m_pLevel->GetFurthestXValue(),m_Window.height});
 	m_pHUD = new HUD(m_Player,m_Window);
+
+	XMLProcessor::ChangeFilePath("Resources/personalBest.xml");
+
 	std::cout << "CURRENT PERSONAL BEST\n ------------- \n";
 	std::string output;
-	XMLProcessor::ReadFile(m_PersonalBestFilePath, output);
+	XMLProcessor::ReadFile(output);
 	std::cout << output << '\n';
 }
 
@@ -43,15 +46,6 @@ void Game::Cleanup( )
 	delete m_pHUD;
 	m_pHUD = nullptr;
 
-	std::cout << "Checking personalbest...\n";
-	if (XMLProcessor::SavePersonalBest(m_Player.ToXML(), m_PersonalBestFilePath))
-	{
-		std::cout << "Saved new personal best\n";
-	}
-	else
-	{
-		std::cout << "Kept old personal best\n";
-	}
 }
 
 void Game::Update( float elapsedSec )
@@ -120,7 +114,7 @@ void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )
 		break;
 	case SDLK_0:
 		std::cout << "Wiping personalbest..\n";
-		XMLProcessor::WipeAndCleanSave(m_PersonalBestFilePath);
+		XMLProcessor::WipeAndCleanSave();
 		break;
 	}
 }

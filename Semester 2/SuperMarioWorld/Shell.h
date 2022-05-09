@@ -9,7 +9,7 @@ public:
 	Shell(const Shell& s) = delete;
 	Shell& operator=(const Shell& s) = delete;
 	Shell(Shell&& s) = delete;
-	Shell& operator=(const Shell& s) = delete;
+	Shell& operator=(Shell&& s) = delete;
 	~Shell() = default;
 
 	void Kick(float horizontalDirection);

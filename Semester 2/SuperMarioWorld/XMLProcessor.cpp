@@ -2,6 +2,8 @@
 #include "XMLProcessor.h"
 #include <fstream>
 
+std::string XMLProcessor::m_FilePath{ "" };
+
 int XMLProcessor::GetAttributeValue(const std::string& attrName, const std::string& element)
 {
 	std::string attribute;
@@ -58,31 +60,31 @@ int XMLProcessor::GetAttributeValue(const std::string& attrName, const std::stri
 	return std::stoi(attribute);
 }
 
-bool XMLProcessor::SavePersonalBest(const std::string& XML, const std::string& filename)
+bool XMLProcessor::SavePersonalBest(const std::string& XML)
 {
 	using PB = PBelement;
 	std::vector<int> values{};
-	ReadValues(filename, values);
+	ReadValues(values);
 	int currentScore{ GetAttributeValue("score", XML) };
 	if (currentScore > values[int(PB::score)])
 	{
-		SaveToFile(XML, filename);
+		SaveToFile(XML);
 		return true;
 	}
 	else if (currentScore == values[int(PB::score)])
 	{
 		if (GetAttributeValue("time", XML) < values[int(PB::time)])
 		{
-			SaveToFile(XML, filename);
+			SaveToFile(XML);
 			return true;
 		}
 	}
 	return false;
 }
 
-void XMLProcessor::WipeAndCleanSave(const std::string& filename)
+void XMLProcessor::WipeAndCleanSave()
 {
-	std::ofstream outputFile{ filename };
+	std::ofstream outputFile{ m_FilePath };
 	std::string output;
 	std::string helper{ '\"' };
 	output += "<personalbest\n";
@@ -100,9 +102,14 @@ void XMLProcessor::WipeAndCleanSave(const std::string& filename)
 	outputFile.write(output.c_str(), output.length());
 }
 
-bool XMLProcessor::ReadFile(const std::string& filename, std::string& output)
+void XMLProcessor::ChangeFilePath(const std::string& filepath)
 {
-	std::ifstream file{ filename };
+	m_FilePath = filepath;
+}
+
+bool XMLProcessor::ReadFile(std::string& output)
+{
+	std::ifstream file{ m_FilePath };
 	if (file.fail()) return false;
 	file.seekg(0, file.end);
 	int length = int(file.tellg());
@@ -122,9 +129,9 @@ bool XMLProcessor::ReadFile(const std::string& filename, std::string& output)
 	return true;
 }
 
-bool XMLProcessor::ReadValues(const std::string& filename, std::vector<int>& output)
+bool XMLProcessor::ReadValues(std::vector<int>& output)
 {
-	std::ifstream file{ filename };
+	std::ifstream file{ m_FilePath };
 	if (file.fail()) return false;
 	file.seekg(0, file.end);
 	int length = int(file.tellg());
@@ -145,8 +152,8 @@ bool XMLProcessor::ReadValues(const std::string& filename, std::vector<int>& out
 	return true;
 }
 
-void XMLProcessor::SaveToFile(const std::string& XML, const std::string& filename)
+void XMLProcessor::SaveToFile(const std::string& XML)
 {
-	std::ofstream outputFile{ filename };
+	std::ofstream outputFile{ m_FilePath };
 	outputFile.write(XML.c_str(), XML.length());
 }

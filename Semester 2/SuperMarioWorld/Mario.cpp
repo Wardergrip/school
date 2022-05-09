@@ -268,9 +268,9 @@ void Mario::UpdateAnim(float elapsedSec)
 				else m_CurrentAnim = AnimState::runNeutral;
 				break;
 			case Stage::big:
-				if (m_CurrentAnim == AnimState(7)) m_CurrentAnim = AnimState(6);
-				else if (m_CurrentAnim == AnimState(6)) m_CurrentAnim = AnimState(5);
-				else m_CurrentAnim = AnimState(7);
+				if (m_CurrentAnim == AnimState::jump) m_CurrentAnim = AnimState::skid;
+				else if (m_CurrentAnim == AnimState::skid) m_CurrentAnim = AnimState::runNeutral;
+				else m_CurrentAnim = AnimState::jump;
 				break;
 			}
 		}
