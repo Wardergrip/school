@@ -213,7 +213,16 @@ std::string Player::ToXML() const
 	std::string output;
 	std::string helper{ '\"' };
 	output += "<personalbest\n";
-	output += "		";
-	output += "time=" + helper + m_Time + helper;
+	output += '\t'; // Horizontal tab
+	output += "time=" + helper + std::to_string(m_Time) + helper + '\n';
+	output += '\t'; // Horizontal tab
+	output += "score=" + helper + std::to_string(m_Score) + helper + '\n';
+	output += '\t'; // Horizontal tab
+	output += "lives=" + helper + std::to_string(m_Lives) + helper + '\n';
+	output += '\t'; // Horizontal tab
+	output += "coins=" + helper + std::to_string(m_CoinAmount) + helper + '\n';
+	output += '\t'; // Horizontal tab
+	output += "bigCoins=" + helper + std::to_string(m_BigCoinAmount) + helper + '\n';
+	output += "/>";
 	return output;
 }

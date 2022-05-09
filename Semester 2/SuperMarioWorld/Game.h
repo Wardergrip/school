@@ -42,6 +42,8 @@ private:
 
 	Level* m_pLevel;
 
+	std::string m_PersonalBestFilePath;
+
 	// FUNCTIONS
 	void Initialize( );
 	void Cleanup( );

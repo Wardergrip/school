@@ -281,6 +281,7 @@ void Level::UpdateContent(float elapsedSec, Mario* mario)
 			for (size_t i{ 0 }; i < m_pShells.size(); ++i)
 			{
 				if (m_pShells[i] != nullptr) continue;
+				if (m_pKoopas[i] == nullptr) break;
 				if (m_pKoopas[i]->GetShell() == nullptr) continue;
 				if (isPointerPushed) continue;
 				m_pShells[i] = m_pKoopas[i]->GiveShell();

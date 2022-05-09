@@ -6,11 +6,13 @@
 #include "Texture.h"
 #include "Level.h"
 #include "HUD.h"
+#include "XMLProcessor.h"
 
 Game::Game( const Window& window ) 
 	:m_Window{ window }
 	,m_Camera{window.width,window.height}
 	,m_Player{}
+	,m_PersonalBestFilePath{"Resources/personalBest.xml"}
 {
 	Initialize( );
 }
@@ -26,6 +28,10 @@ void Game::Initialize( )
 	m_pLevel = new Level(m_Player);
 	m_Camera.SetLevelBoundaries(Rectf{0,0,m_pLevel->GetFurthestXValue(),m_Window.height});
 	m_pHUD = new HUD(m_Player,m_Window);
+	std::cout << "CURRENT PERSONAL BEST\n ------------- \n";
+	std::string output;
+	XMLProcessor::ReadFile(m_PersonalBestFilePath, output);
+	std::cout << output << '\n';
 }
 
 void Game::Cleanup( )
@@ -36,6 +42,16 @@ void Game::Cleanup( )
 	m_pLevel = nullptr;
 	delete m_pHUD;
 	m_pHUD = nullptr;
+
+	std::cout << "Checking personalbest...\n";
+	if (XMLProcessor::SavePersonalBest(m_Player.ToXML(), m_PersonalBestFilePath))
+	{
+		std::cout << "Saved new personal best\n";
+	}
+	else
+	{
+		std::cout << "Kept old personal best\n";
+	}
 }
 
 void Game::Update( float elapsedSec )
@@ -101,6 +117,10 @@ void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )
 	{
 	case SDLK_p:
 		m_Player.DebugPrintAllStats();
+		break;
+	case SDLK_0:
+		std::cout << "Wiping personalbest..\n";
+		XMLProcessor::WipeAndCleanSave(m_PersonalBestFilePath);
 		break;
 	}
 }
