@@ -3,7 +3,6 @@
 
 #include "Player.h"
 #include "Texture.h"
-#include <iostream>
 const float HUD::m_Scale{ 2 };
 
 HUD::HUD(const Player& player, const Window& window)

@@ -15,7 +15,6 @@
 #include "CheckPoint.h"
 #include "Endgoal.h"
 using namespace utils;
-#include <iostream>
 
 Level::Level(Player& player)
 	:m_EnableDebugDraw{true}

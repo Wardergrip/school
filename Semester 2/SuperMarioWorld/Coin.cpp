@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "Coin.h"
 #include "Texture.h"
-#include <iostream>
 
 Texture* Coin::m_NormalCoinTexture{ nullptr };
 Texture* Coin::m_BigCoinTexture{ nullptr };

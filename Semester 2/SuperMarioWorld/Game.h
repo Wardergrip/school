@@ -4,10 +4,6 @@
 
 class MainMenu;
 class Level;
-class Mario;
-class Coin;
-class FireFlower;
-class Mushroom;
 class HUD;
 
 class Game final

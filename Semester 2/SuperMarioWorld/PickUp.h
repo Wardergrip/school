@@ -1,6 +1,5 @@
 #pragma once
 #include "GameObject.h"
-#include "Vector2f.h"
 class Texture;
 class PickUp : public GameObject
 {

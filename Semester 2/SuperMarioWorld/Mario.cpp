@@ -4,7 +4,6 @@
 #include "level.h"
 #include "Texture.h"
 #include "Shell.h"
-#include <iostream>
 using namespace utils;
 
 Mario::Mario()
@@ -373,7 +372,6 @@ void Mario::Hurt()
 		m_Stage = Stage::dead;
 		m_Velocity.x = 0;
 		m_Velocity.y = 100;
-		std::cout << "Small\n";
 		break;
 	case Mario::Stage::big:
 		m_Stage = Stage::small;

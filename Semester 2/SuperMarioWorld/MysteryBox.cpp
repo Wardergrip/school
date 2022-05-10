@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "MysteryBox.h"
 #include "Texture.h"
-#include <iostream>
 #include "utils.h"
 using namespace utils;
 #include "PickUp.h"

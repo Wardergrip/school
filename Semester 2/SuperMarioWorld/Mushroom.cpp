@@ -3,7 +3,6 @@
 #include "Texture.h"
 #include "Level.h"
 #include "utils.h"
-#include <iostream>
 using namespace utils;
 
 Mushroom::Mushroom(Type type, Level* levelReference, const Point2f& pos)
@@ -11,7 +10,7 @@ Mushroom::Mushroom(Type type, Level* levelReference, const Point2f& pos)
 	,m_LevelRef{levelReference}
 	,m_Velocity{100,0}
 {
-	if (type != Type::normalMushroom && type != Type::oneUpMushroom) std::cout << "Wrong Mushroom type!\n";
+	if (type != Type::normalMushroom && type != Type::oneUpMushroom) throw "Wrong Mushroom type!";
 	m_Position = pos;
 }
 
