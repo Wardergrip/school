@@ -45,37 +45,45 @@ Level::Level(Player& player)
 	PushPlatforms();
 	PushPickups();
 
+	{
+		using KbColor = KoopaBase::Color;
+		using KbType = KoopaBase::Type;
 #pragma region FirstPlatform with Koopas
-	m_pKoopas.push_back(new Koopa(KoopaBase::Color::red));
-	m_pKoopas.push_back(new Koopa(KoopaBase::Color::red));
-	m_pKoopas.push_back(new Koopa(KoopaBase::Color::red));
-	m_pKoopas.push_back(new Koopa(KoopaBase::Color::red));
-	m_pKoopas.push_back(new Koopa(KoopaBase::Color::red));
-	m_pKoopas.push_back(new Koopa(KoopaBase::Color::red));
-	m_pKoopas[0]->SetPosition(Point2f{ 570,166 });
-	m_pKoopas[1]->SetPosition(Point2f{ 600,166 });
-	m_pKoopas[2]->SetPosition(Point2f{ 630,166 });
-	m_pKoopas[3]->SetPosition(Point2f{ 660,166 });
-	m_pKoopas[4]->SetPosition(Point2f{ 680,166 });
-	m_pKoopas[5]->SetPosition(Point2f{ 700,166 });
+		Push_back(new Koopa(KbColor::red), Point2f{ 570,166 });
+		Push_back(new Koopa(KbColor::red), Point2f{ 600,166 });
+		Push_back(new Koopa(KbColor::red), Point2f{ 630,166 });
+		Push_back(new Koopa(KbColor::red), Point2f{ 660,166 });
+		Push_back(new Koopa(KbColor::red), Point2f{ 680,166 });
+		Push_back(new Koopa(KbColor::red), Point2f{ 700,166 });
 #pragma endregion
 
-	m_pShells.push_back(new Shell(KoopaBase::Color::red));
-	m_pShells[0]->SetPosition(Point2f{300,150});
+		Push_back(new Shell(KbColor::red), Point2f{ 300,150 });
 
-	m_pShells.push_back(new Shell(KoopaBase::Color::red));
-	m_pShells[1]->SetPosition(Point2f{ 2220,87 });
-	m_pKoopas.push_back(new Koopa(KoopaBase::Color::red, KoopaBase::Type::naked));
-	m_pKoopas[6]->SetPosition(Point2f{ 2260,87 });
-	m_pShells.push_back(new Shell(KoopaBase::Color::green));
-	m_pShells[2]->SetPosition(Point2f{3024,87});
-	m_pKoopas.push_back(new Koopa(KoopaBase::Color::green,KoopaBase::Type::naked));
-	m_pKoopas[7]->SetPosition(Point2f{ 3050,87 });
+		Push_back(new Shell(KbColor::red), Point2f{ 2220, 87 });
+		Push_back(new Koopa(KbColor::red, KbType::naked), Point2f{ 2260,87 });
+		Push_back(new Shell(KbColor::green), Point2f{ 3024,87 });
+		Push_back(new Koopa(KbColor::green,KbType::naked), Point2f{ 3050,87 });
 
-	m_pMysteryBoxes.push_back(new MysteryBox(Point2f{ 1066,168 }, new Coin(PickUp::Type::coin)));
-	m_pPlatforms.push_back(new Platform(Rectf{ 1066,168,16.f * GameObject::m_Scale,16.f * GameObject::m_Scale }));
-	m_pMysteryBoxes.push_back(new MysteryBox(Point2f{ 1120,168 }, new Mushroom(PickUp::Type::normalMushroom, this)));
-	m_pPlatforms.push_back(new Platform(Rectf{ 1120,168,16.f * GameObject::m_Scale,16.f * GameObject::m_Scale }));
+		Push_back(new Koopa(KbColor::red), Point2f{ 3825,200 });
+		Push_back(new Koopa(KbColor::gray), Point2f{ 5400,90 });
+		Push_back(new Koopa(KbColor::red), Point2f{ 6230,140 });
+
+		Push_back(new Koopa(KbColor::red), Point2f{ 6930,90 });
+		Push_back(new Koopa(KbColor::red), Point2f{ 6970,90 });
+
+		Push_back(new Koopa(KbColor::gray), Point2f{ 7304,90 });
+	}
+	{
+		using PuType = PickUp::Type;
+		Push_back(new MysteryBox(Point2f{ 1066,168 }, new Coin(PuType::coin)));
+		Push_back(new MysteryBox(Point2f{ 1120,168 }, new Mushroom(PuType::normalMushroom, this)));
+		Push_back(new MysteryBox(Point2f{ 1480,150 }, new Coin(PuType::coin)));
+		Push_back(new MysteryBox(Point2f{ 1515,150 }, new Coin(PuType::coin)));
+		Push_back(new MysteryBox(Point2f{ 4980,150 }, new Coin(PuType::coin)));
+		Push_back(new MysteryBox(Point2f{ 5010,150 }, new Coin(PuType::coin)));
+		Push_back(new MysteryBox(Point2f{ 5040,150 }, new Coin(PuType::coin)));
+	}
+
 
 	m_pCheckPoints.push_back(new CheckPoint(Point2f{4486,84}));
 	m_pCheckPoints.push_back(new Endgoal(Point2f{ 8421, 84 }));
@@ -143,22 +151,34 @@ void Level::Draw(const Point2f& cameraLoc, bool debugDraw) const
 		m_pLevelTexture->Draw();
 	}
 	glPopMatrix();
-	for (CheckPoint* c : m_pCheckPoints)
+	for (CheckPoint* checkPoint : m_pCheckPoints)
 	{
-		if (c) c->Draw();
+		if (checkPoint)
+		{
+			checkPoint->Draw();
+		}
 	}
 	DrawPickUps();
-	for (Koopa* k : m_pKoopas)
+	for (Koopa* koopa : m_pKoopas)
 	{
-		if (k) k->Draw();
+		if (koopa)
+		{
+			koopa->Draw();
+		}
 	}
-	for (Shell* s : m_pShells)
+	for (Shell* shell : m_pShells)
 	{
-		if (s) s->Draw();
+		if (shell)
+		{
+			shell->Draw();
+		}
 	}
-	for (MysteryBox* m : m_pMysteryBoxes)
+	for (MysteryBox* mysterybox : m_pMysteryBoxes)
 	{
-		if (m) m->Draw();
+		if (mysterybox)
+		{
+			mysterybox->Draw();
+		}
 	}
 	//if (m_pKoopa) m_pKoopa->Draw();
 	if (debugDraw) DebugDraw(Color4f{1,0,0,1},2.f);
@@ -189,30 +209,27 @@ void Level::DrawPickUps() const
 {
 	for (size_t i{ 0 }; i < m_pPickUps.size(); ++i)
 	{
-		if (m_pPickUps[i] == nullptr) continue;
+		if (m_pPickUps[i] == nullptr)
+		{
+			continue;
+		}
 		m_pPickUps[i]->Draw();
 	}
 }
 
 void Level::UpdateContent(float elapsedSec, Mario* mario)
 {
-	// CLEANUP
-	//for (size_t i{ 0 }; i < m_pShells.size(); ++i)
-	//{
-	//	//std::cout << "Shell[" << i << "] :" << m_pShells[i] << '\n';
-	//	if (m_pShells[i] == nullptr) continue;
-	//	else if (m_pShells[i]->GetYPos() < -300)
-	//	{
-	//		//std::cout << "Cleaning up shell idx " << i << '\n';
-	//		delete m_pShells[i];
-	//		m_pShells[i] = nullptr;
-	//	}
-	//}
-	if (mario->GetStage() == Mario::Stage::dead) return;
+	if (mario->GetStage() == Mario::Stage::dead)
+	{
+		return;
+	}
 	// Update PickUps
 	for (size_t i{ 0 }; i < m_pPickUps.size(); ++i)
 	{
-		if (m_pPickUps[i] == nullptr) continue;
+		if (m_pPickUps[i] == nullptr)
+		{
+			continue;
+		}
 		m_pPickUps[i]->Update(elapsedSec);
 		if (m_pPickUps[i]->IsOverlapping(mario->GetRect()))
 		{
@@ -238,31 +255,37 @@ void Level::UpdateContent(float elapsedSec, Mario* mario)
 	{
 		Push_back(m_Player.GetpMario()->GiveShell());
 	}
-	for (size_t i{0}; i < m_pShells.size(); ++i)
+	for (size_t loopedIdx{0}; loopedIdx < m_pShells.size(); ++loopedIdx)
 	{
-		if (m_pShells[i] == nullptr) continue;
-		m_pShells[i]->Update(elapsedSec, m_Player);
-		if (m_pShells[i]->IsGrabbed())
+		if (m_pShells[loopedIdx] == nullptr)
+		{
+			continue;
+		}
+		m_pShells[loopedIdx]->Update(elapsedSec, m_Player);
+		if (m_pShells[loopedIdx]->IsGrabbed())
 		{
 			if (m_Player.GetpMario()->GetShell())
 			{
-				m_pShells[i]->SetGrabbed(false);
-				m_pShells[i]->Kick(m_Player.GetpMario()->GetHorDirection());
+				m_pShells[loopedIdx]->SetGrabbed(false);
+				m_pShells[loopedIdx]->Kick(m_Player.GetpMario()->GetHorDirection());
 			}
 			else
 			{
-				m_Player.GetpMario()->SetShell(m_pShells[i]);
-				m_pShells[i] = nullptr;
+				m_Player.GetpMario()->SetShell(m_pShells[loopedIdx]);
+				m_pShells[loopedIdx] = nullptr;
 				continue;
 			}
 		}
-		m_pShells[i]->UpdateShellCollisions(m_pShells);
-		int j{ m_pShells[i]->UpdateShellKoopaCollisions(m_pKoopas) };
-		if (j == -1) continue;
-		if (m_pShells[i]->IsGoingIn())
+		m_pShells[loopedIdx]->UpdateShellCollisions(m_pShells);
+		int koopaHit{ m_pShells[loopedIdx]->UpdateShellKoopaCollisions(m_pKoopas) };
+		if (koopaHit == -1)
 		{
-			m_pKoopas[j]->SetShell(m_pShells[i]);
-			m_pShells[i] = nullptr;
+			continue;
+		}
+		if (m_pShells[loopedIdx]->IsGoingIn())
+		{
+			m_pKoopas[koopaHit]->SetShell(m_pShells[loopedIdx]);
+			m_pShells[loopedIdx] = nullptr;
 		}
 	}
 	// Update Koopas
@@ -323,9 +346,12 @@ void Level::UpdateContent(float elapsedSec, Mario* mario)
 		}
 	}
 	// Update checkpoints
-	for (CheckPoint* c : m_pCheckPoints)
+	for (CheckPoint* checkPoint : m_pCheckPoints)
 	{
-		if (c) c->Update(elapsedSec,&m_Player);
+		if (checkPoint)
+		{
+			checkPoint->Update(elapsedSec, &m_Player);
+		}
 	}
 }
 
@@ -351,7 +377,7 @@ void Level::Push_back(Platform* p)
 	m_pPlatforms.push_back(p);
 }
 
-void Level::Push_back(Shell* s)
+void Level::Push_back(Shell* s, const Point2f& pos)
 {
 	bool isPointerPushed{ false };
 	for (size_t i{ 0 }; i < m_pShells.size(); ++i)
@@ -362,6 +388,26 @@ void Level::Push_back(Shell* s)
 		isPointerPushed = true;
 	}
 	if (!isPointerPushed) m_pShells.push_back(s);
+	if ((pos.x != Point2f{}.x) && (pos.y != Point2f{}.y))
+	{
+		s->SetPosition(pos);
+	}
+}
+
+void Level::Push_back(MysteryBox* m)
+{
+	m_pMysteryBoxes.push_back(m);
+	Rectf rect{ m->GetRect() };
+	m_pPlatforms.push_back(new Platform(Rectf{ rect.left,rect.bottom,16.f * GameObject::m_Scale,16.f * GameObject::m_Scale}));
+}
+
+void Level::Push_back(Koopa* k, const Point2f& pos)
+{
+	m_pKoopas.push_back(k);
+	if ((pos.x != Point2f{}.x) && (pos.y != Point2f{}.y))
+	{
+		k->SetPosition(pos);
+	}
 }
 
 bool Level::IsOnTop(Rectf& other)

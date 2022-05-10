@@ -29,7 +29,9 @@ public:
 	void Push_back(const Point2f& p);
 	void Push_back(PickUp* pu);
 	void Push_back(Platform* p);
-	void Push_back(Shell* s);
+	void Push_back(Shell* s, const Point2f& pos = {});
+	void Push_back(MysteryBox* m);
+	void Push_back(Koopa* k, const Point2f& pos = {});
 
 	bool IsOnTop(Rectf& other);
 	bool IsOnTop(const Rectf& other, utils::HitInfo& hi, const Vector2f& velocity);
