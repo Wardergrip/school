@@ -297,6 +297,7 @@ void Level::UpdateContent(float elapsedSec, Mario* mario)
 	for (size_t i{ 0 }; i < m_pMysteryBoxes.size(); ++i)
 	{
 		m_pMysteryBoxes[i]->Update(elapsedSec);
+
 		if (m_pMysteryBoxes[i]->IsOverlappingBottomHitbox(m_Player.GetpMario()->GetRect()))
 		{
 			m_pMysteryBoxes[i]->Bump();
@@ -307,8 +308,18 @@ void Level::UpdateContent(float elapsedSec, Mario* mario)
 			if (m_pMysteryBoxes[i]->GetPickUp()->GetType() == PickUp::Type::coin)
 			{
 				delete m_pMysteryBoxes[i]->GivePickUp();
+				m_Player.AddCoin();
 			}
-			else Push_back(m_pMysteryBoxes[i]->GivePickUp());
+			else
+			{
+				switch (m_pMysteryBoxes[i]->GetPickUp()->GetType())
+				{
+				case PickUp::Type::normalMushroom:
+					m_Player.AddScore(100);
+					break;
+				}
+				Push_back(m_pMysteryBoxes[i]->GivePickUp());
+			}
 		}
 	}
 	// Update checkpoints

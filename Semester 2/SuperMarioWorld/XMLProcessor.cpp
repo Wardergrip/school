@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "XMLProcessor.h"
 #include <fstream>
+#include <iostream>
 
 std::string XMLProcessor::m_FilePath{ "" };
 
@@ -105,6 +106,18 @@ void XMLProcessor::WipeAndCleanSave()
 void XMLProcessor::ChangeFilePath(const std::string& filepath)
 {
 	m_FilePath = filepath;
+}
+
+void XMLProcessor::DisplayPersonalBest()
+{
+	std::cout << "\tCURRENT PERSONAL BEST\n	  ---------------- \n";
+	std::vector<int> values;
+	ReadValues(values);
+	std::cout << "\tTime: " << values[int(PBelement::time)] << '\n';
+	std::cout << "\tScore: " << values[int(PBelement::score)] << '\n';
+	std::cout << "\tLives: " << values[int(PBelement::lives)] << '\n';
+	std::cout << "\tCoins: " << values[int(PBelement::coins)] << '\n';
+	std::cout << "\tbigCoins: " << values[int(PBelement::bigCoins)] << '\n';
 }
 
 bool XMLProcessor::ReadFile(std::string& output)

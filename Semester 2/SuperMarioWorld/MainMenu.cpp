@@ -6,14 +6,9 @@
 #include "MenuButton.h"
 #include "SettingsButton.h"
 #include <iostream>
+#include "XMLProcessor.h"
 
 MainMenu::State MainMenu::m_State{State::titlescreen};
-bool MainMenu::m_IsQWERTY{ true };
-
-bool MainMenu::IsQWERTY()
-{
-	return m_IsQWERTY;
-}
 
 MainMenu::MainMenu(const Window& window, State startingState)
 	:m_Window{window}
@@ -24,9 +19,12 @@ MainMenu::MainMenu(const Window& window, State startingState)
 	,m_pPlayButton{ new MenuButton() }
 	,m_pSettingsButton{ new MenuButton() }
 	,m_pBackButton{ new MenuButton() }
-	,m_pIsQWERTYButton{ new SettingsButton(m_IsQWERTY)}
+	,m_pWipeButton{ new SettingsButton(m_WipingButtonActive)}
 	,m_pTitlescreenTitle{ new Texture{"Resources/TitleScreenTitle.png"}}
 	,m_pTitlescreenBorder{new Texture{"Resources/TitleScreenBorder.png"}}
+	,m_pDisplayPBButton{new SettingsButton(m_DisplayPBButtonActive)}
+	,m_WipingButtonActive{false}
+	,m_DisplayPBButtonActive{false}
 {
 	m_State = startingState;
 	std::string fontPath{ "Resources/consola.ttf" };
@@ -37,7 +35,8 @@ MainMenu::MainMenu(const Window& window, State startingState)
 	m_pPlayButton->SetTexture(new Texture{ "Play",fontPath,fontSize,textColor });
 	m_pSettingsButton->SetTexture(new Texture{ "Settings",fontPath,fontSize,textColor });
 	m_pBackButton->SetTexture(new Texture{ "Back",fontPath,fontSize,textColor });
-	m_pIsQWERTYButton->SetTexture( new Texture{ "QWERTY",fontPath,fontSize,textColor } );
+	m_pWipeButton->SetTexture( new Texture{ "Wipe Save",fontPath,fontSize,textColor } );
+	m_pDisplayPBButton->SetTexture(new Texture{ "Display PB",fontPath,fontSize,textColor });
 
 	m_pCreditsTexture = new Texture{"Made by Reï Messely", fontPath,fontSize / 2,textColor};
 
@@ -48,7 +47,8 @@ MainMenu::MainMenu(const Window& window, State startingState)
 	m_pPlayButton->CenterTo(Point2f{ m_Window.width / 2,(m_Window.height / 2) });
 	m_pSettingsButton->CenterTo(Point2f{ m_Window.width / 2,(m_Window.height / 2) * 0.8f });
 	m_pBackButton->CenterTo(Point2f{ m_Window.width / 2,(m_Window.height / 2) * 0.8f });
-	m_pIsQWERTYButton->CenterTo( Point2f{ m_Window.width / 2, (m_Window.height / 2) * 1.2f });
+	m_pWipeButton->CenterTo( Point2f{ m_Window.width / 2, (m_Window.height / 2) * 1.2f });
+	m_pDisplayPBButton->CenterTo(Point2f{ m_Window.width - 150,70 });
 }
 MainMenu::~MainMenu()
 {
@@ -58,8 +58,8 @@ MainMenu::~MainMenu()
 	m_pSettingsButton = nullptr;
 	delete m_pBackButton;
 	m_pBackButton = nullptr;
-	delete m_pIsQWERTYButton;
-	m_pIsQWERTYButton = nullptr;
+	delete m_pWipeButton;
+	m_pWipeButton = nullptr;
 	
 	delete m_pCreditsTexture;
 	m_pCreditsTexture = nullptr;
@@ -67,6 +67,8 @@ MainMenu::~MainMenu()
 	m_pTitlescreenTitle = nullptr;
 	delete m_pTitlescreenBorder;
 	m_pTitlescreenBorder = nullptr;
+	delete m_pDisplayPBButton;
+	m_pDisplayPBButton = nullptr;
 }
 
 void MainMenu::Draw() const
@@ -103,6 +105,7 @@ void MainMenu::Draw() const
 		m_pSettingsButton->Draw();
 
 		m_pCreditsTexture->Draw(Point2f{ 50,50 });
+		m_pDisplayPBButton->Draw();
 	}
 	// Settings objects
 	else if (m_State == State::settings)
@@ -117,7 +120,7 @@ void MainMenu::Draw() const
 		}
 		m_pBackButton->Draw();
 
-		m_pIsQWERTYButton->Draw();
+		m_pWipeButton->Draw();
 
 		m_pCreditsTexture->Draw(Point2f{ 50,50 });
 	}
@@ -129,7 +132,7 @@ void MainMenu::Draw() const
 	}
 }
 
-void MainMenu::CheckClicks(const SDL_MouseButtonEvent& e)
+void MainMenu::CheckUpClicks(const SDL_MouseButtonEvent& e)
 {
 	// If we're playing the game, we shouldn't check for clicks on the MainMenu
 	if (m_State == State::playing) return;
@@ -157,15 +160,46 @@ void MainMenu::CheckClicks(const SDL_MouseButtonEvent& e)
 			m_State = State::titlescreen;
 		}
 		// Clicking on QWERTY setting
-		else if (m_pIsQWERTYButton->IsInside(mousePos) && m_State == State::settings)
+		else if (m_pWipeButton->IsInside(mousePos) && m_State == State::settings)
 		{
-			m_IsQWERTY = !m_IsQWERTY;
-			std::cout << "I could not think of any interesting settings so I thought of this one, however, later realised I don't use much keybinds that are affected by this.\n";
+			XMLProcessor::WipeAndCleanSave();
+			std::cout << "Current personalbest is reset\n";
+		}
+		// Clicking on PBdisplay
+		else if (m_pDisplayPBButton->IsInside(mousePos) && m_State == State::titlescreen)
+		{
+			XMLProcessor::DisplayPersonalBest();
 		}
 		break;
 	case SDL_BUTTON_RIGHT:
 		break;
 	case SDL_BUTTON_MIDDLE:
+		break;
+	}
+	m_WipingButtonActive = false;
+	m_DisplayPBButtonActive = false;
+}
+
+void MainMenu::CheckDownClicks(const SDL_MouseButtonEvent& e)
+{
+	// If we're playing the game, we shouldn't check for clicks on the MainMenu
+	if (m_State == State::playing) return;
+	// Don't check for clicks if we're transitioning to playing
+	if (m_TransitioningTo == State::playing) return;
+
+	Point2f mousePos = Point2f{ float(e.x),float(e.y) };
+
+	switch (e.button)
+	{
+	case SDL_BUTTON_LEFT:
+		if (m_pWipeButton->IsInside(mousePos) && m_State == State::settings)
+		{
+			m_WipingButtonActive = true;
+		}
+		else if (m_pDisplayPBButton->IsInside(mousePos) && m_State == State::titlescreen)
+		{
+			m_DisplayPBButtonActive = true;
+		}
 		break;
 	}
 }

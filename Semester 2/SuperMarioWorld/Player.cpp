@@ -230,6 +230,7 @@ void Player::Win()
 
 std::string Player::ToXML() const
 {
+	int lives{ (m_Lives < 0 ? 0 : m_Lives) };
 	std::string output;
 	std::string helper{ '\"' };
 	output += "<personalbest\n";
@@ -238,7 +239,7 @@ std::string Player::ToXML() const
 	output += '\t'; // Horizontal tab
 	output += "score=" + helper + std::to_string(m_Score) + helper + '\n';
 	output += '\t'; // Horizontal tab
-	output += "lives=" + helper + std::to_string(m_Lives) + helper + '\n';
+	output += "lives=" + helper + std::to_string(lives) + helper + '\n';
 	output += '\t'; // Horizontal tab
 	output += "coins=" + helper + std::to_string(m_CoinAmount) + helper + '\n';
 	output += '\t'; // Horizontal tab

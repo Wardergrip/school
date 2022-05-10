@@ -30,11 +30,7 @@ void Game::Initialize( )
 	m_pHUD = new HUD(m_Player,m_Window);
 
 	XMLProcessor::ChangeFilePath("Resources/personalBest.xml");
-
-	std::cout << "CURRENT PERSONAL BEST\n ------------- \n";
-	std::string output;
-	XMLProcessor::ReadFile(output);
-	std::cout << output << '\n';
+	XMLProcessor::DisplayPersonalBest();
 }
 
 void Game::Cleanup( )
@@ -77,6 +73,7 @@ void Game::Update( float elapsedSec )
 		m_pLevel = new Level(m_Player);
 		m_Player.ResetAll();
 		m_pMainMenu->m_State = MainMenu::State::titlescreen;
+		XMLProcessor::DisplayPersonalBest();
 	}
 
 	m_pLevel->UpdateContent(elapsedSec, m_Player.GetpMario());
@@ -94,7 +91,6 @@ void Game::Draw( ) const
 	glPushMatrix();
 	{
 		m_Camera.Transform(m_Player.GetMarioRect());
-		m_pLevel->DrawPickUps();
 
 		m_pLevel->Draw(m_Camera.GetPos(), true);
 		m_Player.Draw();
@@ -113,8 +109,8 @@ void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )
 		m_Player.DebugPrintAllStats();
 		break;
 	case SDLK_0:
-		std::cout << "Wiping personalbest..\n";
 		XMLProcessor::WipeAndCleanSave();
+		std::cout << "Current personalbest is reset\n";
 		break;
 	}
 }
@@ -161,6 +157,7 @@ void Game::ProcessMouseDownEvent( const SDL_MouseButtonEvent& e )
 	//	std::cout << " middle button " << std::endl;
 	//	break;
 	//}
+	m_pMainMenu->CheckDownClicks(e);
 }
 
 void Game::ProcessMouseUpEvent( const SDL_MouseButtonEvent& e )
@@ -178,7 +175,7 @@ void Game::ProcessMouseUpEvent( const SDL_MouseButtonEvent& e )
 	//	std::cout << " middle button " << std::endl;
 	//	break;
 	//}
-	m_pMainMenu->CheckClicks(e);
+	m_pMainMenu->CheckUpClicks(e);
 }
 
 void Game::ClearBackground( ) const
@@ -198,6 +195,7 @@ void Game::DisplayInfo()
 		<< "Spacebar: jump\n"
 		<< "Left shift: sprinting/grabbing (Hold)\n\n"
 		<< "DEV: Press D to see KoopaBase hitboxes\n"
-		<< "To disable main menu, change starting state in Game.cpp of the MainMenu object to off\n"
+		<< "DEV: Press G to see level boundaries\n"
+		<< "To disable main menu, change starting state in Game.cpp of the MainMenu object to playing\n"
 		;
 }

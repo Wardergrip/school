@@ -28,6 +28,8 @@ public:
 	static void WipeAndCleanSave();
 
 	static void ChangeFilePath(const std::string& filepath);
+	
+	static void DisplayPersonalBest();
 
 private:
 	static std::string m_FilePath;

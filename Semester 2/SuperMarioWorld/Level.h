@@ -23,7 +23,7 @@ public:
 	void Draw(const Point2f& cameraLoc, bool debugDraw = false) const;
 	void DebugDraw(const Color4f& col = Color4f{1,0,0,1}, float lineThickness = 1) const;
 
-	void DrawPickUps() const;
+
 	void UpdateContent(float elapsedSec, Mario* mario);
 
 	void Push_back(const Point2f& p);
@@ -65,5 +65,7 @@ private:
 
 	void PushDemoLevel();
 	void PushDemoPickUps();
+
+	void DrawPickUps() const;
 };
 

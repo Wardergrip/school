@@ -16,7 +16,6 @@ public:
 	};
 
 	static State m_State;
-	static bool IsQWERTY();
 
 	explicit MainMenu(const Window& window, State startingState);
 	MainMenu(const MainMenu& m) = delete;
@@ -26,14 +25,17 @@ public:
 	~MainMenu();
 	
 	void Draw() const;
-	void CheckClicks(const SDL_MouseButtonEvent& e);
+	void CheckUpClicks(const SDL_MouseButtonEvent& e);
+	void CheckDownClicks(const SDL_MouseButtonEvent& e);
 	void CheckSelect(const Point2f& mousePos);
 	void Update(float elapsedSec);
 
 private:
 	// +-----+ DATA MEMBERS +-----+
 
-	static bool m_IsQWERTY;
+	// This was static so that all could access the previous QWERTY setting
+	bool m_WipingButtonActive; 
+	bool m_DisplayPBButtonActive;
 
 	const Window& m_Window;
 
@@ -41,7 +43,8 @@ private:
 	MenuButton* m_pSettingsButton;
 	MenuButton* m_pBackButton;
 
-	SettingsButton* m_pIsQWERTYButton;
+	SettingsButton* m_pWipeButton;
+	SettingsButton* m_pDisplayPBButton;
 
 	Texture* m_pCreditsTexture;
 

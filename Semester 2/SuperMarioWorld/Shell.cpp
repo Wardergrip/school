@@ -69,7 +69,7 @@ void Shell::Draw() const
 	if (m_DrawHitBoxes) DrawHitboxes();
 }
 
-void Shell::Update(float elapsedSec, const Player& player)
+void Shell::Update(float elapsedSec, Player& player)
 {
 	if (m_IsDead)
 	{

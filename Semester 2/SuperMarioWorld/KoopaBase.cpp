@@ -82,7 +82,7 @@ void KoopaBase::Draw() const
 	glPopMatrix();
 }
 
-void KoopaBase::Update(float elapsedSec, const Player& player)
+void KoopaBase::Update(float elapsedSec, Player& player)
 {
 	UpdateMovement(elapsedSec);
 }

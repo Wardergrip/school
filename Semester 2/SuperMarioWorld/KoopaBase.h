@@ -19,7 +19,7 @@ public:
 	virtual ~KoopaBase();
 
 	virtual void Draw() const;
-	virtual void Update(float elapsedSec, const Player& player);
+	virtual void Update(float elapsedSec, Player& player);
 	virtual void UpdateMovement(float elapsedSec);
 
 
