@@ -226,6 +226,9 @@
     <ClInclude Include="Vector2f.h" />
     <ClInclude Include="XMLProcessor.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Messely_Reï_SuperMarioWorld.xlsx" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

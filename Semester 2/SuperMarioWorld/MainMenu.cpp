@@ -23,6 +23,7 @@ MainMenu::MainMenu(const Window& window, State startingState)
 	,m_pTitlescreenTitle{ new Texture{"Resources/TitleScreenTitle.png"}}
 	,m_pTitlescreenBorder{new Texture{"Resources/TitleScreenBorder.png"}}
 	,m_pDisplayPBButton{new SettingsButton(m_DisplayPBButtonActive)}
+	,m_pSoundOnButton{new SettingsButton(m_IsSoundOn)}
 	,m_WipingButtonActive{false}
 	,m_DisplayPBButtonActive{false}
 {
@@ -37,6 +38,7 @@ MainMenu::MainMenu(const Window& window, State startingState)
 	m_pBackButton->SetTexture(new Texture{ "Back",fontPath,fontSize,textColor });
 	m_pWipeButton->SetTexture( new Texture{ "Wipe Save",fontPath,fontSize,textColor } );
 	m_pDisplayPBButton->SetTexture(new Texture{ "Display PB",fontPath,fontSize,textColor });
+	m_pSoundOnButton->SetTexture(new Texture{ "Sound",fontPath,fontSize,textColor });
 
 	m_pCreditsTexture = new Texture{"Made by Reï Messely", fontPath,fontSize / 2,textColor};
 
@@ -69,6 +71,8 @@ MainMenu::~MainMenu()
 	m_pTitlescreenBorder = nullptr;
 	delete m_pDisplayPBButton;
 	m_pDisplayPBButton = nullptr;
+	delete m_pSoundOnButton;
+	m_pSoundOnButton = nullptr;
 }
 
 void MainMenu::Draw() const
@@ -221,6 +225,11 @@ void MainMenu::Update(float elapsedSec)
 			m_TransitionAlpha = 0;
 		}
 	}
+}
+
+bool MainMenu::IsSoundOn()
+{
+	return m_IsSoundOn;
 }
 
 void MainMenu::CheckSelect(const Point2f& mousePos)

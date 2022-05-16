@@ -30,10 +30,12 @@ public:
 	void CheckSelect(const Point2f& mousePos);
 	void Update(float elapsedSec);
 
+	static bool IsSoundOn();
+
 private:
 	// +-----+ DATA MEMBERS +-----+
 
-	// This was static so that all could access the previous QWERTY setting
+	static bool m_IsSoundOn;
 	bool m_WipingButtonActive; 
 	bool m_DisplayPBButtonActive;
 
@@ -45,6 +47,7 @@ private:
 
 	SettingsButton* m_pWipeButton;
 	SettingsButton* m_pDisplayPBButton;
+	SettingsButton* m_pSoundOnButton;
 
 	Texture* m_pCreditsTexture;
 

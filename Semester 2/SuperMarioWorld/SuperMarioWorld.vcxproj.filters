@@ -228,4 +228,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Messely_Reï_SuperMarioWorld.xlsx">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
 </Project>
