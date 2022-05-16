@@ -14,6 +14,10 @@
 #include "MysteryBox.h"
 #include "CheckPoint.h"
 #include "Endgoal.h"
+
+#include "SoundManager.h"
+#include "SoundStream.h"
+
 using namespace utils;
 
 Level::Level(Player& player)
@@ -220,8 +224,22 @@ void Level::UpdateContent(float elapsedSec, Mario* mario)
 {
 	if (mario->GetStage() == Mario::Stage::dead)
 	{
+		SoundStream* overworldTheme{ SoundManager::GetSoundStream("Resources/OverworldTheme.mp3") };
+		if (overworldTheme->IsPlaying())
+		{
+			overworldTheme->Stop();
+		}
 		return;
 	}
+	else
+	{
+		SoundStream* overworldTheme{ SoundManager::GetSoundStream("Resources/OverworldTheme.mp3") };
+		if (!overworldTheme->IsPlaying())
+		{
+			overworldTheme->Play(true);
+		}
+	}
+
 	// Update PickUps
 	for (size_t i{ 0 }; i < m_pPickUps.size(); ++i)
 	{

@@ -120,6 +120,11 @@ void XMLProcessor::DisplayPersonalBest()
 	std::cout << "\tbigCoins: " << values[int(PBelement::bigCoins)] << '\n';
 }
 
+const std::string& XMLProcessor::GetFilePath()
+{
+	return m_FilePath;
+}
+
 bool XMLProcessor::ReadFile(std::string& output)
 {
 	std::ifstream file{ m_FilePath };

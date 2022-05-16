@@ -4,6 +4,8 @@
 #include "level.h"
 #include "Texture.h"
 #include "Shell.h"
+#include "SoundManager.h"
+#include "SoundEffect.h"
 using namespace utils;
 
 Mario::Mario()
@@ -90,7 +92,7 @@ void Mario::Update(float elapsedSec, Level& level)
 {
 	if (m_Stage == Stage::dead)
 	{
-		m_Velocity.y += (m_Gravity.y/3.f) * elapsedSec;
+		m_Velocity.y += (m_Gravity.y/8.f) * elapsedSec;
 		m_Position.y += m_Velocity.y * elapsedSec;
 		if (m_Position.y <= 0) m_IsFullyDead = true;
 		return;
@@ -371,7 +373,8 @@ void Mario::Hurt()
 	case Mario::Stage::small:
 		m_Stage = Stage::dead;
 		m_Velocity.x = 0;
-		m_Velocity.y = 100;
+		m_Velocity.y = 400;
+		SoundManager::GetSoundEffect("Resources/deathSFX.ogg")->Play(0);
 		break;
 	case Mario::Stage::big:
 		m_Stage = Stage::small;

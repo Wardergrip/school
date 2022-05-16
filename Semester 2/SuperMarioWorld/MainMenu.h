@@ -32,6 +32,8 @@ public:
 
 	static bool IsSoundOn();
 
+	std::string ToXML() const;
+
 private:
 	// +-----+ DATA MEMBERS +-----+
 

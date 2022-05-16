@@ -7,8 +7,10 @@
 #include "SettingsButton.h"
 #include <iostream>
 #include "XMLProcessor.h"
+#include "SoundManager.h"
 
 MainMenu::State MainMenu::m_State{State::titlescreen};
+bool MainMenu::m_IsSoundOn{ true };
 
 MainMenu::MainMenu(const Window& window, State startingState)
 	:m_Window{window}
@@ -49,8 +51,23 @@ MainMenu::MainMenu(const Window& window, State startingState)
 	m_pPlayButton->CenterTo(Point2f{ m_Window.width / 2,(m_Window.height / 2) });
 	m_pSettingsButton->CenterTo(Point2f{ m_Window.width / 2,(m_Window.height / 2) * 0.8f });
 	m_pBackButton->CenterTo(Point2f{ m_Window.width / 2,(m_Window.height / 2) * 0.8f });
-	m_pWipeButton->CenterTo( Point2f{ m_Window.width / 2, (m_Window.height / 2) * 1.2f });
+	m_pWipeButton->CenterTo( Point2f{ m_Window.width / 2 - 100, (m_Window.height / 2) * 1.2f });
+	m_pSoundOnButton->CenterTo( Point2f{ m_Window.width / 2 + 100, (m_Window.height / 2) * 1.2f });
 	m_pDisplayPBButton->CenterTo(Point2f{ m_Window.width - 150,70 });
+
+#pragma region SettingsFile
+	{
+		using XMLP = XMLProcessor;
+		std::string filepath{ XMLP::GetFilePath() };
+		std::string output{};
+		XMLP::ChangeFilePath("Resources/settings.xml");
+		if (!XMLP::ReadFile(output)) throw "Wrong filepath";
+
+		m_IsSoundOn = bool(XMLP::GetAttributeValue("sound", output));
+		SoundManager::ToggleSound(m_IsSoundOn); // Adjust soundsetting to the newly read setting
+		XMLP::ChangeFilePath(filepath);
+	}
+#pragma endregion
 }
 MainMenu::~MainMenu()
 {
@@ -73,6 +90,14 @@ MainMenu::~MainMenu()
 	m_pDisplayPBButton = nullptr;
 	delete m_pSoundOnButton;
 	m_pSoundOnButton = nullptr;
+
+	{
+		using XMLP = XMLProcessor;
+		std::string filepath{ XMLP::GetFilePath() };
+		XMLP::ChangeFilePath("Resources/settings.xml");
+		XMLP::SaveToFile(ToXML());
+		XMLP::ChangeFilePath(filepath);
+	}
 }
 
 void MainMenu::Draw() const
@@ -126,6 +151,8 @@ void MainMenu::Draw() const
 
 		m_pWipeButton->Draw();
 
+		m_pSoundOnButton->Draw();
+
 		m_pCreditsTexture->Draw(Point2f{ 50,50 });
 	}
 	// Fading 
@@ -168,6 +195,12 @@ void MainMenu::CheckUpClicks(const SDL_MouseButtonEvent& e)
 		{
 			XMLProcessor::WipeAndCleanSave();
 			std::cout << "Current personalbest is reset\n";
+		}
+		// Clicking on Sound setting
+		else if (m_pSoundOnButton->IsInside(mousePos) && m_State == State::settings)
+		{
+			m_IsSoundOn = !m_IsSoundOn;
+			SoundManager::ToggleSound(m_IsSoundOn);
 		}
 		// Clicking on PBdisplay
 		else if (m_pDisplayPBButton->IsInside(mousePos) && m_State == State::titlescreen)
@@ -230,6 +263,20 @@ void MainMenu::Update(float elapsedSec)
 bool MainMenu::IsSoundOn()
 {
 	return m_IsSoundOn;
+}
+
+std::string MainMenu::ToXML() const
+{
+	std::string output;
+	std::string helper{ "\"" };
+
+	output += "<settings\n";
+	output += "\t"; // horizontal tab
+	output += "sound=" + helper + std::string(m_IsSoundOn ? "1" : "0") + helper +'\n';
+
+	output += "/>";
+
+	return output;
 }
 
 void MainMenu::CheckSelect(const Point2f& mousePos)

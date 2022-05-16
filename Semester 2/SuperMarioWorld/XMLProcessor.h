@@ -31,6 +31,8 @@ public:
 	
 	static void DisplayPersonalBest();
 
+	static const std::string& GetFilePath();
+
 private:
 	static std::string m_FilePath;
 };

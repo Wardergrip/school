@@ -7,6 +7,7 @@
 #include "Level.h"
 #include "HUD.h"
 #include "XMLProcessor.h"
+#include "SoundManager.h"
 
 Game::Game( const Window& window ) 
 	:m_Window{ window }
@@ -24,13 +25,16 @@ Game::~Game( )
 
 void Game::Initialize( )
 {
-	m_pMainMenu = new MainMenu(m_Window, MainMenu::State::playing);
+	SoundManager::GetSoundEffect("Resources/deathSFX.ogg");
+	SoundManager::GetSoundStream("Resources/OverworldTheme.mp3");
+	XMLProcessor::ChangeFilePath("Resources/personalBest.xml");
+	XMLProcessor::DisplayPersonalBest();
+
+	m_pMainMenu = new MainMenu(m_Window, MainMenu::State::titlescreen);
 	m_pLevel = new Level(m_Player);
 	m_Camera.SetLevelBoundaries(Rectf{0,0,m_pLevel->GetFurthestXValue(),m_Window.height});
 	m_pHUD = new HUD(m_Player,m_Window);
 
-	XMLProcessor::ChangeFilePath("Resources/personalBest.xml");
-	XMLProcessor::DisplayPersonalBest();
 }
 
 void Game::Cleanup( )
@@ -42,6 +46,7 @@ void Game::Cleanup( )
 	delete m_pHUD;
 	m_pHUD = nullptr;
 
+	SoundManager::CleanUp();
 }
 
 void Game::Update( float elapsedSec )

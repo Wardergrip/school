@@ -183,6 +183,7 @@
     <ClCompile Include="SettingsButton.cpp" />
     <ClCompile Include="Shell.cpp" />
     <ClCompile Include="SoundEffect.cpp" />
+    <ClCompile Include="SoundManager.cpp" />
     <ClCompile Include="SoundStream.cpp" />
     <ClCompile Include="structs.cpp" />
     <ClCompile Include="SVGParser.cpp" />
@@ -218,6 +219,7 @@
     <ClInclude Include="SettingsButton.h" />
     <ClInclude Include="Shell.h" />
     <ClInclude Include="SoundEffect.h" />
+    <ClInclude Include="SoundManager.h" />
     <ClInclude Include="SoundStream.h" />
     <ClInclude Include="structs.h" />
     <ClInclude Include="SVGParser.h" />
