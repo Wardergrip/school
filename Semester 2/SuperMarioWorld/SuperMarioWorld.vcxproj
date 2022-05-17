@@ -178,6 +178,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="PickUp.cpp" />
+    <ClCompile Include="PickUpManager.cpp" />
     <ClCompile Include="Platform.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="SettingsButton.cpp" />
@@ -214,6 +215,7 @@
     <ClInclude Include="MysteryBox.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="PickUp.h" />
+    <ClInclude Include="PickUpManager.h" />
     <ClInclude Include="Platform.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="SettingsButton.h" />

@@ -1,6 +1,6 @@
 #pragma once
 #include <vector>
-class XMLProcessor
+class XMLProcessor final
 {
 public:
 	enum class PBelement {time,score,lives,coins,bigCoins};

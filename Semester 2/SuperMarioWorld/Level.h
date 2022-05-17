@@ -2,7 +2,7 @@
 #include <vector>
 #include "utils.h"
 class Texture;
-class PickUp;
+class PickUpManager;
 class Platform;
 class Player;
 class Mario;
@@ -27,7 +27,6 @@ public:
 	void UpdateContent(float elapsedSec, Mario* mario);
 
 	void Push_back(const Point2f& p);
-	void Push_back(PickUp* pu);
 	void Push_back(Platform* p);
 	void Push_back(Shell* s, const Point2f& pos = {});
 	void Push_back(MysteryBox* m);
@@ -46,8 +45,8 @@ private:
 	bool m_EnableDebugDraw;
 	Player& m_Player;
 
+	PickUpManager* m_pPickUpManager;
 	std::vector<std::vector<Point2f>> m_Vertices;
-	std::vector<PickUp*> m_pPickUps;
 	std::vector<Platform*> m_pPlatforms;
 	std::vector<MysteryBox*> m_pMysteryBoxes;
 	std::vector<CheckPoint*> m_pCheckPoints;
@@ -63,11 +62,8 @@ private:
 	void ScaleLevel(float scale, int vectorAmount = -1);
 
 	void PushPlatforms();
-	void PushPickups();
 
 	void PushDemoLevel();
 	void PushDemoPickUps();
-
-	void DrawPickUps() const;
 };
 

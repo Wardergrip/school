@@ -4,9 +4,11 @@
 #include "SVGParser.h"
 #include "Texture.h"
 
+#include "PickUpManager.h"
 #include "FireFlower.h"
 #include "Mushroom.h"
 #include "Coin.h"
+
 #include "Platform.h"
 #include "Mario.h"
 #include "Shell.h"
@@ -24,7 +26,7 @@ Level::Level(Player& player)
 	:m_EnableDebugDraw{true}
 	,m_Player{player}
 	,m_Vertices{}
-	,m_pPickUps{}
+	,m_pPickUpManager{new PickUpManager()}
 	,m_pPlatforms{}
 	,m_pBackgroundTexture{new Texture("Resources/Background.png")}
 	,m_pLevelTexture{new Texture("Resources/Level.png")}
@@ -32,7 +34,6 @@ Level::Level(Player& player)
 	,m_pKoopas{}
 	,m_pMysteryBoxes{}
 {
-	m_pPickUps.reserve(16);
 	m_pPlatforms.reserve(30);
 	m_pPlatforms.reserve(30);
 	m_pShells.reserve(16);
@@ -46,7 +47,7 @@ Level::Level(Player& player)
 	if(!SVGParser::GetVerticesFromSvgFile("Resources/thirdAttempt.svg", m_Vertices)) throw "Something went wrong";
 	ScaleLevel(m_Player.GetpMario()->m_Scale);
 	PushPlatforms();
-	PushPickups();
+	m_pPickUpManager->PushPickUps();
 
 	{
 		using KbColor = KoopaBase::Color;
@@ -99,16 +100,13 @@ Level::~Level()
 	delete m_pLevelTexture;
 	m_pLevelTexture = nullptr;
 
+	delete m_pPickUpManager;
+	m_pPickUpManager = nullptr;
 	for (size_t i{ 0 }; i < m_Vertices.size(); ++i)
 	{
 		m_Vertices[i].clear();
 	}
 	m_Vertices.clear();
-	for (size_t i{0}; i < m_pPickUps.size(); ++i)
-	{
-		delete m_pPickUps[i];
-		m_pPickUps[i] = nullptr;
-	}
 	for (size_t i{ 0 }; i < m_pPlatforms.size(); ++i)
 	{
 		delete m_pPlatforms[i];
@@ -161,7 +159,7 @@ void Level::Draw(const Point2f& cameraLoc, bool debugDraw) const
 			checkPoint->Draw();
 		}
 	}
-	DrawPickUps();
+	m_pPickUpManager->Draw();
 	for (Koopa* koopa : m_pKoopas)
 	{
 		if (koopa)
@@ -208,18 +206,6 @@ void Level::DebugDraw(const Color4f& col, float lineThickness) const
 	}
 }
 
-void Level::DrawPickUps() const
-{
-	for (size_t i{ 0 }; i < m_pPickUps.size(); ++i)
-	{
-		if (m_pPickUps[i] == nullptr)
-		{
-			continue;
-		}
-		m_pPickUps[i]->Draw();
-	}
-}
-
 void Level::UpdateContent(float elapsedSec, Mario* mario)
 {
 	if (mario->GetStage() == Mario::Stage::dead)
@@ -241,32 +227,7 @@ void Level::UpdateContent(float elapsedSec, Mario* mario)
 	}
 
 	// Update PickUps
-	for (size_t i{ 0 }; i < m_pPickUps.size(); ++i)
-	{
-		if (m_pPickUps[i] == nullptr)
-		{
-			continue;
-		}
-		m_pPickUps[i]->Update(elapsedSec);
-		if (m_pPickUps[i]->IsOverlapping(mario->GetRect()))
-		{
-			PickUp::Type t{ m_pPickUps[i]->GetType() };
-			switch (t)
-			{
-			case PickUp::Type::coin:
-				m_Player.AddCoin();
-				break;
-			case PickUp::Type::bigCoin:
-				m_Player.AddBigCoin();
-				break;
-			case PickUp::Type::normalMushroom:
-				mario->Grow();
-				break;
-			}
-			delete m_pPickUps[i];
-			m_pPickUps[i] = nullptr;
-		}
-	}
+	m_pPickUpManager->Update(elapsedSec, &m_Player);
 	// Update Shells
 	if (m_Player.GetpMario()->IsTryingToThrowShell())
 	{
@@ -297,7 +258,7 @@ void Level::UpdateContent(float elapsedSec, Mario* mario)
 		int koopaHit{ m_pShells[loopedIdx]->UpdateShellKoopaCollisions(m_pKoopas) };
 		if (koopaHit == -1)
 		{
-			continue;
+			continue; 
 		}
 		if (m_pShells[loopedIdx]->IsGoingIn())
 		{
@@ -358,7 +319,7 @@ void Level::UpdateContent(float elapsedSec, Mario* mario)
 					m_Player.AddScore(100);
 					break;
 				}
-				Push_back(m_pMysteryBoxes[i]->GivePickUp());
+				m_pPickUpManager->Push_back(m_pMysteryBoxes[i]->GivePickUp());
 			}
 		}
 	}
@@ -375,18 +336,6 @@ void Level::UpdateContent(float elapsedSec, Mario* mario)
 void Level::Push_back(const Point2f& p)
 {
 	m_Vertices[0].push_back(p);
-}
-
-void Level::Push_back(PickUp* pu)
-{
-	bool isPointerPushed{ false };
-	for (size_t i{ 0 }; i < m_pPickUps.size(); ++i)
-	{
-		if (m_pPickUps[i] != nullptr) continue;
-		m_pPickUps[i] = pu;
-		isPointerPushed = true;
-	}
-	if (!isPointerPushed) m_pPickUps.push_back(pu);
 }
 
 void Level::Push_back(Platform* p)
@@ -617,35 +566,6 @@ void Level::PushPlatforms()
 	Push_back(new Platform(Point2f{ 5938,220 }, 274, 1));
 }
 
-void Level::PushPickups()
-{
-	Push_back(new Coin(PickUp::Type::coin, Point2f{ 2157,170 }));
-	Push_back(new Coin(PickUp::Type::coin, Point2f{ 2184,200 }));
-	Push_back(new Coin(PickUp::Type::bigCoin, Point2f{ 2212,205 }));
-	Push_back(new Coin(PickUp::Type::coin, Point2f{ 2240,195 }));
-	Push_back(new Coin(PickUp::Type::coin, Point2f{ 2267,170 }));
-
-	Push_back(new Coin(PickUp::Type::bigCoin, Point2f{ 3024,206 }));
-
-	Push_back(new Coin(PickUp::Type::coin, Point2f{ 4004,280 }));
-	Push_back(new Coin(PickUp::Type::coin, Point2f{ 4032,310 }));
-	Push_back(new Coin(PickUp::Type::coin, Point2f{ 4065,310 }));
-	Push_back(new Coin(PickUp::Type::bigCoin, Point2f{ 4090,320 }));
-
-	Push_back(new Coin(PickUp::Type::coin, Point2f{ 6020,306 }));
-	Push_back(new Coin(PickUp::Type::coin, Point2f{ 6051,306 }));
-	Push_back(new Coin(PickUp::Type::coin, Point2f{ 6076,306 }));
-	Push_back(new Coin(PickUp::Type::bigCoin, Point2f{ 6130,310 }));
-
-	Push_back(new Coin(PickUp::Type::coin, Point2f{ 7980,130 }));
-	Push_back(new Coin(PickUp::Type::coin, Point2f{ 8000,160 }));
-	Push_back(new Coin(PickUp::Type::coin, Point2f{ 8020,200 }));
-	for (float i{ 0 }; i < 10; ++i)
-	{
-		Push_back(new Coin(PickUp::Type::coin, Point2f{ 8050 + i*30,220 }));
-	}
-}
-
 void Level::PushDemoLevel()
 {
 	Push_back(Point2f{ 0,0 });
@@ -665,7 +585,7 @@ void Level::PushDemoPickUps()
 {
 	for (float i{ 0 }; i < 10; ++i)
 	{
-		Push_back(new Coin(Coin::Type::coin, Point2f{100 + 20 * i,200 }));
+		m_pPickUpManager->Push_back(new Coin(Coin::Type::coin, Point2f{100 + 20 * i,200 }));
 	}
-	Push_back(new Mushroom(PickUp::Type::normalMushroom, this, Point2f{ 10,200 }));
+	m_pPickUpManager->Push_back(new Mushroom(PickUp::Type::normalMushroom, this, Point2f{ 10,200 }));
 }
