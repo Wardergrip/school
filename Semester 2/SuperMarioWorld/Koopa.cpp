@@ -54,7 +54,7 @@ void Koopa::Draw() const
 	if (m_DrawHitBoxes) DrawHitboxes();
 }
 
-void Koopa::Update(float elapsedSec, Player& player)
+void Koopa::Update(float elapsedSec, Player* player)
 {
 	if (m_IsHurt && m_pShell)
 	{
@@ -62,21 +62,21 @@ void Koopa::Update(float elapsedSec, Player& player)
 		if (m_pShell->GetYPos() < -300) m_IsDead = true;
 		return;
 	}
-	Mario* pMario{ player.GetpMario() };
+	Mario* pMario{ player->GetpMario() };
 
 	if (IsOverlapping(pMario->GetRect(), GetTopHitbox()))
 	{
 		if (m_Type == Type::naked && m_IsHurt)
 		{
 			m_IsDead = true;
-			player.AddScore(50);
+			player->AddScore(50);
 		}
 		else if (m_Type == Type::naked)
 		{
 			AboutToDie();
 			pMario->BounceJump();
 			m_Rect.left = -m_Rect.width; // Doesn't work?
-			player.AddScore(50);
+			player->AddScore(50);
 		}
 		else if (m_Type == Type::shelled) m_IsGivingShell = true;
 	}

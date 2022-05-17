@@ -16,7 +16,7 @@ public:
 	void Throw(float horizontalDirection, const Vector2f& velocity);
 
 	void Draw() const override;
-	void Update(float elapsedSec, Player& player) override;
+	void Update(float elapsedSec, Player* player) override;
 	// Returns idx of the koopa hit
 	int UpdateShellKoopaCollisions(std::vector<Koopa*>& pKs);
 	void UpdateShellCollisions(std::vector<Shell*>& pSs);

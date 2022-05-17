@@ -69,7 +69,7 @@ void Shell::Draw() const
 	if (m_DrawHitBoxes) DrawHitboxes();
 }
 
-void Shell::Update(float elapsedSec, Player& player)
+void Shell::Update(float elapsedSec, Player* player)
 {
 	if (m_IsDead)
 	{
@@ -78,7 +78,7 @@ void Shell::Update(float elapsedSec, Player& player)
 		return;
 	}
 	const Uint8* pStates = SDL_GetKeyboardState(nullptr);
-	Mario* pMario{ player.GetpMario() };
+	Mario* pMario{ player->GetpMario() };
 
 	if (IsOverlapping(pMario->GetRect(), this->GetTopHitbox()))
 	{

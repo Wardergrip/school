@@ -9,11 +9,16 @@
 #include "Mushroom.h"
 #include "Coin.h"
 
-#include "Platform.h"
-#include "Mario.h"
+#include "KoopaBaseManager.h"
 #include "Shell.h"
 #include "Koopa.h"
+
+#include "Platform.h"
+#include "Mario.h"
+
+#include "MysteryBoxManager.h"
 #include "MysteryBox.h"
+
 #include "CheckPoint.h"
 #include "Endgoal.h"
 
@@ -27,56 +32,23 @@ Level::Level(Player& player)
 	,m_Player{player}
 	,m_Vertices{}
 	,m_pPickUpManager{new PickUpManager()}
+	,m_pKoopaBaseManager{new KoopaBaseManager()}
 	,m_pPlatforms{}
 	,m_pBackgroundTexture{new Texture("Resources/Background.png")}
 	,m_pLevelTexture{new Texture("Resources/Level.png")}
-	,m_pShells{}
-	,m_pKoopas{}
-	,m_pMysteryBoxes{}
+	,m_pMysteryBoxManager{new MysteryBoxManager()}
 {
 	m_pPlatforms.reserve(30);
 	m_pPlatforms.reserve(30);
-	m_pShells.reserve(16);
-	m_pKoopas.reserve(16);
-	m_pMysteryBoxes.reserve(20);
 
 	KoopaBase::InitLevelRef(this);
 	m_Vertices.push_back(std::vector<Point2f>{});
-	//PushDemoLevel();
-	//PushDemoPickUps();
 	if(!SVGParser::GetVerticesFromSvgFile("Resources/thirdAttempt.svg", m_Vertices)) throw "Something went wrong";
 	ScaleLevel(m_Player.GetpMario()->m_Scale);
 	PushPlatforms();
 	m_pPickUpManager->PushPickUps();
-
-	{
-		using KbColor = KoopaBase::Color;
-		using KbType = KoopaBase::Type;
-#pragma region FirstPlatform with Koopas
-		Push_back(new Koopa(KbColor::red), Point2f{ 570,166 });
-		Push_back(new Koopa(KbColor::red), Point2f{ 600,166 });
-		Push_back(new Koopa(KbColor::red), Point2f{ 630,166 });
-		Push_back(new Koopa(KbColor::red), Point2f{ 660,166 });
-		Push_back(new Koopa(KbColor::red), Point2f{ 680,166 });
-		Push_back(new Koopa(KbColor::red), Point2f{ 700,166 });
-#pragma endregion
-
-		Push_back(new Shell(KbColor::red), Point2f{ 300,150 });
-
-		Push_back(new Shell(KbColor::red), Point2f{ 2220, 87 });
-		Push_back(new Koopa(KbColor::red, KbType::naked), Point2f{ 2260,87 });
-		Push_back(new Shell(KbColor::green), Point2f{ 3024,87 });
-		Push_back(new Koopa(KbColor::green,KbType::naked), Point2f{ 3050,87 });
-
-		Push_back(new Koopa(KbColor::red), Point2f{ 3825,200 });
-		Push_back(new Koopa(KbColor::gray), Point2f{ 5400,90 });
-		Push_back(new Koopa(KbColor::red), Point2f{ 6230,140 });
-
-		Push_back(new Koopa(KbColor::red), Point2f{ 6930,90 });
-		Push_back(new Koopa(KbColor::red), Point2f{ 6970,90 });
-
-		Push_back(new Koopa(KbColor::gray), Point2f{ 7304,90 });
-	}
+	m_pKoopaBaseManager->PushKoopaBases();
+	
 	{
 		using PuType = PickUp::Type;
 		Push_back(new MysteryBox(Point2f{ 1066,168 }, new Coin(PuType::coin)));
@@ -102,6 +74,10 @@ Level::~Level()
 
 	delete m_pPickUpManager;
 	m_pPickUpManager = nullptr;
+	delete m_pKoopaBaseManager;
+	m_pKoopaBaseManager = nullptr;
+	delete m_pMysteryBoxManager;
+	m_pMysteryBoxManager = nullptr;
 	for (size_t i{ 0 }; i < m_Vertices.size(); ++i)
 	{
 		m_Vertices[i].clear();
@@ -112,27 +88,11 @@ Level::~Level()
 		delete m_pPlatforms[i];
 		m_pPlatforms[i] = nullptr;
 	}
-	for (size_t i{ 0 }; i < m_pShells.size(); ++i)
-	{
-		delete m_pShells[i];
-		m_pShells[i] = nullptr;
-	}
-	for (size_t i{ 0 }; i < m_pKoopas.size(); ++i)
-	{
-		delete m_pKoopas[i];
-		m_pKoopas[i] = nullptr;
-	}
-	for (size_t i{ 0 }; i < m_pMysteryBoxes.size(); ++i)
-	{
-		delete m_pMysteryBoxes[i];
-		m_pMysteryBoxes[i] = nullptr;
-	}
 	for (size_t i{ 0 }; i < m_pCheckPoints.size(); ++i)
 	{
 		delete m_pCheckPoints[i];
 		m_pCheckPoints[i] = nullptr;
 	}
-
 }
 
 void Level::Draw(const Point2f& cameraLoc, bool debugDraw) const
@@ -160,27 +120,8 @@ void Level::Draw(const Point2f& cameraLoc, bool debugDraw) const
 		}
 	}
 	m_pPickUpManager->Draw();
-	for (Koopa* koopa : m_pKoopas)
-	{
-		if (koopa)
-		{
-			koopa->Draw();
-		}
-	}
-	for (Shell* shell : m_pShells)
-	{
-		if (shell)
-		{
-			shell->Draw();
-		}
-	}
-	for (MysteryBox* mysterybox : m_pMysteryBoxes)
-	{
-		if (mysterybox)
-		{
-			mysterybox->Draw();
-		}
-	}
+	m_pKoopaBaseManager->Draw();
+	m_pMysteryBoxManager->Draw();
 	//if (m_pKoopa) m_pKoopa->Draw();
 	if (debugDraw) DebugDraw(Color4f{1,0,0,1},2.f);
 }
@@ -228,101 +169,10 @@ void Level::UpdateContent(float elapsedSec, Mario* mario)
 
 	// Update PickUps
 	m_pPickUpManager->Update(elapsedSec, &m_Player);
-	// Update Shells
-	if (m_Player.GetpMario()->IsTryingToThrowShell())
-	{
-		Push_back(m_Player.GetpMario()->GiveShell());
-	}
-	for (size_t loopedIdx{0}; loopedIdx < m_pShells.size(); ++loopedIdx)
-	{
-		if (m_pShells[loopedIdx] == nullptr)
-		{
-			continue;
-		}
-		m_pShells[loopedIdx]->Update(elapsedSec, m_Player);
-		if (m_pShells[loopedIdx]->IsGrabbed())
-		{
-			if (m_Player.GetpMario()->GetShell())
-			{
-				m_pShells[loopedIdx]->SetGrabbed(false);
-				m_pShells[loopedIdx]->Kick(m_Player.GetpMario()->GetHorDirection());
-			}
-			else
-			{
-				m_Player.GetpMario()->SetShell(m_pShells[loopedIdx]);
-				m_pShells[loopedIdx] = nullptr;
-				continue;
-			}
-		}
-		m_pShells[loopedIdx]->UpdateShellCollisions(m_pShells);
-		int koopaHit{ m_pShells[loopedIdx]->UpdateShellKoopaCollisions(m_pKoopas) };
-		if (koopaHit == -1)
-		{
-			continue; 
-		}
-		if (m_pShells[loopedIdx]->IsGoingIn())
-		{
-			m_pKoopas[koopaHit]->SetShell(m_pShells[loopedIdx]);
-			m_pShells[loopedIdx] = nullptr;
-		}
-	}
-	// Update Koopas
-	for (size_t i{ 0 }; i < m_pKoopas.size(); ++i)
-	{
-		if (m_pKoopas[i] == nullptr) continue;
-		m_pKoopas[i]->Update(elapsedSec, m_Player);
-		if (m_pKoopas[i]->IsDead())
-		{
-			delete m_pKoopas[i];
-			m_pKoopas[i] = nullptr;
-		}
-		else if (m_pKoopas[i]->IsWantingToGiveShell())
-		{
-			bool isPointerPushed{ false };
-			for (size_t i{ 0 }; i < m_pShells.size(); ++i)
-			{
-				if (m_pShells[i] != nullptr) continue;
-				if (m_pKoopas[i] == nullptr) break;
-				if (m_pKoopas[i]->GetShell() == nullptr) continue;
-				if (isPointerPushed) continue;
-				m_pShells[i] = m_pKoopas[i]->GiveShell();
-				isPointerPushed = true;
-			}
-			if (!isPointerPushed)
-			{
-				m_pShells.push_back(m_pKoopas[i]->GiveShell());
-			}
-		}
-	}
+	// Update Shells and Koopas
+	m_pKoopaBaseManager->Update(elapsedSec,&m_Player);
 	// Update MysteryBoxes
-	for (size_t i{ 0 }; i < m_pMysteryBoxes.size(); ++i)
-	{
-		m_pMysteryBoxes[i]->Update(elapsedSec);
-
-		if (m_pMysteryBoxes[i]->IsOverlappingBottomHitbox(m_Player.GetpMario()->GetRect()))
-		{
-			m_pMysteryBoxes[i]->Bump();
-			m_Player.GetpMario()->BumpHead();
-		}
-		if (m_pMysteryBoxes[i]->IsWantingToGivePickUp())
-		{
-			if (m_pMysteryBoxes[i]->GetPickUp()->GetType() == PickUp::Type::coin)
-			{
-				delete m_pMysteryBoxes[i]->GivePickUp();
-				m_Player.AddCoin();
-			}
-			else
-			{
-				switch (m_pMysteryBoxes[i]->GetPickUp()->GetType())
-				{
-				case PickUp::Type::normalMushroom:
-					m_Player.AddScore(100);
-					break;
-				}
-				m_pPickUpManager->Push_back(m_pMysteryBoxes[i]->GivePickUp());
-			}
-		}
-	}
+	m_pMysteryBoxManager->Update(elapsedSec,&m_Player,m_pPickUpManager);
 	// Update checkpoints
 	for (CheckPoint* checkPoint : m_pCheckPoints)
 	{
@@ -343,37 +193,16 @@ void Level::Push_back(Platform* p)
 	m_pPlatforms.push_back(p);
 }
 
-void Level::Push_back(Shell* s, const Point2f& pos)
-{
-	bool isPointerPushed{ false };
-	for (size_t i{ 0 }; i < m_pShells.size(); ++i)
-	{
-		if (m_pShells[i] != nullptr) continue;
-		if (isPointerPushed) continue;
-		m_pShells[i] = s;
-		isPointerPushed = true;
-	}
-	if (!isPointerPushed) m_pShells.push_back(s);
-	if ((pos.x != Point2f{}.x) && (pos.y != Point2f{}.y))
-	{
-		s->SetPosition(pos);
-	}
-}
-
 void Level::Push_back(MysteryBox* m)
 {
-	m_pMysteryBoxes.push_back(m);
+	m_pMysteryBoxManager->Push_back(m);
 	Rectf rect{ m->GetRect() };
 	m_pPlatforms.push_back(new Platform(Rectf{ rect.left,rect.bottom,16.f * GameObject::m_Scale,16.f * GameObject::m_Scale}));
 }
 
-void Level::Push_back(Koopa* k, const Point2f& pos)
+void Level::Push_back(Shell* shell, const Point2f& point)
 {
-	m_pKoopas.push_back(k);
-	if ((pos.x != Point2f{}.x) && (pos.y != Point2f{}.y))
-	{
-		k->SetPosition(pos);
-	}
+	m_pKoopaBaseManager->Push_back(shell, point);
 }
 
 bool Level::IsOnTop(Rectf& other)

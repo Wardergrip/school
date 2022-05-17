@@ -3,12 +3,16 @@
 #include "utils.h"
 class Texture;
 class PickUpManager;
+
+class KoopaBaseManager;
+class Shell;
+
+class MysteryBoxManager;
+class MysteryBox;
+
 class Platform;
 class Player;
 class Mario;
-class Shell;
-class Koopa;
-class MysteryBox;
 class CheckPoint;
 class Level final
 {
@@ -28,9 +32,9 @@ public:
 
 	void Push_back(const Point2f& p);
 	void Push_back(Platform* p);
-	void Push_back(Shell* s, const Point2f& pos = {});
 	void Push_back(MysteryBox* m);
-	void Push_back(Koopa* k, const Point2f& pos = {});
+
+	void Push_back(Shell* shell, const Point2f& point = {});
 
 	bool IsOnTop(Rectf& other);
 	bool IsOnTop(const Rectf& other, utils::HitInfo& hi, const Vector2f& velocity);
@@ -46,16 +50,14 @@ private:
 	Player& m_Player;
 
 	PickUpManager* m_pPickUpManager;
+	KoopaBaseManager* m_pKoopaBaseManager;
+	MysteryBoxManager* m_pMysteryBoxManager;
 	std::vector<std::vector<Point2f>> m_Vertices;
 	std::vector<Platform*> m_pPlatforms;
-	std::vector<MysteryBox*> m_pMysteryBoxes;
 	std::vector<CheckPoint*> m_pCheckPoints;
 
 	Texture* m_pBackgroundTexture;
 	Texture* m_pLevelTexture;
-
-	std::vector<Shell*> m_pShells;
-	std::vector<Koopa*> m_pKoopas;
 
 	// Scale the level. vectorAmount indicates until what idx the vectors should be scaled.
 	// -1 will scale all vectors.

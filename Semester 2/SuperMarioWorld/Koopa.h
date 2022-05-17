@@ -12,7 +12,7 @@ public:
 	~Koopa();
 
 	void Draw() const override;
-	void Update(float elapsedSec, Player& player) override;
+	void Update(float elapsedSec, Player* player) override;
 
 	void AboutToDie();
 	void ForceDie();
