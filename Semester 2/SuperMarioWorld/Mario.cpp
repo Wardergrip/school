@@ -5,7 +5,6 @@
 #include "Texture.h"
 #include "Shell.h"
 #include "SoundManager.h"
-#include "SoundEffect.h"
 using namespace utils;
 
 Mario::Mario()
@@ -306,6 +305,7 @@ void Mario::UpdateAnim(float elapsedSec)
 		case Stage::big:
 			switch (m_CurrentAnim)
 			{
+			case AnimState(9):
 			case AnimState(5):
 			case AnimState(6):
 				m_CurrentAnim = AnimState::run;
@@ -347,9 +347,14 @@ void Mario::UpdateAnim(float elapsedSec)
 	}
 }
 
-void Mario::Jump()
+bool Mario::Jump()
 {
-	if (!m_IsInAir) m_Velocity.y = m_JumpSpeed;
+	if (!m_IsInAir)
+	{
+		m_Velocity.y = m_JumpSpeed;
+		return true;
+	}
+	return false;
 }
 
 void Mario::BounceJump()
@@ -374,7 +379,7 @@ void Mario::Hurt()
 		m_Stage = Stage::dead;
 		m_Velocity.x = 0;
 		m_Velocity.y = 400;
-		SoundManager::GetSoundEffect("Resources/deathSFX.ogg")->Play(0);
+		SoundManager::GetAndPlaySoundEffect("Resources/deathSFX.ogg");
 		break;
 	case Mario::Stage::big:
 		m_Stage = Stage::small;

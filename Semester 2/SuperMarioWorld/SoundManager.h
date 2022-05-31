@@ -19,6 +19,9 @@ public:
 	// true = full volume
 	static void ToggleSound(bool state);
 
+	static SoundEffect* GetAndPlaySoundEffect(const std::string& filename, int loops = 0);
+	static SoundStream* GetAndPlaySoundStream(const std::string& filename, bool repeat = false);
+
 	static void CleanUp();
 
 private:

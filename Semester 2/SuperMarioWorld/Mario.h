@@ -19,7 +19,8 @@ public:
 	void Update(float elapsedSec, Level& level);
 	void UpdateAnim(float elapsedSec);
 
-	void Jump();
+	// Returns true if succeeded
+	bool Jump();
 	void BounceJump();
 	void BumpHead();
 	void Hurt();

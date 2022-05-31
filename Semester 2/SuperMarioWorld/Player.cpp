@@ -5,6 +5,7 @@
 #include "Mario.h"
 #include "Level.h"
 #include "XMLProcessor.h"
+#include "SoundManager.h"
 
 Player::Player()
 	:m_pMario{nullptr}
@@ -180,7 +181,10 @@ void Player::ProcessKeyDownEvent(const SDL_KeyboardEvent& e)
 	switch (e.keysym.sym)
 	{
 	case SDLK_SPACE:
-		m_pMario->Jump();
+		if (m_pMario->Jump())
+		{
+			SoundManager::GetAndPlaySoundEffect("Resources/jumpSFX.ogg");
+		}
 		break;
 	case SDLK_o:
 		std::cout << "MarioPos [" << m_pMario->GetPureLocation().x << ", " << m_pMario->GetPureLocation().y << "]\n";

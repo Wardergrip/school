@@ -26,7 +26,9 @@ Game::~Game( )
 void Game::Initialize( )
 {
 	SoundManager::GetSoundEffect("Resources/deathSFX.ogg");
+	SoundManager::GetSoundEffect("Resources/jumpSFX.ogg");
 	SoundManager::GetSoundStream("Resources/OverworldTheme.mp3");
+
 	XMLProcessor::ChangeFilePath("Resources/personalBest.xml");
 	XMLProcessor::DisplayPersonalBest();
 

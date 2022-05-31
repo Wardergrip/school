@@ -28,7 +28,7 @@
 using namespace utils;
 
 Level::Level(Player& player)
-	:m_EnableDebugDraw{true}
+	:m_EnableDebugDraw{false}
 	,m_Player{player}
 	,m_Vertices{}
 	,m_pPickUpManager{new PickUpManager()}

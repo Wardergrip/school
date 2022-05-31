@@ -40,6 +40,18 @@ void SoundManager::ToggleSound(bool state)
     }
 }
 
+SoundEffect* SoundManager::GetAndPlaySoundEffect(const std::string& filename,int loops)
+{
+    GetSoundEffect(filename)->Play(loops);
+    return GetSoundEffect(filename);
+}
+
+SoundStream* SoundManager::GetAndPlaySoundStream(const std::string& filename, bool repeat)
+{
+    GetSoundStream(filename)->Play(repeat);
+    return GetSoundStream(filename);
+}
+
 void SoundManager::CleanUp()
 {
     for (std::pair<std::string, SoundEffect*> pair : m_pSoundEffects)
