@@ -6,8 +6,8 @@ class ExampleAbility final : public Ability
 {
 public:
 	ExampleAbility(const std::string& key, const Point2f& championLocationRef);
-	ExampleAbility(ExampleAbility& ability) = delete;
-	ExampleAbility& operator=(ExampleAbility& ability) = delete;
+	ExampleAbility(const ExampleAbility& ability) = delete;
+	ExampleAbility& operator=(const ExampleAbility& ability) = delete;
 	ExampleAbility(ExampleAbility&& ability) = delete;
 	ExampleAbility& operator=(ExampleAbility&& ability) = delete;
 	virtual ~ExampleAbility();

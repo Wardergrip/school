@@ -7,7 +7,7 @@ class Champion : public Unit
 {
 public:
 	Champion(const Window& window);
-	Champion(Champion& champ) = delete;
+	Champion(const Champion& champ) = delete;
 	Champion& operator=(const Champion& champ) = delete;
 	Champion(Champion&& champ) = delete;
 	Champion& operator=(Champion&& champ) = delete;

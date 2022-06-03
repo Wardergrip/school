@@ -20,8 +20,8 @@ private:
 public:
 	InfoPlate(const Unit* trackingUnit, const Vector2f& offset);
 	InfoPlate(const Unit* trackingUnit);
-	InfoPlate(InfoPlate& infoplate) = delete;
-	InfoPlate& operator=(InfoPlate& infoplate) = delete;
+	InfoPlate(const InfoPlate& infoplate) = delete;
+	InfoPlate& operator=(const InfoPlate& infoplate) = delete;
 	InfoPlate(InfoPlate&& infoplate) = delete;
 	InfoPlate& operator=(InfoPlate&& infoplate) = delete;
 	~InfoPlate();
