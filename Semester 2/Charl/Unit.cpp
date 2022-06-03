@@ -33,6 +33,7 @@ Unit::Unit(const Point2f& position, const Rectf& hitbox)
 	,m_IsHoldingRightClick{false}
 {
 	CenterHitboxToPosition();
+	m_BasicStats.movementSpeed = 200;
 }
 
 Unit::Unit(const Rectf& hitbox)
@@ -43,23 +44,23 @@ Unit::Unit(const Rectf& hitbox)
 
 bool Unit::IsOverlapping(const Point2f& point) const
 {
-	return utils::IsPointInRect(point,m_Hitbox);
+	return utils::IsPointInRect(point, Rectf{ m_Transform.location.x, m_Transform.location.y, m_Hitbox.width,m_Hitbox.height});
 }
 
 bool Unit::IsOverlapping(const Rectf& rect) const
 {
-	return utils::IsOverlapping(m_Hitbox,rect);
+	return utils::IsOverlapping(Rectf{ m_Transform.location.x, m_Transform.location.y, m_Hitbox.width,m_Hitbox.height },rect);
 }
 
 bool Unit::IsOverlapping(const Circlef& circle) const
 {
-	return utils::IsOverlapping(m_Hitbox,circle);
+	return utils::IsOverlapping(Rectf{ m_Transform.location.x, m_Transform.location.y, m_Hitbox.width,m_Hitbox.height },circle);
 }
 
 bool Unit::IsOverlapping(const Unit& unit) const
 {
 	if (&unit == this) return true;
-	return utils::IsOverlapping(this->m_Hitbox,unit.m_Hitbox);
+	return utils::IsOverlapping(Rectf{ m_Transform.location.x, m_Transform.location.y, m_Hitbox.width,m_Hitbox.height }, Rectf{ unit.m_Hitbox.left, unit.m_Hitbox.bottom, unit.m_Hitbox.width,unit.m_Hitbox.height });
 }
 
 void Unit::CenterTo(const Point2f& point)
@@ -82,7 +83,7 @@ void Unit::TeleportTo(const Point2f& location)
 
 void Unit::RotateTowards(const Point2f& target)
 {
-	m_Transform.SetAngleInRad(atan2f(m_Transform.location.y - target.y, m_Transform.location.x - target.x) - float(M_PI));
+	m_Transform.RotateTowards(target);
 }
 
 const Transform& Unit::GetTransform() const
@@ -98,6 +99,12 @@ void Unit::GetTransform(Transform& output) const
 const BasicStats& Unit::GetBasicStats() const
 {
 	return m_BasicStats;
+}
+
+bool Unit::TakeDamage(float damageAmount)
+{
+	m_BasicStats.currentHealth -= damageAmount;
+	return (m_BasicStats.currentHealth > 0);
 }
 
 Rectf Unit::GetHitbox() const
@@ -118,7 +125,7 @@ void Unit::DrawHitbox() const
 	DrawRect(m_Hitbox, 2);
 }
 
-void Unit::MoveTowards(const Point2f& point)
+void Unit::MoveTowards(const Point2f& point, float elapsedSec)
 {
 	Vector2f direction{ point - m_Transform.location };
 	if (direction.x < 1 && direction.x > -1)
@@ -130,14 +137,14 @@ void Unit::MoveTowards(const Point2f& point)
 		else
 		{
 			direction = direction.Normalized();
-			m_Transform.location += (direction * m_BasicStats.movementSpeed);
+			m_Transform.location += (direction * m_BasicStats.movementSpeed * elapsedSec);
 			RotateTowards(point);
 		}
 	}
 	else
 	{
 		direction = direction.Normalized();
-		m_Transform.location += (direction * m_BasicStats.movementSpeed);
+		m_Transform.location += (direction * m_BasicStats.movementSpeed * elapsedSec);
 		RotateTowards(point);
 	}
 }
@@ -194,7 +201,7 @@ void Unit::Draw() const
 
 void Unit::Update(float elapsedSec)
 {
-	MoveTowards(m_Destination);
+	MoveTowards(m_Destination,elapsedSec);
 }
 
 void Unit::OnMouseDown(const SDL_MouseButtonEvent& e)

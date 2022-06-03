@@ -64,3 +64,8 @@ float Transform::GetAngleInRad() const
 {
 	return (angle * float(M_PI)) / 180.f;
 }
+
+void Transform::RotateTowards(const Point2f& target)
+{
+	SetAngleInRad(atan2f(location.y - target.y, location.x - target.x) - float(M_PI));
+}

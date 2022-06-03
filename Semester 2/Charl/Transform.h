@@ -22,6 +22,8 @@ struct Transform
 	void SetAngleInRad(float rad);
 	float GetAngleInRad() const;
 
+	void RotateTowards(const Point2f& target);
+
 	Point2f location;
 	Vector2f scale;
 	float angle;

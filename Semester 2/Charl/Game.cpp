@@ -5,6 +5,7 @@
 
 #include "Champion.h"
 #include "InfoPlate.h"
+#include "LockOnProjectile.h"
 
 #include "utils.h"
 
@@ -25,6 +26,8 @@ void Game::Initialize( )
 	m_TestPlate = new InfoPlate{m_TestingChamp};
 	m_TestPlate->SetName("Tester");
 	m_TestingChamp->TeleportTo(Point2f{ m_Window.width / 2,m_Window.height / 2 });
+	m_LockOnProjs.reserve(16);
+	m_LockOnProjs.push_back(new LockOnProjectile{ Point2f{0,0},m_TestingChamp});
 }
 
 void Game::Cleanup( )
@@ -33,6 +36,11 @@ void Game::Cleanup( )
 	m_TestingChamp = nullptr;
 	delete m_TestPlate;
 	m_TestingChamp = nullptr;
+	for (size_t i{ 0 }; i < m_LockOnProjs.size(); ++i)
+	{
+		delete m_LockOnProjs[i];
+		m_LockOnProjs[i] = nullptr;
+	}
 }
 
 void Game::Update( float elapsedSec )
@@ -42,6 +50,19 @@ void Game::Update( float elapsedSec )
 	
 	m_TestingChamp->OnKeyHold(elapsedSec, pStates, m_LastMousePos);
 	m_TestingChamp->Update(elapsedSec);
+	for (size_t i{ 0 }; i < m_LockOnProjs.size(); ++i)
+	{
+		if (m_LockOnProjs[i] == nullptr)
+		{
+			continue;
+		}
+		m_LockOnProjs[i]->Update(elapsedSec);
+		if (m_LockOnProjs[i]->HasHit())
+		{
+			delete m_LockOnProjs[i];
+			m_LockOnProjs[i] = nullptr;
+		}
+	}
 }
 
 void Game::Draw( ) const
@@ -49,6 +70,14 @@ void Game::Draw( ) const
 	ClearBackground( );
 	m_TestingChamp->Draw();
 	m_TestPlate->Draw();
+	
+	for (auto proj : m_LockOnProjs)
+	{
+		if (proj)
+		{
+			proj->Draw();
+		}
+	}
 }
 
 void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )
@@ -103,6 +132,7 @@ void Game::ProcessMouseDownEvent( const SDL_MouseButtonEvent& e )
 	switch ( e.button )
 	{
 	case SDL_BUTTON_LEFT:
+		m_LockOnProjs.push_back(new LockOnProjectile{ Point2f{float(e.x),float(e.y)},m_TestingChamp});
 		break;
 	case SDL_BUTTON_RIGHT:
 		break;

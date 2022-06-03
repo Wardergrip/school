@@ -1,7 +1,10 @@
 #pragma once
 
+#include <vector>
+
 class Champion;
 class InfoPlate;
+class LockOnProjectile;
 
 class Game final
 {
@@ -31,6 +34,7 @@ private:
 
 	Champion* m_TestingChamp;
 	InfoPlate* m_TestPlate;
+	std::vector<LockOnProjectile*> m_LockOnProjs;
 
 	// FUNCTIONS
 	void Initialize( );

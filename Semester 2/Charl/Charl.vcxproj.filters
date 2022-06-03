@@ -81,6 +81,9 @@
     <ClCompile Include="BasicStats.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="LockOnProjectile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Vector2f.h">
@@ -138,6 +141,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="BasicStats.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LockOnProjectile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

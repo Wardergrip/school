@@ -51,6 +51,8 @@ public:
 	void GetTransform(Transform& output) const;
 
 	const BasicStats& GetBasicStats() const;
+	// Returns if the Unit is still in positive health amount
+	bool TakeDamage(float damageAmount);
 	
 	Rectf GetHitbox() const;
 	// Returns output
@@ -65,7 +67,7 @@ protected:
 
 	void DrawHitbox() const;
 
-	void MoveTowards(const Point2f& point);
+	void MoveTowards(const Point2f& point, float elapsedSec);
 
 	void OnMouseDownBasic(const SDL_MouseButtonEvent& e);
 	void OnMouseUpBasic(const SDL_MouseButtonEvent& e);

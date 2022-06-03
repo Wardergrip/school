@@ -159,6 +159,7 @@
     <ClCompile Include="ExampleAbility.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="InfoPlate.cpp" />
+    <ClCompile Include="LockOnProjectile.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Matrix2x3.cpp" />
     <ClCompile Include="pch.cpp">
@@ -186,6 +187,7 @@
     <ClInclude Include="ExampleAbility.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="InfoPlate.h" />
+    <ClInclude Include="LockOnProjectile.h" />
     <ClInclude Include="Matrix2x3.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="SoundEffect.h" />
