@@ -53,3 +53,14 @@ void Transform::FlipY()
 {
 	scale.y = -scale.y;
 }
+
+void Transform::SetAngleInRad(float rad)
+{
+	angle = ((rad / (2 * float(M_PI))) * 360.f);
+
+}
+
+float Transform::GetAngleInRad() const
+{
+	return (angle * float(M_PI)) / 180.f;
+}

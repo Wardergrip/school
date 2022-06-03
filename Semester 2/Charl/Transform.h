@@ -19,6 +19,9 @@ struct Transform
 	// scale.y = -scale.y
 	void FlipY();
 
+	void SetAngleInRad(float rad);
+	float GetAngleInRad() const;
+
 	Point2f location;
 	Vector2f scale;
 	float angle;

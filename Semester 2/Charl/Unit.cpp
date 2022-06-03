@@ -4,6 +4,8 @@
 
 #include <iostream>
 
+#include "Vector2f.h"
+
 // STATICS
 bool Unit::c_IsDrawingHitboxes{ false };
 
@@ -25,7 +27,7 @@ bool Unit::IsDrawingHitboxes()
 // NON STATICS
 Unit::Unit(const Point2f& position, const Rectf& hitbox)
 	:m_Hitbox{hitbox}
-	,m_Transform{position}
+	, m_Transform{position,Vector2f{1,1} }
 	,m_Destination{position}
 	,m_BasicStats{}
 	,m_IsHoldingRightClick{false}
@@ -70,6 +72,17 @@ void Unit::CenterHitboxToPosition()
 {
 	m_Hitbox.left = -m_Hitbox.width / 2;
 	m_Hitbox.bottom = -m_Hitbox.height / 2;
+}
+
+void Unit::TeleportTo(const Point2f& location)
+{
+	m_Transform.location = location;
+	m_Destination = location;
+}
+
+void Unit::RotateTowards(const Point2f& target)
+{
+	m_Transform.SetAngleInRad(atan2f(m_Transform.location.y - target.y, m_Transform.location.x - target.x) - float(M_PI));
 }
 
 const Transform& Unit::GetTransform() const
@@ -118,12 +131,14 @@ void Unit::MoveTowards(const Point2f& point)
 		{
 			direction = direction.Normalized();
 			m_Transform.location += (direction * m_BasicStats.movementSpeed);
+			RotateTowards(point);
 		}
 	}
 	else
 	{
 		direction = direction.Normalized();
 		m_Transform.location += (direction * m_BasicStats.movementSpeed);
+		RotateTowards(point);
 	}
 }
 

@@ -6,6 +6,8 @@
 #include "Champion.h"
 #include "InfoPlate.h"
 
+#include "utils.h"
+
 Game::Game( const Window& window ) 
 	:m_Window{ window }
 	,m_TestingChamp{ new Champion{window} }
@@ -22,6 +24,7 @@ void Game::Initialize( )
 {
 	m_TestPlate = new InfoPlate{m_TestingChamp};
 	m_TestPlate->SetName("Tester");
+	m_TestingChamp->TeleportTo(Point2f{ m_Window.width / 2,m_Window.height / 2 });
 }
 
 void Game::Cleanup( )

@@ -44,6 +44,8 @@ public:
 	void CenterTo(const Point2f& point = {});
 	// Hitbox middle will be the transform.location
 	void CenterHitboxToPosition();
+	void TeleportTo(const Point2f& location);
+	void RotateTowards(const Point2f& target);
 
 	const Transform& GetTransform() const;
 	void GetTransform(Transform& output) const;

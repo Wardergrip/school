@@ -23,6 +23,7 @@ private:
 	Point2f m_LastMousePos;
 
 	bool m_IsHoldingDown;
+	float m_Range;
 
 	void DrawIcon() const override;
 

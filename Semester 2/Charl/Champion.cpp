@@ -21,7 +21,23 @@ Champion::~Champion()
 
 void Champion::Draw() const
 {
-	Unit::Draw();
+	using namespace utils;
+
+	m_Transform.Push();
+	m_Transform.Apply();
+	// Draw Unit
+	SetColor(Color4f{ 1,1,1,1 });
+	FillEllipse(Point2f{ 0,0 }, 10, 10);
+
+	FillRect(Point2f{ 0,-5 }, 15, 5);
+
+	// Draw hitbox
+	if (c_IsDrawingHitboxes)
+	{
+		DrawHitbox();
+	}
+	m_Transform.Pop();
+
 	m_pAbilityInterface->Draw();
 }
 

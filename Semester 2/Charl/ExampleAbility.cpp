@@ -9,6 +9,7 @@ ExampleAbility::ExampleAbility(const std::string& key, const Point2f& championLo
 	,m_ChampionLocationRef{championLocationRef}
 	,m_IsHoldingDown{false}
 	,m_LastMousePos{}
+	,m_Range{200}
 {
 }
 
@@ -20,7 +21,10 @@ void ExampleAbility::Draw() const
 {
 	if (m_IsHoldingDown)
 	{
-		utils::DrawLine(m_ChampionLocationRef, m_LastMousePos);
+		Vector2f direction{m_LastMousePos - m_ChampionLocationRef};
+		direction = direction.Normalized();
+		Point2f point{ m_ChampionLocationRef + direction * m_Range };
+		utils::DrawLine(m_ChampionLocationRef, point);
 	}
 }
 
@@ -28,19 +32,16 @@ void ExampleAbility::OnPress(const Point2f& mousePos)
 {
 	if (m_IsHoldingDown) return;
 	else m_IsHoldingDown = true;
-	std::cout << "[EXAMPLEABILITY] OnPress\n";
 }
 
 void ExampleAbility::OnHolding(float elapsedSec, const Point2f& mousePos)
 {
-	std::cout << "[EXAMPLEABILITY] OnHold\n";
 	m_LastMousePos = mousePos;
 }
 
 void ExampleAbility::OnRelease(const Point2f& mousePos)
 {
 	m_IsHoldingDown = false;
-	std::cout << "[EXAMPLEABILITY] OnRelease\n";
 }
 
 void ExampleAbility::DrawIcon() const
