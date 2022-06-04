@@ -44,23 +44,23 @@ Unit::Unit(const Rectf& hitbox)
 
 bool Unit::IsOverlapping(const Point2f& point) const
 {
-	return utils::IsPointInRect(point, Rectf{ m_Transform.location.x, m_Transform.location.y, m_Hitbox.width,m_Hitbox.height});
+	return utils::IsPointInRect(point, GetHitbox());
 }
 
 bool Unit::IsOverlapping(const Rectf& rect) const
 {
-	return utils::IsOverlapping(Rectf{ m_Transform.location.x, m_Transform.location.y, m_Hitbox.width,m_Hitbox.height },rect);
+	return utils::IsOverlapping(GetHitbox(),rect);
 }
 
 bool Unit::IsOverlapping(const Circlef& circle) const
 {
-	return utils::IsOverlapping(Rectf{ m_Transform.location.x, m_Transform.location.y, m_Hitbox.width,m_Hitbox.height },circle);
+	return utils::IsOverlapping(GetHitbox(),circle);
 }
 
 bool Unit::IsOverlapping(const Unit& unit) const
 {
 	if (&unit == this) return true;
-	return utils::IsOverlapping(Rectf{ m_Transform.location.x, m_Transform.location.y, m_Hitbox.width,m_Hitbox.height }, Rectf{ unit.m_Hitbox.left, unit.m_Hitbox.bottom, unit.m_Hitbox.width,unit.m_Hitbox.height });
+	return utils::IsOverlapping(GetHitbox(), unit.GetHitbox());
 }
 
 void Unit::CenterTo(const Point2f& point)
@@ -109,13 +109,7 @@ bool Unit::TakeDamage(float damageAmount)
 
 Rectf Unit::GetHitbox() const
 {
-	return m_Hitbox;
-}
-
-Rectf& Unit::GetHitbox(Rectf& output) const
-{
-	output = m_Hitbox;
-	return output;
+	return Rectf{ m_Transform.location.x - m_Hitbox.width / 2, m_Transform.location.y - m_Hitbox.height / 2, m_Hitbox.width,m_Hitbox.height };
 }
 
 void Unit::DrawHitbox() const

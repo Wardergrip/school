@@ -55,8 +55,6 @@ public:
 	bool TakeDamage(float damageAmount);
 	
 	Rectf GetHitbox() const;
-	// Returns output
-	Rectf& GetHitbox(Rectf& output) const;
 
 protected:
 	Rectf m_Hitbox;

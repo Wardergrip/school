@@ -2,9 +2,10 @@
 
 #include <vector>
 
+class Unit;
 class Champion;
 class InfoPlate;
-class LockOnProjectile;
+class ProjectileManager;
 
 class Game final
 {
@@ -34,7 +35,8 @@ private:
 
 	Champion* m_TestingChamp;
 	InfoPlate* m_TestPlate;
-	std::vector<LockOnProjectile*> m_LockOnProjs;
+	ProjectileManager* m_ProjectileManager;
+	std::vector<Unit*> m_Units;
 
 	// FUNCTIONS
 	void Initialize( );

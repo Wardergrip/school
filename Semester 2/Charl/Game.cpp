@@ -3,9 +3,10 @@
 
 #include "log.h"
 
-#include "Champion.h"
+#include "unit.h"
 #include "InfoPlate.h"
-#include "LockOnProjectile.h"
+#include "Champion.h"
+#include "ProjectileManager.h"
 
 #include "utils.h"
 
@@ -26,8 +27,9 @@ void Game::Initialize( )
 	m_TestPlate = new InfoPlate{m_TestingChamp};
 	m_TestPlate->SetName("Tester");
 	m_TestingChamp->TeleportTo(Point2f{ m_Window.width / 2,m_Window.height / 2 });
-	m_LockOnProjs.reserve(16);
-	m_LockOnProjs.push_back(new LockOnProjectile{ Point2f{0,0},m_TestingChamp});
+	m_ProjectileManager = new ProjectileManager();
+	
+	m_Units.push_back(new Unit(Point2f{ 30,30 }, Rectf{ 0,0,20,20 }));
 }
 
 void Game::Cleanup( )
@@ -36,10 +38,12 @@ void Game::Cleanup( )
 	m_TestingChamp = nullptr;
 	delete m_TestPlate;
 	m_TestingChamp = nullptr;
-	for (size_t i{ 0 }; i < m_LockOnProjs.size(); ++i)
+	delete m_ProjectileManager;
+	m_ProjectileManager = nullptr;
+	for (size_t i{ 0 }; i < m_Units.size(); ++i)
 	{
-		delete m_LockOnProjs[i];
-		m_LockOnProjs[i] = nullptr;
+		delete m_Units[i];
+		m_Units[i] = nullptr;
 	}
 }
 
@@ -50,18 +54,10 @@ void Game::Update( float elapsedSec )
 	
 	m_TestingChamp->OnKeyHold(elapsedSec, pStates, m_LastMousePos);
 	m_TestingChamp->Update(elapsedSec);
-	for (size_t i{ 0 }; i < m_LockOnProjs.size(); ++i)
+	m_ProjectileManager->UpdateAll(elapsedSec);
+	for (size_t i{ 0 }; i < m_Units.size(); ++i)
 	{
-		if (m_LockOnProjs[i] == nullptr)
-		{
-			continue;
-		}
-		m_LockOnProjs[i]->Update(elapsedSec);
-		if (m_LockOnProjs[i]->HasHit())
-		{
-			delete m_LockOnProjs[i];
-			m_LockOnProjs[i] = nullptr;
-		}
+		m_Units[i]->Update(elapsedSec);
 	}
 }
 
@@ -71,11 +67,12 @@ void Game::Draw( ) const
 	m_TestingChamp->Draw();
 	m_TestPlate->Draw();
 	
-	for (auto proj : m_LockOnProjs)
+	m_ProjectileManager->DrawAll();
+	for (Unit* unit : m_Units)
 	{
-		if (proj)
+		if (unit)
 		{
-			proj->Draw();
+			unit->Draw();
 		}
 	}
 }
@@ -132,9 +129,17 @@ void Game::ProcessMouseDownEvent( const SDL_MouseButtonEvent& e )
 	switch ( e.button )
 	{
 	case SDL_BUTTON_LEFT:
-		m_LockOnProjs.push_back(new LockOnProjectile{ Point2f{float(e.x),float(e.y)},m_TestingChamp});
 		break;
 	case SDL_BUTTON_RIGHT:
+		for (size_t i{ 0 }; i < m_Units.size(); ++i)
+		{
+			if (m_Units[i]->IsOverlapping(Point2f{ float(e.x),float(e.y) }))
+			{
+				m_ProjectileManager->PushBack(m_TestingChamp->GetTransform().location, m_Units[i]);
+				std::cout << "Pew\n";
+				break;
+			}
+		}
 		break;
 	case SDL_BUTTON_MIDDLE:
 		break;
