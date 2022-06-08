@@ -117,6 +117,18 @@ void Core::Initialize( )
 	}
 
 	m_Initialized = true;
+
+#pragma region Icon
+	// Code snippit from Lee Vangraefschepe
+	SDL_Surface* pIcon = IMG_Load("Resources/SuperMarioWorldIcon.png");
+	if (pIcon == nullptr)
+	{
+		std::cerr << "Core::Initialize( ), error when calling IMG_Load: " << SDL_GetError() << '\n';
+		std::cerr << "Using default icon." << '\n';
+	}
+	SDL_SetWindowIcon(m_pWindow, pIcon);
+	SDL_FreeSurface(pIcon);
+#pragma endregion
 }
 
 void Core::Run( )
