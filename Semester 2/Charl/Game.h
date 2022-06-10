@@ -34,7 +34,6 @@ private:
 	Point2f m_LastMousePos;
 
 	Champion* m_TestingChamp;
-	InfoPlate* m_TestPlate;
 	ProjectileManager* m_ProjectileManager;
 	std::vector<Unit*> m_Units;
 

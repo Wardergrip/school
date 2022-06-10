@@ -4,6 +4,7 @@
 
 class LockOnProjectile;
 class Unit;
+class Champion;
 
 class ProjectileManager final
 {
@@ -26,7 +27,12 @@ public:
 	void DrawAll() const;
 	void UpdateAll(float elapsedSec);
 
+	void TryAutoAttack(const Point2f& mousePos, Champion* shooter, std::vector<Unit*>* units);
+
 private:
 	std::vector<LockOnProjectile*> m_pLockOnProjs;
+	Point2f m_LastMousePos;
+	Champion* m_LastShooter;
+	std::vector<Unit*>* m_LastUnits;
 };
 

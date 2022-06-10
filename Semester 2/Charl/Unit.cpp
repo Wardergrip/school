@@ -86,6 +86,11 @@ void Unit::RotateTowards(const Point2f& target)
 	m_Transform.RotateTowards(target);
 }
 
+void Unit::StopMovement()
+{
+	m_Destination = m_Transform.location;
+}
+
 const Transform& Unit::GetTransform() const
 {
 	return m_Transform;

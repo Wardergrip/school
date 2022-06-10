@@ -46,6 +46,7 @@ public:
 	void CenterHitboxToPosition();
 	void TeleportTo(const Point2f& location);
 	void RotateTowards(const Point2f& target);
+	void StopMovement();
 
 	const Transform& GetTransform() const;
 	void GetTransform(Transform& output) const;

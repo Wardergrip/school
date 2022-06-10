@@ -4,12 +4,21 @@
 #include "utils.h"
 #include "ExampleAbility.h"
 
+#include "InfoPlate.h"
+
+#include "Timer.h"
+
 Champion::Champion(const Window& window)
 	:m_pAbilityInterface{new AbilityInterface(window)}
+	,m_pInfoPlate{ new InfoPlate{ this } }
+	,m_pAutoAttackTimer{ new Timer{1/2.f} }
+	,m_AutoAttackRangeRadius{200.f}
+	,m_DrawAARange{false}
 {
 	m_Hitbox = Rectf{ 0,0,20,20 };
 	CenterHitboxToPosition();
 
+	m_pInfoPlate->SetName("Champion ZX");
 	m_pAbilityInterface->AssignAbility(AbilityKey::Q, new ExampleAbility("Q", this->m_Transform.location));
 }
 
@@ -17,6 +26,10 @@ Champion::~Champion()
 {
 	delete m_pAbilityInterface;
 	m_pAbilityInterface = nullptr;
+	delete m_pInfoPlate;
+	m_pInfoPlate = nullptr;
+	delete m_pAutoAttackTimer;
+	m_pAutoAttackTimer = nullptr;
 }
 
 void Champion::Draw() const
@@ -36,9 +49,21 @@ void Champion::Draw() const
 	{
 		DrawHitbox();
 	}
+	// Draw range
+	if (m_DrawAARange)
+	{
+		DrawEllipse(Point2f{ 0,0 }, m_AutoAttackRangeRadius, m_AutoAttackRangeRadius);
+	}
 	m_Transform.Pop();
 
+	m_pInfoPlate->Draw();
 	m_pAbilityInterface->Draw();
+}
+
+void Champion::Update(float elapsedSec)
+{
+	MoveTowards(m_Destination,elapsedSec);
+	m_pAutoAttackTimer->Update(elapsedSec);
 }
 
 void Champion::OnMouseDown(const SDL_MouseButtonEvent& e)
@@ -88,12 +113,35 @@ void Champion::OnKeyHold(float elapsedSec, const Uint8* pStates, const Point2f& 
 	{
 		m_pAbilityInterface->OnHoldingAbility(AbilityKey::F, mousePos, elapsedSec);
 	}
+	//
+	if (pStates[SDL_SCANCODE_C]) m_DrawAARange = true;
+	else m_DrawAARange = false;
 }
 
 void Champion::OnKeyUp(const SDL_KeyboardEvent& e, const Point2f& mousePos)
 {
 	AbilityKey key{ GetAppropriateAbilityKey(e) };
 	m_pAbilityInterface->OnReleaseAbility(key,mousePos);
+}
+
+bool Champion::IsAutoAttackReady() const
+{
+	return m_pAutoAttackTimer->IsDone();
+}
+
+bool Champion::IsAAReadyAndReset()
+{
+	bool isDone{ m_pAutoAttackTimer->IsDone() };
+	if (isDone)
+	{
+		m_pAutoAttackTimer->ResetTimer();
+	}
+	return isDone;
+}
+
+float Champion::GetAutoAttackRangeRadius() const
+{
+	return m_AutoAttackRangeRadius;
 }
 
 AbilityKey Champion::GetAppropriateAbilityKey(const SDL_KeyboardEvent& e) const

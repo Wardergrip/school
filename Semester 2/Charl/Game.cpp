@@ -24,8 +24,6 @@ Game::~Game( )
 
 void Game::Initialize( )
 {
-	m_TestPlate = new InfoPlate{m_TestingChamp};
-	m_TestPlate->SetName("Tester");
 	m_TestingChamp->TeleportTo(Point2f{ m_Window.width / 2,m_Window.height / 2 });
 	m_ProjectileManager = new ProjectileManager();
 	
@@ -36,7 +34,6 @@ void Game::Cleanup( )
 {
 	delete m_TestingChamp;
 	m_TestingChamp = nullptr;
-	delete m_TestPlate;
 	m_TestingChamp = nullptr;
 	delete m_ProjectileManager;
 	m_ProjectileManager = nullptr;
@@ -65,7 +62,6 @@ void Game::Draw( ) const
 {
 	ClearBackground( );
 	m_TestingChamp->Draw();
-	m_TestPlate->Draw();
 	
 	m_ProjectileManager->DrawAll();
 	for (Unit* unit : m_Units)
@@ -131,15 +127,7 @@ void Game::ProcessMouseDownEvent( const SDL_MouseButtonEvent& e )
 	case SDL_BUTTON_LEFT:
 		break;
 	case SDL_BUTTON_RIGHT:
-		for (size_t i{ 0 }; i < m_Units.size(); ++i)
-		{
-			if (m_Units[i]->IsOverlapping(Point2f{ float(e.x),float(e.y) }))
-			{
-				m_ProjectileManager->PushBack(m_TestingChamp->GetTransform().location, m_Units[i]);
-				std::cout << "Pew\n";
-				break;
-			}
-		}
+		m_ProjectileManager->TryAutoAttack(Point2f{ float(e.x),float(e.y) }, m_TestingChamp, &m_Units);
 		break;
 	case SDL_BUTTON_MIDDLE:
 		break;

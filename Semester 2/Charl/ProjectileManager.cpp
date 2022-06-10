@@ -3,8 +3,13 @@
 
 #include "LockOnProjectile.h"
 
+#include "Champion.h"
+
 ProjectileManager::ProjectileManager(int reserveLockOn)
     :m_pLockOnProjs{ reserveLockOn }
+    ,m_LastMousePos{0,0}
+    ,m_LastShooter{ nullptr }
+    ,m_LastUnits{ nullptr }
 {
 }
 
@@ -85,5 +90,45 @@ void ProjectileManager::UpdateAll(float elapsedSec)
             delete m_pLockOnProjs[i];
             m_pLockOnProjs[i] = nullptr;
         }
+    }
+    TryAutoAttack(m_LastMousePos, m_LastShooter, m_LastUnits);
+}
+
+void ProjectileManager::TryAutoAttack(const Point2f& mousePos, Champion* shooter, std::vector<Unit*>* units)
+{
+    if ((shooter == nullptr) || (units == nullptr))
+    {
+        return;
+    }
+
+    for (size_t i{ 0 }; i < units->size(); ++i)
+    {
+        if (units->at(i)->IsOverlapping(mousePos))
+        {
+            float distance{ Vector2f{ shooter->GetTransform().location - units->at(i)->GetTransform().location }.Length() };
+            if (shooter->GetAutoAttackRangeRadius() < distance)
+            {
+                break;
+            }
+            if (shooter->IsAAReadyAndReset())
+            {
+                PushBack(shooter->GetTransform().location, units->at(i));
+            }
+            shooter->StopMovement();
+            shooter->RotateTowards(mousePos);
+            break;
+        }
+    }
+    if (&mousePos != &m_LastMousePos)
+    {
+        m_LastMousePos = mousePos;
+    }
+    if (units != m_LastUnits)
+    {
+        m_LastUnits = units;
+    }
+    if (shooter != m_LastShooter)
+    {
+        m_LastShooter = shooter;
     }
 }
