@@ -108,7 +108,10 @@ const BasicStats& Unit::GetBasicStats() const
 
 bool Unit::TakeDamage(float damageAmount)
 {
-	m_BasicStats.currentHealth -= damageAmount;
+	if (m_BasicStats.currentHealth > 0)
+	{
+		m_BasicStats.currentHealth -= damageAmount;
+	}
 	return (m_BasicStats.currentHealth > 0);
 }
 

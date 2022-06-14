@@ -22,6 +22,12 @@
     <Filter Include="Projectile Files">
       <UniqueIdentifier>{a014a804-7fa4-43d9-95d8-741feb2f585f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Unit Files">
+      <UniqueIdentifier>{fb8bca0c-13f3-47cb-82d7-8b0f3ef46e80}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Userinterface Files">
+      <UniqueIdentifier>{dbfce542-ccb1-4130-b187-f4a120e7417e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core.cpp">
@@ -63,12 +69,6 @@
     <ClCompile Include="Transform.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Unit.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Champion.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="ExampleAbility.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -77,9 +77,6 @@
     </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>Critical Files</Filter>
-    </ClCompile>
-    <ClCompile Include="InfoPlate.cpp">
-      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="BasicStats.cpp">
       <Filter>Source Files</Filter>
@@ -98,6 +95,18 @@
     </ClCompile>
     <ClCompile Include="AutoAttack.cpp">
       <Filter>Projectile Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Unit.cpp">
+      <Filter>Unit Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Champion.cpp">
+      <Filter>Unit Files</Filter>
+    </ClCompile>
+    <ClCompile Include="InfoPlate.cpp">
+      <Filter>Userinterface Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TargetDummy.cpp">
+      <Filter>Unit Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -140,20 +149,11 @@
     <ClInclude Include="Transform.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Unit.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Champion.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ExampleAbility.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Game.h">
       <Filter>Critical Files</Filter>
-    </ClInclude>
-    <ClInclude Include="InfoPlate.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="BasicStats.h">
       <Filter>Header Files</Filter>
@@ -172,6 +172,18 @@
     </ClInclude>
     <ClInclude Include="AutoAttack.h">
       <Filter>Projectile Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Unit.h">
+      <Filter>Unit Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Champion.h">
+      <Filter>Unit Files</Filter>
+    </ClInclude>
+    <ClInclude Include="InfoPlate.h">
+      <Filter>Userinterface Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TargetDummy.h">
+      <Filter>Unit Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

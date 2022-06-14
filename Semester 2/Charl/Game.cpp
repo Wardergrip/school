@@ -9,6 +9,8 @@
 #include "ProjectileManager.h"
 #include "Ability.h"
 
+#include "TargetDummy.h"
+
 #include "utils.h"
 
 Game::Game( const Window& window ) 
@@ -31,7 +33,7 @@ void Game::Initialize( )
 	m_TestingChamp = new Champion(m_Window, m_ProjectileManager);
 	m_TestingChamp->TeleportTo(Point2f{ m_Window.width / 2,m_Window.height / 2 });
 
-	m_Units.push_back(new Unit(Point2f{ 30,30 }, Rectf{ 0,0,20,20 }));
+	m_Units.push_back(new TargetDummy(Point2f{ 70,50 }));
 }
 
 void Game::Cleanup( )
