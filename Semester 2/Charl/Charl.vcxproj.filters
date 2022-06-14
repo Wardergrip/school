@@ -19,6 +19,9 @@
     <Filter Include="Critical Files">
       <UniqueIdentifier>{50efee26-5e7f-4ea8-9234-7945f47f5440}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Projectile Files">
+      <UniqueIdentifier>{a014a804-7fa4-43d9-95d8-741feb2f585f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core.cpp">
@@ -81,14 +84,20 @@
     <ClCompile Include="BasicStats.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="LockOnProjectile.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ProjectileManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Timer.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SkillShotProjectile.cpp">
+      <Filter>Projectile Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ProjectileManager.cpp">
+      <Filter>Projectile Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LockOnProjectile.cpp">
+      <Filter>Projectile Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AutoAttack.cpp">
+      <Filter>Projectile Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -149,14 +158,20 @@
     <ClInclude Include="BasicStats.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="LockOnProjectile.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ProjectileManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Timer.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LockOnProjectile.h">
+      <Filter>Projectile Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ProjectileManager.h">
+      <Filter>Projectile Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SkillShotProjectile.h">
+      <Filter>Projectile Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AutoAttack.h">
+      <Filter>Projectile Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

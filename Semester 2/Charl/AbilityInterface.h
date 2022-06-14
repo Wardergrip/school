@@ -24,6 +24,7 @@ public:
 	~AbilityInterface();
 
 	void Draw() const;
+	void Update(float elapsedSec);
 
 	// Overrides ability in case a ability is already assigned
 	void AssignAbility(AbilityKey idx, Ability* ability);

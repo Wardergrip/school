@@ -4,7 +4,7 @@
 
 class Unit;
 
-class LockOnProjectile final
+class LockOnProjectile
 {
 public:
 	LockOnProjectile(const Point2f& startingPos, Unit* target, float damage = 10.f, float speed = 300.f);
@@ -12,14 +12,14 @@ public:
 	LockOnProjectile& operator=(const LockOnProjectile& proj) = delete;
 	LockOnProjectile(LockOnProjectile&& proj) = delete;
 	LockOnProjectile& operator=(LockOnProjectile&& proj) = delete;
-	~LockOnProjectile();
+	virtual ~LockOnProjectile();
 
-	void Draw() const;
-	void Update(float elapsedSec);
+	virtual void Draw() const;
+	virtual void Update(float elapsedSec);
 
-	bool HasHit() const;
+	virtual bool HasHit() const;
 
-private:
+protected:
 	Transform m_Transform;
 	float m_Speed;
 	float m_Damage;

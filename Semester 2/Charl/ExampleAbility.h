@@ -18,6 +18,8 @@ public:
 	void OnHolding(float elapsedSec, const Point2f& mousePos) override;
 	void OnRelease(const Point2f& mousePos) override;
 
+	virtual void Update(float elapsedSec) override;
+
 private:
 	const Point2f& m_ChampionLocationRef;
 	Point2f m_LastMousePos;

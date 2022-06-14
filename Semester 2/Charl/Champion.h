@@ -5,11 +5,12 @@
 
 class InfoPlate;
 class Timer;
+class ProjectileManager;
 
 class Champion : public Unit
 {
 public:
-	Champion(const Window& window);
+	Champion(const Window& window, ProjectileManager* projectilemanagerref);
 	Champion(const Champion& champ) = delete;
 	Champion& operator=(const Champion& champ) = delete;
 	Champion(Champion&& champ) = delete;
@@ -33,7 +34,11 @@ public:
 
 	float GetAutoAttackRangeRadius() const;
 
+	Unit* GetClosestUnit(std::vector<Unit*>* units) const;
+
 protected:
+	ProjectileManager* m_ProjectileManagerRef;
+
 	AbilityInterface* m_pAbilityInterface;
 	InfoPlate* m_pInfoPlate;
 	Timer* m_pAutoAttackTimer;

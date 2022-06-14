@@ -8,8 +8,11 @@
 
 #include "Timer.h"
 
-Champion::Champion(const Window& window)
-	:m_pAbilityInterface{new AbilityInterface(window)}
+#include "ProjectileManager.h"
+
+Champion::Champion(const Window& window, ProjectileManager* projectilemanagerref)
+	:m_ProjectileManagerRef{ projectilemanagerref }
+	,m_pAbilityInterface{new AbilityInterface(window)}
 	,m_pInfoPlate{ new InfoPlate{ this } }
 	,m_pAutoAttackTimer{ new Timer{1/2.f} }
 	,m_AutoAttackRangeRadius{200.f}
@@ -62,6 +65,7 @@ void Champion::Draw() const
 
 void Champion::Update(float elapsedSec)
 {
+	m_pAbilityInterface->Update(elapsedSec);
 	MoveTowards(m_Destination,elapsedSec);
 	m_pAutoAttackTimer->Update(elapsedSec);
 }
@@ -69,6 +73,16 @@ void Champion::Update(float elapsedSec)
 void Champion::OnMouseDown(const SDL_MouseButtonEvent& e)
 {
 	OnMouseDownBasic(e);
+	switch (e.button)
+	{
+	case SDL_BUTTON_LEFT:
+		break;
+	case SDL_BUTTON_RIGHT:
+		m_ProjectileManagerRef->TryAutoAttack(Point2f{ float(e.x),float(e.y) }, this);
+		break;
+	case SDL_BUTTON_MIDDLE:
+		break;
+	}
 }
 
 void Champion::OnMouseUp(const SDL_MouseButtonEvent& e)
@@ -142,6 +156,26 @@ bool Champion::IsAAReadyAndReset()
 float Champion::GetAutoAttackRangeRadius() const
 {
 	return m_AutoAttackRangeRadius;
+}
+
+Unit* Champion::GetClosestUnit(std::vector<Unit*>* units) const
+{
+	float shortestDistance{ 1000.f };
+	int index{ -1 };
+	for (size_t i{ 0 }; i < units->size(); ++i)
+	{
+		float distance{ Vector2f{m_Transform.location - units->at(i)->GetTransform().location}.Length()};
+		if (distance < shortestDistance)
+		{
+			index = int(i);
+			shortestDistance = distance;
+		}
+	}
+	if (index == -1)
+	{
+		return nullptr;
+	}
+	return units->at(index);
 }
 
 AbilityKey Champion::GetAppropriateAbilityKey(const SDL_KeyboardEvent& e) const

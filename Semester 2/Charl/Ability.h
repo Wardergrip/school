@@ -2,9 +2,16 @@
 #include <string>
 
 class Texture;
+class Timer;
+
+class ProjectileManager;
 
 class Ability
 {
+public:
+	static void InitProjManager(ProjectileManager* projMan);
+protected:
+	static ProjectileManager* c_ProjectileManagerRef;
 public:
 	enum class Type
 	{
@@ -25,13 +32,15 @@ public:
 	virtual void OnHolding(float elapsedSec, const Point2f& mousePos) = 0;
 	virtual void OnRelease(const Point2f& mousePos) = 0;
 
+	virtual void Update(float elapsedSec) = 0;
+
 protected:
 	const Type m_Type;
 
 	bool m_ShowTelegraph;
 
 	std::string m_Name;
-	float m_Cooldown;
+	Timer* m_Cooldown;
 
 	Texture* m_pButtonKeyTexture;
 

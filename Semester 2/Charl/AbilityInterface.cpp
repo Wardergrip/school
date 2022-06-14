@@ -132,6 +132,18 @@ void AbilityInterface::Draw() const
 	glPopMatrix();
 }
 
+void AbilityInterface::Update(float elapsedSec)
+{
+	for (size_t i{ 0 }; i < m_pAbilities.size(); ++i)
+	{
+		if (m_pAbilities[i] == nullptr)
+		{
+			continue;
+		}
+		m_pAbilities[i]->Update(elapsedSec);
+	}
+}
+
 void AbilityInterface::AssignAbility(AbilityKey idx, Ability* ability)
 {
 	delete m_pAbilities[int(idx)];

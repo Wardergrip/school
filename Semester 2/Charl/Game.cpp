@@ -7,12 +7,12 @@
 #include "InfoPlate.h"
 #include "Champion.h"
 #include "ProjectileManager.h"
+#include "Ability.h"
 
 #include "utils.h"
 
 Game::Game( const Window& window ) 
 	:m_Window{ window }
-	,m_TestingChamp{ new Champion{window} }
 {
 	Initialize( );
 }
@@ -24,9 +24,13 @@ Game::~Game( )
 
 void Game::Initialize( )
 {
-	m_TestingChamp->TeleportTo(Point2f{ m_Window.width / 2,m_Window.height / 2 });
-	m_ProjectileManager = new ProjectileManager();
+	ProjectileManager::ChangeUnits(&m_Units);
+	m_ProjectileManager = new ProjectileManager(&m_Units);
+	Ability::InitProjManager(m_ProjectileManager);
 	
+	m_TestingChamp = new Champion(m_Window, m_ProjectileManager);
+	m_TestingChamp->TeleportTo(Point2f{ m_Window.width / 2,m_Window.height / 2 });
+
 	m_Units.push_back(new Unit(Point2f{ 30,30 }, Rectf{ 0,0,20,20 }));
 }
 
@@ -51,7 +55,7 @@ void Game::Update( float elapsedSec )
 	
 	m_TestingChamp->OnKeyHold(elapsedSec, pStates, m_LastMousePos);
 	m_TestingChamp->Update(elapsedSec);
-	m_ProjectileManager->UpdateAll(elapsedSec);
+	m_ProjectileManager->UpdateAll(elapsedSec, pStates);
 	for (size_t i{ 0 }; i < m_Units.size(); ++i)
 	{
 		m_Units[i]->Update(elapsedSec);
@@ -127,7 +131,6 @@ void Game::ProcessMouseDownEvent( const SDL_MouseButtonEvent& e )
 	case SDL_BUTTON_LEFT:
 		break;
 	case SDL_BUTTON_RIGHT:
-		m_ProjectileManager->TryAutoAttack(Point2f{ float(e.x),float(e.y) }, m_TestingChamp, &m_Units);
 		break;
 	case SDL_BUTTON_MIDDLE:
 		break;

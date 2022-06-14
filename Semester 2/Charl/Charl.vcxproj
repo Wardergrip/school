@@ -153,6 +153,7 @@
   <ItemGroup>
     <ClCompile Include="Ability.cpp" />
     <ClCompile Include="AbilityInterface.cpp" />
+    <ClCompile Include="AutoAttack.cpp" />
     <ClCompile Include="BasicStats.cpp" />
     <ClCompile Include="Champion.cpp" />
     <ClCompile Include="Core.cpp" />
@@ -169,6 +170,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="ProjectileManager.cpp" />
+    <ClCompile Include="SkillShotProjectile.cpp" />
     <ClCompile Include="SoundEffect.cpp" />
     <ClCompile Include="SoundStream.cpp" />
     <ClCompile Include="structs.cpp" />
@@ -183,6 +185,7 @@
   <ItemGroup>
     <ClInclude Include="Ability.h" />
     <ClInclude Include="AbilityInterface.h" />
+    <ClInclude Include="AutoAttack.h" />
     <ClInclude Include="BasicStats.h" />
     <ClInclude Include="Champion.h" />
     <ClInclude Include="Core.h" />
@@ -193,6 +196,7 @@
     <ClInclude Include="Matrix2x3.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="ProjectileManager.h" />
+    <ClInclude Include="SkillShotProjectile.h" />
     <ClInclude Include="SoundEffect.h" />
     <ClInclude Include="SoundStream.h" />
     <ClInclude Include="structs.h" />
