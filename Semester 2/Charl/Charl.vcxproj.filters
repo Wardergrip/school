@@ -108,6 +108,9 @@
     <ClCompile Include="TargetDummy.cpp">
       <Filter>Unit Files</Filter>
     </ClCompile>
+    <ClCompile Include="UserInterfaceElement.cpp">
+      <Filter>Userinterface Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Vector2f.h">
@@ -184,6 +187,9 @@
     </ClInclude>
     <ClInclude Include="TargetDummy.h">
       <Filter>Unit Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterfaceElement.h">
+      <Filter>Userinterface Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
