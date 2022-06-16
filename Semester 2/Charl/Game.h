@@ -4,8 +4,9 @@
 
 class Unit;
 class Champion;
-class InfoPlate;
 class ProjectileManager;
+
+class SmartTextComponent;
 
 class Game final
 {
@@ -36,6 +37,8 @@ private:
 	Champion* m_TestingChamp;
 	ProjectileManager* m_ProjectileManager;
 	std::vector<Unit*> m_Units;
+
+	SmartTextComponent* m_Orientation;
 
 	// FUNCTIONS
 	void Initialize( );

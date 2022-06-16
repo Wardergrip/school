@@ -171,6 +171,7 @@
     </ClCompile>
     <ClCompile Include="ProjectileManager.cpp" />
     <ClCompile Include="SkillShotProjectile.cpp" />
+    <ClCompile Include="SmartTextComponent.cpp" />
     <ClCompile Include="SoundEffect.cpp" />
     <ClCompile Include="SoundStream.cpp" />
     <ClCompile Include="structs.cpp" />
@@ -199,6 +200,7 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="ProjectileManager.h" />
     <ClInclude Include="SkillShotProjectile.h" />
+    <ClInclude Include="SmartTextComponent.h" />
     <ClInclude Include="SoundEffect.h" />
     <ClInclude Include="SoundStream.h" />
     <ClInclude Include="structs.h" />

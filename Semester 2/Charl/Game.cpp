@@ -13,6 +13,8 @@
 
 #include "utils.h"
 
+#include "SmartTextComponent.h"
+
 Game::Game( const Window& window ) 
 	:m_Window{ window }
 {
@@ -34,6 +36,9 @@ void Game::Initialize( )
 	m_TestingChamp->TeleportTo(Point2f{ m_Window.width / 2,m_Window.height / 2 });
 
 	m_Units.push_back(new TargetDummy(Point2f{ 70,50 }));
+
+	m_Orientation = new SmartTextComponent("w");
+	m_Orientation->ChangeTransform(Transform{ Point2f{0,m_Window.height - 25} });
 }
 
 void Game::Cleanup( )
@@ -48,6 +53,9 @@ void Game::Cleanup( )
 		delete m_Units[i];
 		m_Units[i] = nullptr;
 	}
+
+	delete m_Orientation;
+	m_Orientation = nullptr;
 }
 
 void Game::Update( float elapsedSec )
@@ -62,6 +70,7 @@ void Game::Update( float elapsedSec )
 	{
 		m_Units[i]->Update(elapsedSec);
 	}
+	m_Orientation->UpdateText("Location: " + std::to_string(int(m_TestingChamp->GetTransform().location.x)) + " " + std::to_string(int(m_TestingChamp->GetTransform().location.y)));
 }
 
 void Game::Draw( ) const
@@ -77,6 +86,8 @@ void Game::Draw( ) const
 			unit->Draw();
 		}
 	}
+
+	m_Orientation->Draw();
 }
 
 void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )

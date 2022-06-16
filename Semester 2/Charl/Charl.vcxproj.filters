@@ -111,6 +111,9 @@
     <ClCompile Include="UserInterfaceElement.cpp">
       <Filter>Userinterface Files</Filter>
     </ClCompile>
+    <ClCompile Include="SmartTextComponent.cpp">
+      <Filter>Userinterface Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Vector2f.h">
@@ -189,6 +192,9 @@
       <Filter>Unit Files</Filter>
     </ClInclude>
     <ClInclude Include="UserInterfaceElement.h">
+      <Filter>Userinterface Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SmartTextComponent.h">
       <Filter>Userinterface Files</Filter>
     </ClInclude>
   </ItemGroup>

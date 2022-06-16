@@ -22,14 +22,10 @@ public:
 	Point2f GetCenter() const;
 	bool IsInside(const Point2f& pos) const;
 
-	void CenterRect(const Point2f& p = {});
-	Point2f RectToBL() const;
 	Point2f CenterOf() const;
 
-private:
+protected:
 	Transform m_Transform;
 	Rectf m_Rect;
-
-	void UpdateTransform();
 };
 
