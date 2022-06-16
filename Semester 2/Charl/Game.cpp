@@ -17,6 +17,7 @@
 
 Game::Game( const Window& window ) 
 	:m_Window{ window }
+	,m_Camera{window.width,window.height}
 {
 	Initialize( );
 }
@@ -39,6 +40,8 @@ void Game::Initialize( )
 
 	m_Orientation = new SmartTextComponent("w");
 	m_Orientation->ChangeTransform(Transform{ Point2f{0,m_Window.height - 25} });
+
+	m_Camera.SetLevelBoundaries(Rectf{ 0,0,400,400 });
 }
 
 void Game::Cleanup( )
@@ -76,16 +79,21 @@ void Game::Update( float elapsedSec )
 void Game::Draw( ) const
 {
 	ClearBackground( );
-	m_TestingChamp->Draw();
-	
-	m_ProjectileManager->DrawAll();
-	for (Unit* unit : m_Units)
+	glPushMatrix();
 	{
-		if (unit)
+		m_Camera.Transform(m_TestingChamp->GetTransform().location);
+		m_TestingChamp->Draw();
+	
+		m_ProjectileManager->DrawAll();
+		for (Unit* unit : m_Units)
 		{
-			unit->Draw();
+			if (unit)
+			{
+				unit->Draw();
+			}
 		}
 	}
+	glPopMatrix();
 
 	m_Orientation->Draw();
 }

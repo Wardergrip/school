@@ -114,6 +114,9 @@
     <ClCompile Include="SmartTextComponent.cpp">
       <Filter>Userinterface Files</Filter>
     </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Vector2f.h">
@@ -196,6 +199,9 @@
     </ClInclude>
     <ClInclude Include="SmartTextComponent.h">
       <Filter>Userinterface Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

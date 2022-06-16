@@ -2,6 +2,8 @@
 
 #include <vector>
 
+#include "Camera.h"
+
 class Unit;
 class Champion;
 class ProjectileManager;
@@ -39,6 +41,7 @@ private:
 	std::vector<Unit*> m_Units;
 
 	SmartTextComponent* m_Orientation;
+	Camera m_Camera;
 
 	// FUNCTIONS
 	void Initialize( );

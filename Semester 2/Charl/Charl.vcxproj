@@ -155,6 +155,7 @@
     <ClCompile Include="AbilityInterface.cpp" />
     <ClCompile Include="AutoAttack.cpp" />
     <ClCompile Include="BasicStats.cpp" />
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Champion.cpp" />
     <ClCompile Include="Core.cpp" />
     <ClCompile Include="ExampleAbility.cpp" />
@@ -190,6 +191,7 @@
     <ClInclude Include="AbilityInterface.h" />
     <ClInclude Include="AutoAttack.h" />
     <ClInclude Include="BasicStats.h" />
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="Champion.h" />
     <ClInclude Include="Core.h" />
     <ClInclude Include="ExampleAbility.h" />
