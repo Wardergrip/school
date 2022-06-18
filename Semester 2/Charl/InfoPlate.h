@@ -1,11 +1,12 @@
 #pragma once
+#include "UserInterfaceElement.h"
 
 #include "Vector2f.h"
 
 class Texture;
 class Unit;
 
-class InfoPlate final
+class InfoPlate final : public UserInterfaceElement
 {
 // STATICS
 public:
@@ -26,14 +27,13 @@ public:
 	InfoPlate& operator=(InfoPlate&& infoplate) = delete;
 	~InfoPlate();
 
-	void Draw() const;
+	void Draw() const override;
 
 	void SetName(const std::string& name);
 
 private:
 	const Unit* m_TrackingUnit;
 
-	Rectf m_Plate;
 	Vector2f m_Offset;
 	Vector2f m_Scale;
 

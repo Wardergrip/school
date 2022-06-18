@@ -6,6 +6,8 @@
 
 #include "Vector2f.h"
 
+#include "OrientationManager.h"
+
 // STATICS
 bool Unit::c_IsDrawingHitboxes{ false };
 
@@ -157,7 +159,7 @@ void Unit::OnMouseDownBasic(const SDL_MouseButtonEvent& e)
 	{
 	case SDL_BUTTON_RIGHT:
 		m_IsHoldingRightClick = true;
-		m_Destination = Point2f{ float(e.x),float(e.y) };
+		m_Destination = OrientationManager::GetWorldLocation(Point2f{ float(e.x),float(e.y) });
 		break;
 	}
 }
@@ -176,7 +178,7 @@ void Unit::OnMouseMotionBasic(const SDL_MouseMotionEvent& e)
 {
 	if (m_IsHoldingRightClick)
 	{
-		m_Destination = Point2f{ float(e.x),float(e.y) };
+		m_Destination = OrientationManager::GetWorldLocation(Point2f{ float(e.x),float(e.y) });
 	}
 }
 

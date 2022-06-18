@@ -10,6 +10,8 @@
 
 #include "ProjectileManager.h"
 
+#include "OrientationManager.h"
+
 Champion::Champion(const Window& window, ProjectileManager* projectilemanagerref)
 	:m_ProjectileManagerRef{ projectilemanagerref }
 	,m_pAbilityInterface{new AbilityInterface(window)}
@@ -98,34 +100,34 @@ void Champion::OnMouseMotion(const SDL_MouseMotionEvent& e)
 void Champion::OnKeyDown(const SDL_KeyboardEvent& e, const Point2f& mousePos)
 {
 	AbilityKey key{ GetAppropriateAbilityKey(e) };
-	m_pAbilityInterface->OnPressAbility(key,mousePos);
+	m_pAbilityInterface->OnPressAbility(key,OrientationManager::GetWorldLocation(mousePos));
 }
 
 void Champion::OnKeyHold(float elapsedSec, const Uint8* pStates, const Point2f& mousePos)
 {
 	if (pStates[SDL_SCANCODE_Q])
 	{
-		m_pAbilityInterface->OnHoldingAbility(AbilityKey::Q, mousePos, elapsedSec);
+		m_pAbilityInterface->OnHoldingAbility(AbilityKey::Q, OrientationManager::GetWorldLocation(mousePos), elapsedSec);
 	}
 	if (pStates[SDL_SCANCODE_W])
 	{
-		m_pAbilityInterface->OnHoldingAbility(AbilityKey::W, mousePos, elapsedSec);
+		m_pAbilityInterface->OnHoldingAbility(AbilityKey::W, OrientationManager::GetWorldLocation(mousePos), elapsedSec);
 	}
 	if (pStates[SDL_SCANCODE_E])
 	{
-		m_pAbilityInterface->OnHoldingAbility(AbilityKey::E, mousePos, elapsedSec);
+		m_pAbilityInterface->OnHoldingAbility(AbilityKey::E, OrientationManager::GetWorldLocation(mousePos), elapsedSec);
 	}
 	if (pStates[SDL_SCANCODE_R])
 	{
-		m_pAbilityInterface->OnHoldingAbility(AbilityKey::R, mousePos, elapsedSec);
+		m_pAbilityInterface->OnHoldingAbility(AbilityKey::R, OrientationManager::GetWorldLocation(mousePos), elapsedSec);
 	}
 	if (pStates[SDL_SCANCODE_D])
 	{
-		m_pAbilityInterface->OnHoldingAbility(AbilityKey::D, mousePos, elapsedSec);
+		m_pAbilityInterface->OnHoldingAbility(AbilityKey::D, OrientationManager::GetWorldLocation(mousePos), elapsedSec);
 	}
 	if (pStates[SDL_SCANCODE_F])
 	{
-		m_pAbilityInterface->OnHoldingAbility(AbilityKey::F, mousePos, elapsedSec);
+		m_pAbilityInterface->OnHoldingAbility(AbilityKey::F, OrientationManager::GetWorldLocation(mousePos), elapsedSec);
 	}
 	//
 	if (pStates[SDL_SCANCODE_C]) m_DrawAARange = true;
@@ -135,7 +137,7 @@ void Champion::OnKeyHold(float elapsedSec, const Uint8* pStates, const Point2f& 
 void Champion::OnKeyUp(const SDL_KeyboardEvent& e, const Point2f& mousePos)
 {
 	AbilityKey key{ GetAppropriateAbilityKey(e) };
-	m_pAbilityInterface->OnReleaseAbility(key,mousePos);
+	m_pAbilityInterface->OnReleaseAbility(key, OrientationManager::GetWorldLocation(mousePos));
 }
 
 bool Champion::IsAutoAttackReady() const

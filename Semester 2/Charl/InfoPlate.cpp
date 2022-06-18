@@ -28,16 +28,16 @@ bool InfoPlate::IsDrawingInfoPlates()
 
 // NON STATICS
 InfoPlate::InfoPlate(const Unit* trackingUnit, const Vector2f& offset)
-	:m_TrackingUnit{trackingUnit}
-	,m_Plate{0,0,150,40}
+	:UserInterfaceElement(Rectf{ 0,0,150,40 })
+	,m_TrackingUnit{trackingUnit}
 	,m_Offset{offset}
 	,m_Scale{1,1}
 	,m_HealthBar{0,0,130,10}
 	,m_HealthBarColor{ Color4f{1,0,0,1} }
 	,m_pName{}
 {
-	m_Plate.left = -m_Plate.width / 2;
-	m_Plate.bottom = -m_Plate.height / 2;
+	m_Rect.left = -m_Rect.width / 2;
+	m_Rect.bottom = -m_Rect.height / 2;
 
 	m_HealthBar.left = -m_HealthBar.width / 2;
 	m_HealthBar.bottom = -m_HealthBar.height / 2;
@@ -70,7 +70,7 @@ void InfoPlate::Draw() const
 		// InfoPlate base plate
 		glScalef(m_Scale.x, m_Scale.y, 1);
 		SetColor(Color4f{ 0.5f,0.5f,0.5f,1 });
-		FillRect(m_Plate);
+		FillRect(m_Rect);
 		
 		// Healthbar and line around it
 		glTranslatef(0, -10, 0);

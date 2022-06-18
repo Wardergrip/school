@@ -15,6 +15,8 @@
 
 #include "SmartTextComponent.h"
 
+#include "OrientationManager.h"
+
 Game::Game( const Window& window ) 
 	:m_Window{ window }
 	,m_Camera{window.width,window.height}
@@ -74,6 +76,7 @@ void Game::Update( float elapsedSec )
 		m_Units[i]->Update(elapsedSec);
 	}
 	m_Orientation->UpdateText("Location: " + std::to_string(int(m_TestingChamp->GetTransform().location.x)) + " " + std::to_string(int(m_TestingChamp->GetTransform().location.y)));
+	OrientationManager::UpdateCameraLoc(m_Camera.GetCameraPosition(m_TestingChamp->GetTransform().location));
 }
 
 void Game::Draw( ) const
