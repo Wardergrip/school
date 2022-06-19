@@ -3,6 +3,8 @@
 
 #include "Texture.h"
 
+#include <iostream>
+
 std::string SmartTextComponent::c_DefaultFontPath{"Resources/consola.ttf"};
 
 bool SmartTextComponent::ChangeDefaultFont(const std::string& fontPath)
@@ -16,7 +18,8 @@ bool SmartTextComponent::ChangeDefaultFont(const std::string& fontPath)
 }
 
 SmartTextComponent::SmartTextComponent(const std::string& text, int textSize, const Color4f & textColor, const std::string& fontPath)
-	:m_CurrentText{text}
+	:UserInterfaceElement(Rectf{})
+	,m_CurrentText{text}
 	,m_FontPath{fontPath}
 	,m_TextSize{textSize}
 	,m_TextColor{textColor}

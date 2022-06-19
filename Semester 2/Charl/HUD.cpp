@@ -9,7 +9,24 @@ std::vector<std::pair<HUD::HUDName, UserInterfaceElement*>> HUD::c_UIQueue{16};
 
 void HUD::QueueUI(const std::pair<HUDName, UserInterfaceElement*>& pair)
 {
-	c_UIQueue.push_back(pair);
+	bool isPointerPushed{ false };
+	for (size_t i{ 0 }; i < c_UIQueue.size(); ++i)
+	{
+		if (c_UIQueue[i].second != nullptr)
+		{
+			continue;
+		}
+		if (isPointerPushed)
+		{
+			break;
+		}
+		c_UIQueue[i]= pair;
+		isPointerPushed = true;
+	}
+	if (!isPointerPushed)
+	{
+		c_UIQueue.push_back(pair);
+	}
 }
 
 void HUD::SwapQueueIdx(int a, int b)

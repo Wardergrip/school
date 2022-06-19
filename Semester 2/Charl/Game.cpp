@@ -53,7 +53,6 @@ void Game::Cleanup( )
 {
 	delete m_TestingChamp;
 	m_TestingChamp = nullptr;
-	m_TestingChamp = nullptr;
 	delete m_ProjectileManager;
 	m_ProjectileManager = nullptr;
 	for (size_t i{ 0 }; i < m_Units.size(); ++i)
@@ -61,9 +60,6 @@ void Game::Cleanup( )
 		delete m_Units[i];
 		m_Units[i] = nullptr;
 	}
-
-	delete m_Orientation;
-	m_Orientation = nullptr;
 
 	delete m_pInGameHUD;
 	m_pInGameHUD = nullptr;
@@ -105,7 +101,6 @@ void Game::Draw( ) const
 	glPopMatrix();
 
 	m_pInGameHUD->DrawAll();
-	m_Orientation->Draw();
 }
 
 void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )

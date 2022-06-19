@@ -2,9 +2,11 @@
 
 #include "Transform.h"
 
+#include "UserInterfaceElement.h"
+
 class Texture;
 
-class SmartTextComponent final
+class SmartTextComponent final : public UserInterfaceElement
 {
 // STATICS
 public:
@@ -21,7 +23,7 @@ public:
 	SmartTextComponent& operator=(SmartTextComponent&& other) = delete;
 	~SmartTextComponent();
 
-	void Draw() const;
+	void Draw() const override;
 
 	void UpdateText(const std::string& text, bool checkForChanges = true);
 	void UpdateFont(const std::string& fontPath = c_DefaultFontPath, bool checkForChanges = true);
@@ -34,7 +36,7 @@ public:
 	float GetWidth() const;
 	float GetHeight() const;
 private:
-	Transform m_Transform;
+	//Transform m_Transform;
 
 	Texture* m_pTexture;
 	std::string m_CurrentText;

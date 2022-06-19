@@ -17,8 +17,6 @@ TargetDummy::TargetDummy(const Point2f& position)
 
 TargetDummy::~TargetDummy()
 {
-	delete m_pInfoPlate;
-	m_pInfoPlate = nullptr;
 	delete m_pTimer;
 	m_pTimer = nullptr;
 }
