@@ -4,6 +4,7 @@
 
 #include "structs.h"
 #include "Vector2f.h"
+#include "UserInterfaceElement.h"
 
 enum class AbilityKey { Q, W, E, R, D, F, undefined };
 
@@ -12,7 +13,7 @@ char KeyToChar(AbilityKey key);
 
 class Ability;
 
-class AbilityInterface final
+class AbilityInterface final : public UserInterfaceElement
 {
 public:
 
@@ -23,7 +24,8 @@ public:
 	AbilityInterface& operator=(AbilityInterface&& abilityinterface) = delete;
 	~AbilityInterface();
 
-	void Draw() const;
+	void Draw() const override;
+	void DrawAbilities() const;
 	void Update(float elapsedSec);
 
 	// Overrides ability in case a ability is already assigned

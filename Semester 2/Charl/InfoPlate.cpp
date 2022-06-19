@@ -41,6 +41,8 @@ InfoPlate::InfoPlate(const Unit* trackingUnit, const Vector2f& offset)
 
 	m_HealthBar.left = -m_HealthBar.width / 2;
 	m_HealthBar.bottom = -m_HealthBar.height / 2;
+
+	m_AutomaticHUDDraw = false;
 }
 
 InfoPlate::InfoPlate(const Unit* trackingUnit)

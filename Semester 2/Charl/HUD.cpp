@@ -26,15 +26,7 @@ HUD::HUD(HUDName name, bool readQueue)
 {
 	if (readQueue)
 	{
-		for (size_t i{ 0 }; i < c_UIQueue.size(); ++i)
-		{
-			if (c_UIQueue[i].first == m_Name)
-			{
-				m_pUserInterfaceElements.push_back(c_UIQueue[i].second);
-				SwapQueueIdx(i, c_UIQueue.size());
-				c_UIQueue.pop_back();
-			}
-		}
+		ReadQueueAndPushback();
 	}
 }
 
@@ -51,7 +43,10 @@ void HUD::DrawAll() const
 {
 	for (size_t i{ 0 }; i < m_pUserInterfaceElements.size(); ++i)
 	{
-		m_pUserInterfaceElements[i]->Draw();
+		if (m_pUserInterfaceElements[i]->GetAutomaticHUDDraw())
+		{
+			m_pUserInterfaceElements[i]->Draw();
+		}
 	}
 }
 
@@ -62,4 +57,17 @@ void HUD::Pushback(UserInterfaceElement* newElement)
 		return;
 	}
 	m_pUserInterfaceElements.push_back(newElement);
+}
+
+void HUD::ReadQueueAndPushback()
+{
+	for (size_t i{ 0 }; i < c_UIQueue.size(); ++i)
+	{
+		if (c_UIQueue[i].first == m_Name)
+		{
+			m_pUserInterfaceElements.push_back(c_UIQueue[i].second);
+			SwapQueueIdx(int(i), int(c_UIQueue.size() - 1));
+			c_UIQueue.pop_back();
+		}
+	}
 }

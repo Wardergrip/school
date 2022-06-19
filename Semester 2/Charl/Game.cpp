@@ -16,6 +16,7 @@
 #include "SmartTextComponent.h"
 
 #include "OrientationManager.h"
+#include "HUD.h"
 
 Game::Game( const Window& window ) 
 	:m_Window{ window }
@@ -44,6 +45,8 @@ void Game::Initialize( )
 	m_Orientation->ChangeTransform(Transform{ Point2f{0,m_Window.height - 25} });
 
 	m_Camera.SetLevelBoundaries(Rectf{ 0,0,400,400 });
+
+	m_pInGameHUD = new HUD(HUD::HUDName::ingame);
 }
 
 void Game::Cleanup( )
@@ -61,6 +64,9 @@ void Game::Cleanup( )
 
 	delete m_Orientation;
 	m_Orientation = nullptr;
+
+	delete m_pInGameHUD;
+	m_pInGameHUD = nullptr;
 }
 
 void Game::Update( float elapsedSec )
@@ -98,6 +104,7 @@ void Game::Draw( ) const
 	}
 	glPopMatrix();
 
+	m_pInGameHUD->DrawAll();
 	m_Orientation->Draw();
 }
 

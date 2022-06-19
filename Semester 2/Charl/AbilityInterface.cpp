@@ -78,7 +78,8 @@ char KeyToChar(AbilityKey key)
 // //////////////////////////////////////////////////////////////////////////////
 
 AbilityInterface::AbilityInterface(const Window& window, const Vector2f& scale)
-	:m_pAbilities{}
+	:UserInterfaceElement(m_Base)
+	,m_pAbilities{}
 	,m_Base{}
 	,m_Scale{scale}
 	,m_Middle{}
@@ -107,13 +108,6 @@ AbilityInterface::~AbilityInterface()
 
 void AbilityInterface::Draw() const
 {
-	// Draw abilities
-	for (auto ability : m_pAbilities)
-	{
-		if (ability == nullptr) continue;
-		ability->Draw();
-	}
-
 	// Base
 	SetColor(Color4f{ 1,1,1,0.5f });
 	glPushMatrix();
@@ -130,6 +124,15 @@ void AbilityInterface::Draw() const
 		}
 	}
 	glPopMatrix();
+}
+
+void AbilityInterface::DrawAbilities() const
+{
+	for (auto ability : m_pAbilities)
+	{
+		if (ability == nullptr) continue;
+		ability->Draw();
+	}
 }
 
 void AbilityInterface::Update(float elapsedSec)

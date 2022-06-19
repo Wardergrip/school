@@ -24,8 +24,11 @@ public:
 
 	Point2f CenterOf() const;
 
+	bool GetAutomaticHUDDraw() const;
+
 protected:
 	Transform m_Transform;
 	Rectf m_Rect;
+	bool m_AutomaticHUDDraw;
 };
 

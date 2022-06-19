@@ -10,6 +10,7 @@ class HUD final
 public:
 	enum class HUDName 
 	{
+		UNDEFINED = 0,
 		ingame
 	};
 	static void QueueUI(const std::pair<HUDName, UserInterfaceElement*>& pair);
@@ -30,6 +31,8 @@ public:
 	void DrawAll() const;
 
 	void Pushback(UserInterfaceElement* newElement);
+
+	void ReadQueueAndPushback();
 private:
 	HUDName m_Name;
 	std::vector<UserInterfaceElement*>  m_pUserInterfaceElements;

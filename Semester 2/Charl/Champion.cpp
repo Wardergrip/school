@@ -29,10 +29,8 @@ Champion::Champion(const Window& window, ProjectileManager* projectilemanagerref
 
 Champion::~Champion()
 {
-	delete m_pAbilityInterface;
-	m_pAbilityInterface = nullptr;
-	delete m_pInfoPlate;
-	m_pInfoPlate = nullptr;
+	/*delete m_pAbilityInterface;
+	m_pAbilityInterface = nullptr;*/
 	delete m_pAutoAttackTimer;
 	m_pAutoAttackTimer = nullptr;
 }
@@ -62,7 +60,7 @@ void Champion::Draw() const
 	m_Transform.Pop();
 
 	m_pInfoPlate->Draw();
-	m_pAbilityInterface->Draw();
+	m_pAbilityInterface->DrawAbilities();
 }
 
 void Champion::Update(float elapsedSec)

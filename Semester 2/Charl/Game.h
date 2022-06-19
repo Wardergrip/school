@@ -7,6 +7,7 @@
 class Unit;
 class Champion;
 class ProjectileManager;
+class HUD;
 
 class SmartTextComponent;
 
@@ -40,6 +41,7 @@ private:
 	ProjectileManager* m_ProjectileManager;
 	std::vector<Unit*> m_Units;
 
+	HUD* m_pInGameHUD;
 	SmartTextComponent* m_Orientation;
 	Camera m_Camera;
 

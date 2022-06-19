@@ -4,13 +4,19 @@
 #include "utils.h"
 using namespace utils;
 
+#include "HUD.h"
+
+#include <iostream>
 
 UserInterfaceElement::UserInterfaceElement(const Rectf& rect)
 	:m_Transform{ Point2f{rect.left,rect.bottom} }
 	,m_Rect{rect}
+	,m_AutomaticHUDDraw{true}
 {
 	m_Rect.left = 0;
 	m_Rect.bottom = 0;
+
+	HUD::QueueUI(std::pair<HUD::HUDName, UserInterfaceElement*>{HUD::HUDName::ingame, this});
 }
 
 UserInterfaceElement::~UserInterfaceElement()
@@ -60,4 +66,9 @@ bool UserInterfaceElement::IsInside(const Point2f& pos) const
 Point2f UserInterfaceElement::CenterOf() const
 {
 	return Point2f(m_Transform.location.x + m_Rect.width / 2, m_Transform.location.y + m_Rect.height / 2);
+}
+
+bool UserInterfaceElement::GetAutomaticHUDDraw() const
+{
+	return m_AutomaticHUDDraw;
 }
