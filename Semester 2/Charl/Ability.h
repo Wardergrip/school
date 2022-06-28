@@ -5,6 +5,7 @@ class Texture;
 class Timer;
 
 class ProjectileManager;
+class CircleProgression;
 
 class Ability
 {
@@ -41,6 +42,7 @@ protected:
 
 	std::string m_Name;
 	Timer* m_Cooldown;
+	CircleProgression* m_pCircleProgression;
 
 	Texture* m_pButtonKeyTexture;
 

@@ -40,3 +40,17 @@ float Timer::GetTime() const
 {
 	return m_AccumulateSeconds;
 }
+
+const float& Timer::GetTimeRef() const
+{
+	return m_AccumulateSeconds;
+}
+
+float Timer::GetPercentageDone() const
+{
+	if (m_IsTimerDone)
+	{
+		return 1.00f;
+	}
+	return (m_AccumulateSeconds / m_TimeGoal);
+}

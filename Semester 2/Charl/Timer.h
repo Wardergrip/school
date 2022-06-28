@@ -13,6 +13,8 @@ public:
 	void SetTimeGoal(float seconds);
 	void ResetTimer();
 	float GetTime() const;
+	const float& GetTimeRef() const;
+	float GetPercentageDone() const;
 
 	bool IsDone() const;
 

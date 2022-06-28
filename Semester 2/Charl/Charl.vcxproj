@@ -157,6 +157,7 @@
     <ClCompile Include="BasicStats.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Champion.cpp" />
+    <ClCompile Include="CircleProgression.cpp" />
     <ClCompile Include="Core.cpp" />
     <ClCompile Include="ExampleAbility.cpp" />
     <ClCompile Include="Game.cpp" />
@@ -195,6 +196,7 @@
     <ClInclude Include="BasicStats.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Champion.h" />
+    <ClInclude Include="CircleProgression.h" />
     <ClInclude Include="Core.h" />
     <ClInclude Include="ExampleAbility.h" />
     <ClInclude Include="Game.h" />

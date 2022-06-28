@@ -18,6 +18,9 @@
 #include "OrientationManager.h"
 #include "HUD.h"
 
+#include "CircleProgression.h"
+#include "Timer.h"
+
 Game::Game( const Window& window ) 
 	:m_Window{ window }
 	,m_Camera{window.width,window.height}
@@ -47,6 +50,7 @@ void Game::Initialize( )
 	m_Camera.SetLevelBoundaries(Rectf{ 0,0,400,400 });
 
 	m_pInGameHUD = new HUD(HUD::HUDName::ingame);
+
 }
 
 void Game::Cleanup( )
