@@ -17,14 +17,15 @@
 
 #include "OrientationManager.h"
 #include "HUD.h"
+#include "CameraManager.h"
 
 #include "CircleProgression.h"
 #include "Timer.h"
 
 Game::Game( const Window& window ) 
 	:m_Window{ window }
-	,m_Camera{window.width,window.height}
 {
+	m_pCameraManager = new CameraManager{ window };
 	Initialize( );
 }
 
@@ -47,7 +48,8 @@ void Game::Initialize( )
 	m_Orientation = new SmartTextComponent("w");
 	m_Orientation->ChangeTransform(Transform{ Point2f{0,m_Window.height - 25} });
 
-	m_Camera.SetLevelBoundaries(Rectf{ 0,0,400,400 });
+	m_pCameraManager->SetLevelBoundaries(Rectf{ 0,0,400,400 });
+	m_pCameraManager->Track(m_TestingChamp->GetTransform().location);
 
 	m_pInGameHUD = new HUD(HUD::HUDName::ingame);
 
@@ -67,6 +69,8 @@ void Game::Cleanup( )
 
 	delete m_pInGameHUD;
 	m_pInGameHUD = nullptr;
+	delete m_pCameraManager;
+	m_pCameraManager = nullptr;
 }
 
 void Game::Update( float elapsedSec )
@@ -81,8 +85,8 @@ void Game::Update( float elapsedSec )
 	{
 		m_Units[i]->Update(elapsedSec);
 	}
-	m_Orientation->UpdateText("Location: " + std::to_string(int(m_TestingChamp->GetTransform().location.x)) + " " + std::to_string(int(m_TestingChamp->GetTransform().location.y)));
-	OrientationManager::UpdateCameraLoc(m_Camera.GetCameraPosition(m_TestingChamp->GetTransform().location));
+	m_Orientation->UpdateText("Champ loc: " + std::to_string(int(m_TestingChamp->GetTransform().location.x)) + " " + std::to_string(int(m_TestingChamp->GetTransform().location.y)));
+	m_pCameraManager->Update(elapsedSec,pStates, m_LastMousePos);
 }
 
 void Game::Draw( ) const
@@ -90,7 +94,7 @@ void Game::Draw( ) const
 	ClearBackground( );
 	glPushMatrix();
 	{
-		m_Camera.Transform(m_TestingChamp->GetTransform().location);
+		m_pCameraManager->Transform();
 		m_TestingChamp->Draw();
 	
 		m_ProjectileManager->DrawAll();
@@ -119,6 +123,9 @@ void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )
 	case SDLK_o:
 		InfoPlate::SwitchDrawInfoPlates();
 		Log(std::boolalpha << "[DEBUG] DrawingInfoPlates: " << InfoPlate::IsDrawingInfoPlates());
+		break;
+	case SDLK_y:
+		m_pCameraManager->ToggleLock();
 		break;
 	}
 	m_TestingChamp->OnKeyDown(e, m_LastMousePos);

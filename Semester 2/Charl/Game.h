@@ -2,12 +2,11 @@
 
 #include <vector>
 
-#include "Camera.h"
-
 class Unit;
 class Champion;
 class ProjectileManager;
 class HUD;
+class CameraManager;
 
 class SmartTextComponent;
 
@@ -43,7 +42,7 @@ private:
 
 	HUD* m_pInGameHUD;
 	SmartTextComponent* m_Orientation;
-	Camera m_Camera;
+	CameraManager* m_pCameraManager;
 
 	// FUNCTIONS
 	void Initialize( );

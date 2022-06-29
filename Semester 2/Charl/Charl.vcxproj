@@ -156,6 +156,7 @@
     <ClCompile Include="AutoAttack.cpp" />
     <ClCompile Include="BasicStats.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="CameraManager.cpp" />
     <ClCompile Include="Champion.cpp" />
     <ClCompile Include="CircleProgression.cpp" />
     <ClCompile Include="Core.cpp" />
@@ -195,6 +196,7 @@
     <ClInclude Include="AutoAttack.h" />
     <ClInclude Include="BasicStats.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="CameraManager.h" />
     <ClInclude Include="Champion.h" />
     <ClInclude Include="CircleProgression.h" />
     <ClInclude Include="Core.h" />

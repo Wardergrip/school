@@ -3,6 +3,11 @@ class Camera final
 {
 public:
 	Camera(float width, float height);
+	Camera(const Camera& other) = delete;
+	Camera& operator=(const Camera& other) = delete;
+	Camera(Camera&& other) = delete;
+	Camera& operator=(Camera&& other) = delete;
+	~Camera() = default;
 
 	void Transform(const Rectf& target) const;
 	void Transform(const Point2f& target) const;
