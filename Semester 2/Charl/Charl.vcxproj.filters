@@ -28,6 +28,9 @@
     <Filter Include="Userinterface Files">
       <UniqueIdentifier>{dbfce542-ccb1-4130-b187-f4a120e7417e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ResourceManagement Files">
+      <UniqueIdentifier>{363b542e-d772-4c29-87d6-92fd60245892}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core.cpp">
@@ -129,6 +132,9 @@
     <ClCompile Include="CameraManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="JsonFilehelper.cpp">
+      <Filter>ResourceManagement Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Vector2f.h">
@@ -226,6 +232,12 @@
     </ClInclude>
     <ClInclude Include="CameraManager.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="json.hpp">
+      <Filter>ResourceManagement Files</Filter>
+    </ClInclude>
+    <ClInclude Include="JsonFilehelper.h">
+      <Filter>ResourceManagement Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

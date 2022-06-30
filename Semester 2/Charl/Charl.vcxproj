@@ -126,6 +126,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -164,6 +165,7 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="HUD.cpp" />
     <ClCompile Include="InfoPlate.cpp" />
+    <ClCompile Include="JsonFilehelper.cpp" />
     <ClCompile Include="LockOnProjectile.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Matrix2x3.cpp" />
@@ -204,6 +206,8 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="HUD.h" />
     <ClInclude Include="InfoPlate.h" />
+    <ClInclude Include="json.hpp" />
+    <ClInclude Include="JsonFilehelper.h" />
     <ClInclude Include="LockOnProjectile.h" />
     <ClInclude Include="Matrix2x3.h" />
     <ClInclude Include="OrientationManager.h" />

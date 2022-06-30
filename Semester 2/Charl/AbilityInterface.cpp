@@ -4,7 +4,6 @@
 #include <iostream>
 
 #include "Ability.h"
-#include "Log.h"
 
 #include "utils.h"
 using namespace utils;

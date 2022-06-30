@@ -1,9 +1,7 @@
 #include "pch.h"
 #include "Game.h"
 
-#include "log.h"
-
-#include "unit.h"
+#include "Unit.h"
 #include "InfoPlate.h"
 #include "Champion.h"
 #include "ProjectileManager.h"
@@ -19,8 +17,7 @@
 #include "HUD.h"
 #include "CameraManager.h"
 
-#include "CircleProgression.h"
-#include "Timer.h"
+#include "JsonFilehelper.h"
 
 Game::Game( const Window& window ) 
 	:m_Window{ window }
@@ -118,11 +115,11 @@ void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )
 	{
 	case SDLK_p:
 		Unit::SwitchDrawingHitboxes();
-		Log(std::boolalpha << "[DEBUG] DrawingHitboxes: " << Unit::IsDrawingHitboxes());
+		std::cout << std::boolalpha << "[DEBUG] DrawingHitboxes: " << Unit::IsDrawingHitboxes() << std::endl;
 		break;
 	case SDLK_o:
 		InfoPlate::SwitchDrawInfoPlates();
-		Log(std::boolalpha << "[DEBUG] DrawingInfoPlates: " << InfoPlate::IsDrawingInfoPlates());
+		std::cout << std::boolalpha << "[DEBUG] DrawingInfoPlates: " << InfoPlate::IsDrawingInfoPlates() << std::endl;
 		break;
 	case SDLK_y:
 		m_pCameraManager->ToggleLock();
