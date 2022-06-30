@@ -135,6 +135,9 @@
     <ClCompile Include="JsonFilehelper.cpp">
       <Filter>ResourceManagement Files</Filter>
     </ClCompile>
+    <ClCompile Include="Chronometer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Vector2f.h">
@@ -238,6 +241,9 @@
     </ClInclude>
     <ClInclude Include="JsonFilehelper.h">
       <Filter>ResourceManagement Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Chronometer.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -159,6 +159,7 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CameraManager.cpp" />
     <ClCompile Include="Champion.cpp" />
+    <ClCompile Include="Chronometer.cpp" />
     <ClCompile Include="CircleProgression.cpp" />
     <ClCompile Include="Core.cpp" />
     <ClCompile Include="ExampleAbility.cpp" />
@@ -200,6 +201,7 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CameraManager.h" />
     <ClInclude Include="Champion.h" />
+    <ClInclude Include="Chronometer.h" />
     <ClInclude Include="CircleProgression.h" />
     <ClInclude Include="Core.h" />
     <ClInclude Include="ExampleAbility.h" />

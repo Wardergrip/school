@@ -72,3 +72,8 @@ bool UserInterfaceElement::GetAutomaticHUDDraw() const
 {
 	return m_AutomaticHUDDraw;
 }
+
+void UserInterfaceElement::ChangeAutomaticHUDDraw(bool state)
+{
+	m_AutomaticHUDDraw = state;
+}

@@ -52,7 +52,7 @@ void ExampleAbility::OnRelease(const Point2f& mousePos)
 		Vector2f direction{ m_LastMousePos - m_ChampionLocationRef };
 		direction = direction.Normalized();
 		Point2f point{ m_ChampionLocationRef + direction * m_Range };
-		c_ProjectileManagerRef->PushBackSkillShot(m_ChampionLocationRef, point,10,100);
+		c_ProjectileManagerRef->PushBackSkillShot(m_ChampionLocationRef, point,20,100);
 		m_Cooldown->ResetTimer();
 	}
 }

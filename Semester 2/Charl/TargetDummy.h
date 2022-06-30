@@ -3,6 +3,8 @@
 
 class InfoPlate;
 class Timer;
+class SmartTextComponent;
+class Chronometer;
 
 class TargetDummy final : public Unit
 {
@@ -21,5 +23,10 @@ public:
 private:
 	InfoPlate* m_pInfoPlate;
 	Timer* m_pTimer;
+
+	float m_TotalDmgTaken;
+	Chronometer* m_pDpsChrono;
+	SmartTextComponent* m_pLastHitText;
+	SmartTextComponent* m_pDpsText;
 };
 

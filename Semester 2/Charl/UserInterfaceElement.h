@@ -25,6 +25,7 @@ public:
 	Point2f CenterOf() const;
 
 	bool GetAutomaticHUDDraw() const;
+	void ChangeAutomaticHUDDraw(bool state);
 
 protected:
 	Transform m_Transform;

@@ -20,8 +20,3 @@ int JsonFilehelper::SaveJSON(const std::string& jsonDump, const std::string& fil
 
 	return 0;
 }
-
-int JsonFilehelper::SaveJSON(const json& json, const std::string& filePath)
-{
-	return (SaveJSON(json.dump(), filePath));
-}

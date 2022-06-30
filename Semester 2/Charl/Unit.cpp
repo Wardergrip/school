@@ -33,6 +33,7 @@ Unit::Unit(const Point2f& position, const Rectf& hitbox)
 	,m_Destination{position}
 	,m_BasicStats{}
 	,m_IsHoldingRightClick{false}
+	,m_UnitColor{1,1,1,1}
 {
 	CenterHitboxToPosition();
 	m_BasicStats.movementSpeed = 200;
@@ -192,7 +193,7 @@ void Unit::Draw() const
 	m_Transform.Push();
 	m_Transform.Apply();
 	// Draw Unit
-	SetColor(Color4f{1,1,1,1});
+	SetColor(m_UnitColor);
 	FillEllipse(Point2f{ 0,0 }, 10, 10);
 	
 	// Draw hitbox

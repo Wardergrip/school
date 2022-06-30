@@ -63,6 +63,7 @@ protected:
 	Point2f m_Destination;
 	BasicStats m_BasicStats;
 	bool m_IsHoldingRightClick;
+	Color4f m_UnitColor;
 
 	void DrawHitbox() const;
 
