@@ -1,10 +1,12 @@
 #include "pch.h"
 #include "Camera.h"
 
+#include "utils.h"
+
 Camera::Camera(float width, float height)
 	:m_Width{ width }
 	,m_Height{ height }
-	,m_LevelBoundaries{ 0,0,0,0 }
+	,m_LevelBoundaries{ 0,0,1000,1000 }
 {
 }
 

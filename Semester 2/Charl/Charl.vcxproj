@@ -186,6 +186,7 @@
     <ClCompile Include="SVGParser.cpp" />
     <ClCompile Include="TargetDummy.cpp" />
     <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="TextureManager.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Transform.cpp" />
     <ClCompile Include="Unit.cpp" />
@@ -223,6 +224,7 @@
     <ClInclude Include="SVGParser.h" />
     <ClInclude Include="TargetDummy.h" />
     <ClInclude Include="Texture.h" />
+    <ClInclude Include="TextureManager.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="Unit.h" />

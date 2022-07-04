@@ -15,7 +15,7 @@ public:
 private:
 	static std::vector<Unit*>* c_Units;
 public:
-	ProjectileManager(std::vector<Unit*>* units, int reserveLockOn = 20, int reserveSkillShot = 20);
+	ProjectileManager(std::vector<Unit*>* units, int reserveLockOn = 30, int reserveSkillShot = 30);
 	ProjectileManager(const ProjectileManager& projMan) = delete;
 	ProjectileManager& operator=(const ProjectileManager& projMan) = delete;
 	ProjectileManager(ProjectileManager&& projMan) = delete;
@@ -34,9 +34,9 @@ public:
 	void PushBack(SkillShotProjectile* proj);
 
 	void DrawAll() const;
-	void UpdateAll(float elapsedSec, const Uint8* pStates);
+	void UpdateAll(float elapsedSec);
 
-	void TryAutoAttack(const Point2f& mousePos, Champion* shooter);
+	void TryAutoAttack(const Point2f& mousePos, Champion* shooter, bool isNewInput = true);
 
 private:
 	std::vector<LockOnProjectile*> m_pLockOnProjs;

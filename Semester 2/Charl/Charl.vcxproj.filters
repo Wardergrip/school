@@ -138,6 +138,9 @@
     <ClCompile Include="Chronometer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="TextureManager.cpp">
+      <Filter>ResourceManagement Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Vector2f.h">
@@ -244,6 +247,9 @@
     </ClInclude>
     <ClInclude Include="Chronometer.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureManager.h">
+      <Filter>ResourceManagement Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

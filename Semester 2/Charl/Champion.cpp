@@ -103,29 +103,31 @@ void Champion::OnKeyDown(const SDL_KeyboardEvent& e, const Point2f& mousePos)
 
 void Champion::OnKeyHold(float elapsedSec, const Uint8* pStates, const Point2f& mousePos)
 {
-	if (pStates[SDL_SCANCODE_Q])
 	{
-		m_pAbilityInterface->OnHoldingAbility(AbilityKey::Q, OrientationManager::GetWorldLocation(mousePos), elapsedSec);
-	}
-	if (pStates[SDL_SCANCODE_W])
-	{
-		m_pAbilityInterface->OnHoldingAbility(AbilityKey::W, OrientationManager::GetWorldLocation(mousePos), elapsedSec);
-	}
-	if (pStates[SDL_SCANCODE_E])
-	{
-		m_pAbilityInterface->OnHoldingAbility(AbilityKey::E, OrientationManager::GetWorldLocation(mousePos), elapsedSec);
-	}
-	if (pStates[SDL_SCANCODE_R])
-	{
-		m_pAbilityInterface->OnHoldingAbility(AbilityKey::R, OrientationManager::GetWorldLocation(mousePos), elapsedSec);
-	}
-	if (pStates[SDL_SCANCODE_D])
-	{
-		m_pAbilityInterface->OnHoldingAbility(AbilityKey::D, OrientationManager::GetWorldLocation(mousePos), elapsedSec);
-	}
-	if (pStates[SDL_SCANCODE_F])
-	{
-		m_pAbilityInterface->OnHoldingAbility(AbilityKey::F, OrientationManager::GetWorldLocation(mousePos), elapsedSec);
+		if (pStates[SDL_SCANCODE_Q])
+		{
+			m_pAbilityInterface->OnHoldingAbility(AbilityKey::Q, OrientationManager::GetWorldLocation(mousePos), elapsedSec);
+		}
+		if (pStates[SDL_SCANCODE_W])
+		{
+			m_pAbilityInterface->OnHoldingAbility(AbilityKey::W, OrientationManager::GetWorldLocation(mousePos), elapsedSec);
+		}
+		if (pStates[SDL_SCANCODE_E])
+		{
+			m_pAbilityInterface->OnHoldingAbility(AbilityKey::E, OrientationManager::GetWorldLocation(mousePos), elapsedSec);
+		}
+		if (pStates[SDL_SCANCODE_R])
+		{
+			m_pAbilityInterface->OnHoldingAbility(AbilityKey::R, OrientationManager::GetWorldLocation(mousePos), elapsedSec);
+		}
+		if (pStates[SDL_SCANCODE_D])
+		{
+			m_pAbilityInterface->OnHoldingAbility(AbilityKey::D, OrientationManager::GetWorldLocation(mousePos), elapsedSec);
+		}
+		if (pStates[SDL_SCANCODE_F])
+		{
+			m_pAbilityInterface->OnHoldingAbility(AbilityKey::F, OrientationManager::GetWorldLocation(mousePos), elapsedSec);
+		}
 	}
 	//
 	if (pStates[SDL_SCANCODE_C]) m_DrawAARange = true;

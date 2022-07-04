@@ -135,10 +135,8 @@ void ProjectileManager::DrawAll() const
     }
 }
 
-void ProjectileManager::UpdateAll(float elapsedSec, const Uint8* pStates)
+void ProjectileManager::UpdateAll(float elapsedSec)
 {
-    m_IsShiftHeld = pStates[SDL_SCANCODE_LSHIFT];
-
     // LOCK ON
     for (size_t i{ 0 }; i < m_pLockOnProjs.size(); ++i)
     {
@@ -153,7 +151,7 @@ void ProjectileManager::UpdateAll(float elapsedSec, const Uint8* pStates)
             m_pLockOnProjs[i] = nullptr;
         }
     }
-    TryAutoAttack(m_LastMousePos, m_LastShooter);
+    TryAutoAttack(m_LastMousePos, m_LastShooter, false);
 
     // SKILLSHOT
     for (size_t i{ 0 }; i < m_pSkillShotProjs.size(); ++i)
@@ -171,7 +169,7 @@ void ProjectileManager::UpdateAll(float elapsedSec, const Uint8* pStates)
     }
 }
 
-void ProjectileManager::TryAutoAttack(const Point2f& mousePos, Champion* shooter)
+void ProjectileManager::TryAutoAttack(const Point2f& mousePos, Champion* shooter, bool isNewInput)
 {
     if (shooter == nullptr)
     {
@@ -179,6 +177,10 @@ void ProjectileManager::TryAutoAttack(const Point2f& mousePos, Champion* shooter
     }
 
     const Uint8* pStates = SDL_GetKeyboardState(nullptr);
+    if (isNewInput)
+    {
+        m_IsShiftHeld = pStates[SDL_SCANCODE_LSHIFT];
+    }
 
     for (size_t i{ 0 }; i < c_Units->size(); ++i)
     {

@@ -17,6 +17,8 @@
 #include "HUD.h"
 #include "CameraManager.h"
 
+#include "TextureManager.h"
+
 Game::Game( const Window& window ) 
 	:m_Window{ window }
 {
@@ -48,10 +50,12 @@ void Game::Initialize( )
 
 	m_pInGameHUD = new HUD(HUD::HUDName::ingame);
 
+	TextureManager::InitiateTexturesFromFile("Resources/Resources.json");
 }
 
 void Game::Cleanup( )
 {
+	TextureManager::CleanUp();
 	delete m_TestingChamp;
 	m_TestingChamp = nullptr;
 	delete m_ProjectileManager;
@@ -75,7 +79,7 @@ void Game::Update( float elapsedSec )
 	
 	m_TestingChamp->OnKeyHold(elapsedSec, pStates, m_LastMousePos);
 	m_TestingChamp->Update(elapsedSec);
-	m_ProjectileManager->UpdateAll(elapsedSec, pStates);
+	m_ProjectileManager->UpdateAll(elapsedSec);
 	for (size_t i{ 0 }; i < m_Units.size(); ++i)
 	{
 		m_Units[i]->Update(elapsedSec);
