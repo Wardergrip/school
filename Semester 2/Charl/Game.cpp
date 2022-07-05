@@ -17,8 +17,6 @@
 #include "HUD.h"
 #include "CameraManager.h"
 
-#include "TextureManager.h"
-
 Game::Game( const Window& window ) 
 	:m_Window{ window }
 {
@@ -49,13 +47,10 @@ void Game::Initialize( )
 	m_pCameraManager->Track(m_TestingChamp->GetTransform().location);
 
 	m_pInGameHUD = new HUD(HUD::HUDName::ingame);
-
-	TextureManager::InitiateTexturesFromFile("Resources/Resources.json");
 }
 
 void Game::Cleanup( )
 {
-	TextureManager::CleanUp();
 	delete m_TestingChamp;
 	m_TestingChamp = nullptr;
 	delete m_ProjectileManager;
