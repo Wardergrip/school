@@ -6,11 +6,6 @@ class Texture;
 class TextureManager final
 {
 public:
-	enum class Key
-	{ 
-		missing 
-	};
-
 	TextureManager(const std::string& filePath);
 	TextureManager(const TextureManager& other) = delete;
 	TextureManager& operator=(const TextureManager& other) = delete;
@@ -18,10 +13,12 @@ public:
 	TextureManager& operator=(TextureManager&& other) = delete;
 	~TextureManager();
 
+	Texture* operator[](const std::string& name);
+	const Texture* operator[](const std::string& name) const;
+
 	Texture* GetTexture(const std::string& name);
-	Texture* GetTexture(TextureManager::Key key);
+	const Texture* GetTexture(const std::string& name) const;
 private:
-	static std::string KeyToString(Key k);
 	std::map<std::string, Texture*> m_pTextures;
 };
 

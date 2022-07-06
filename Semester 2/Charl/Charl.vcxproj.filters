@@ -141,6 +141,12 @@
     <ClCompile Include="TextureManager.cpp">
       <Filter>ResourceManagement Files</Filter>
     </ClCompile>
+    <ClCompile Include="ResourceManager.cpp">
+      <Filter>ResourceManagement Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundEffectManager.cpp">
+      <Filter>ResourceManagement Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Vector2f.h">
@@ -249,6 +255,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="TextureManager.h">
+      <Filter>ResourceManagement Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceManager.h">
+      <Filter>ResourceManagement Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundEffectManager.h">
       <Filter>ResourceManagement Files</Filter>
     </ClInclude>
   </ItemGroup>

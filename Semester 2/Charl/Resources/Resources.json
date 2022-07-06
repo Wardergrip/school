@@ -1,5 +1,11 @@
 {
     "textures": {
         "missing":"Resources/missingTexture.png"
+    },
+    "soundeffects": {
+        
+    },
+    "soundstreams":{
+
     }
 }
