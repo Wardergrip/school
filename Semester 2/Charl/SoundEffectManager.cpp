@@ -9,6 +9,21 @@ SoundEffectManager::SoundEffectManager(const std::string& filePath)
 {
 	using json = nlohmann::json;
 	std::ifstream input{ filePath };
+	try
+	{
+		if (input.fail())
+		{
+			throw 1;
+		}
+	}
+	catch (int errC)
+	{
+		if (errC == 1)
+		{
+			std::cout << "[SoundEffectManager] Failed to load: " << filePath << "\n";
+			return;
+		}
+	}
 	json jFile{};
 	input >> jFile;
 	json jTextures{ jFile.at("soundeffects") };

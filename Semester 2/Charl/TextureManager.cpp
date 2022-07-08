@@ -8,6 +8,21 @@ TextureManager::TextureManager(const std::string& filePath)
 {
 	using json = nlohmann::json; // convenience
 	std::ifstream input{ filePath }; // load file from filepath
+	try
+	{
+		if (input.fail())
+		{
+			throw 1;
+		}
+	}
+	catch (int errC)
+	{
+		if (errC == 1)
+		{
+			std::cout << "[TextureManager] Failed to load: " << filePath << "\n";
+			return;
+		}
+	}
 	json jFile{}; // make json object
 	input >> jFile; // transfer all date from input to json object
 	json jTextures{ jFile.at("textures") }; // make a new object that contains everything inside whatever we looked for

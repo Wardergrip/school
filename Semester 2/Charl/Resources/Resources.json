@@ -3,7 +3,7 @@
         "missing":"Resources/missingTexture.png"
     },
     "soundeffects": {
-        
+        "test" : "Resources/ShootTest.ogg"
     },
     "soundstreams":{
 

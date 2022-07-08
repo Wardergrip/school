@@ -17,9 +17,15 @@
 #include "HUD.h"
 #include "CameraManager.h"
 
+#include "ResourceManager.h"
+#include "SoundEffect.h"
+#include "Texture.h"
+
 Game::Game( const Window& window ) 
 	:m_Window{ window }
 {
+	ResourceManager::Init("Resources/Resources.json");
+
 	m_pCameraManager = new CameraManager{ window };
 	Initialize( );
 }
@@ -65,6 +71,8 @@ void Game::Cleanup( )
 	m_pInGameHUD = nullptr;
 	delete m_pCameraManager;
 	m_pCameraManager = nullptr;
+
+	ResourceManager::CleanUp();
 }
 
 void Game::Update( float elapsedSec )
@@ -103,6 +111,7 @@ void Game::Draw( ) const
 	glPopMatrix();
 
 	m_pInGameHUD->DrawAll();
+	ResourceManager::GetTexture(ResourceManager::Textures::missing)->Draw();
 }
 
 void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )
