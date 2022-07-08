@@ -40,42 +40,42 @@ Texture* ResourceManager::GetTexture(const std::string& name)
     return c_TextureManager->GetTexture(name);
 }
 
-SoundEffect* ResourceManager::GetSoundEffect(ResourceManager::SoundEffects key)
+SoundEffect* ResourceManager::GetSFX(ResourceManager::SoundEffects key)
 {
 	return c_SoundEffectManager->GetSoundEffect(KeyToStr(key));
 }
 
-SoundEffect* ResourceManager::GetSoundEffect(const std::string& name)
+SoundEffect* ResourceManager::GetSFX(const std::string& name)
 {
 	return c_SoundEffectManager->GetSoundEffect(name);
 }
 
-SoundEffect* ResourceManager::Play(const std::string& name, int loops)
+SoundEffect* ResourceManager::SFXPlay(const std::string& name, int loops)
 {
 	return c_SoundEffectManager->Play(name,loops);
 }
 
-void ResourceManager::MuteAll()
+void ResourceManager::SFXMuteAll()
 {
 	c_SoundEffectManager->MuteAll();
 }
 
-void ResourceManager::UnmuteAll()
+void ResourceManager::SFXUnmuteAll()
 {
 	c_SoundEffectManager->UnmuteAll();
 }
 
-void ResourceManager::StopAll()
+void ResourceManager::SFXStopAll()
 {
 	c_SoundEffectManager->StopAll();
 }
 
-void ResourceManager::PauseAll()
+void ResourceManager::SFXPauseAll()
 {
 	c_SoundEffectManager->PauseAll();
 }
 
-void ResourceManager::ResumeAll()
+void ResourceManager::SFXResumeAll()
 {
 	c_SoundEffectManager->ResumeAll();
 }
