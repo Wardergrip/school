@@ -6,6 +6,6 @@
         "test" : "Resources/ShootTest.ogg"
     },
     "soundstreams":{
-
+        "sadTheme":"Resources/SadThemev1.mp3"
     }
 }

@@ -36,9 +36,9 @@ TextureManager::TextureManager(const std::string& filePath)
 
 TextureManager::~TextureManager()
 {
-	for (std::pair<std::string, Texture*> pair : m_pTextures)
+	for (const auto& [name, adress] : m_pTextures)
 	{
-		delete pair.second;
+		delete adress;
 	}
 	m_pTextures.clear();
 }
@@ -55,7 +55,7 @@ const Texture* TextureManager::operator[](const std::string& name) const
 
 Texture* TextureManager::GetTexture(const std::string& name)
 {
-	return (m_pTextures[name]);
+	return (m_pTextures.at(name));
 }
 
 const Texture* TextureManager::GetTexture(const std::string& name) const

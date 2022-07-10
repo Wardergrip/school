@@ -26,9 +26,9 @@ SoundEffectManager::SoundEffectManager(const std::string& filePath)
 	}
 	json jFile{};
 	input >> jFile;
-	json jTextures{ jFile.at("soundeffects") };
+	json jSoundEffects{ jFile.at("soundeffects") };
 	//std::cout << std::setw(4) << jTextures << '\n';
-	for (json::iterator it = jTextures.begin(); it != jTextures.end(); ++it)
+	for (json::iterator it = jSoundEffects.begin(); it != jSoundEffects.end(); ++it)
 	{
 		//std::cout << it.key() << " : " << it.value() << "\n";
 		m_pSoundEffects[it.key()] = new SoundEffect{ it.value() };
@@ -37,9 +37,9 @@ SoundEffectManager::SoundEffectManager(const std::string& filePath)
 
 SoundEffectManager::~SoundEffectManager()
 {
-	for (std::pair<std::string, SoundEffect*> pair : m_pSoundEffects)
+	for (const auto& [name, adress] : m_pSoundEffects)
 	{
-		delete pair.second;
+		delete adress;
 	}
 	m_pSoundEffects.clear();
 }
@@ -56,7 +56,7 @@ const SoundEffect* SoundEffectManager::operator[](const std::string& name) const
 
 SoundEffect* SoundEffectManager::GetSoundEffect(const std::string& name)
 {
-	return m_pSoundEffects[name];
+	return m_pSoundEffects.at(name);
 }
 
 const SoundEffect* SoundEffectManager::GetSoundEffect(const std::string& name) const

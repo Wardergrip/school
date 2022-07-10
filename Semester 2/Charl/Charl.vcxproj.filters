@@ -147,6 +147,9 @@
     <ClCompile Include="SoundEffectManager.cpp">
       <Filter>ResourceManagement Files</Filter>
     </ClCompile>
+    <ClCompile Include="SoundStreamManager.cpp">
+      <Filter>ResourceManagement Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Vector2f.h">
@@ -261,6 +264,9 @@
       <Filter>ResourceManagement Files</Filter>
     </ClInclude>
     <ClInclude Include="SoundEffectManager.h">
+      <Filter>ResourceManagement Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundStreamManager.h">
       <Filter>ResourceManagement Files</Filter>
     </ClInclude>
   </ItemGroup>

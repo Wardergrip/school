@@ -48,6 +48,8 @@ void Game::Initialize( )
 
 	m_Orientation = new SmartTextComponent("w");
 	m_Orientation->ChangeTransform(Transform{ Point2f{0,m_Window.height - 25} });
+	m_FPS = new SmartTextComponent("w",16,Color4f{1,1,1,0.5f});
+	m_FPS->ChangeTransform(Transform{ Point2f{0,m_Window.height - 50} });
 
 	m_pCameraManager->SetLevelBoundaries(Rectf{ 0,0,400,400 });
 	m_pCameraManager->Track(m_TestingChamp->GetTransform().location);
@@ -88,6 +90,7 @@ void Game::Update( float elapsedSec )
 		m_Units[i]->Update(elapsedSec);
 	}
 	m_Orientation->UpdateText("Champ loc: " + std::to_string(int(m_TestingChamp->GetTransform().location.x)) + " " + std::to_string(int(m_TestingChamp->GetTransform().location.y)));
+	m_FPS->UpdateText(std::to_string(int(1 / elapsedSec)) + " fps");
 	m_pCameraManager->Update(elapsedSec,pStates, m_LastMousePos);
 }
 
@@ -111,7 +114,6 @@ void Game::Draw( ) const
 	glPopMatrix();
 
 	m_pInGameHUD->DrawAll();
-	ResourceManager::GetTexture(ResourceManager::Textures::missing)->Draw();
 }
 
 void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )

@@ -42,6 +42,7 @@ private:
 
 	HUD* m_pInGameHUD;
 	SmartTextComponent* m_Orientation;
+	SmartTextComponent* m_FPS;
 	CameraManager* m_pCameraManager;
 
 	// FUNCTIONS
