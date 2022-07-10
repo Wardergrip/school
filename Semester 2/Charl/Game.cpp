@@ -18,8 +18,9 @@
 #include "CameraManager.h"
 
 #include "ResourceManager.h"
-#include "SoundEffect.h"
-#include "Texture.h"
+
+#include "LockOnProjectile.h"
+#include "SkillShotProjectile.h"
 
 Game::Game( const Window& window ) 
 	:m_Window{ window }
@@ -123,6 +124,8 @@ void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )
 	{
 	case SDLK_p:
 		Unit::SwitchDrawingHitboxes();
+		LockOnProjectile::SwitchDrawingHitboxes();
+		SkillShotProjectile::SwitchDrawingHitboxes();
 		std::cout << std::boolalpha << "[DEBUG] DrawingHitboxes: " << Unit::IsDrawingHitboxes() << std::endl;
 		break;
 	case SDLK_o:

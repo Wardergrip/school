@@ -5,6 +5,25 @@
 
 #include "unit.h"
 
+//STATICS
+bool LockOnProjectile::c_IsDrawingHitboxes{ false };
+
+void LockOnProjectile::SetDrawingHitboxes(bool state)
+{
+	c_IsDrawingHitboxes = state;
+}
+
+void LockOnProjectile::SwitchDrawingHitboxes()
+{
+	c_IsDrawingHitboxes = !c_IsDrawingHitboxes;
+}
+
+bool LockOnProjectile::IsDrawingHitboxes()
+{
+	return c_IsDrawingHitboxes;
+}
+
+// NON-STATICS
 LockOnProjectile::LockOnProjectile(const Point2f& startingPos,Unit* target, float damage, float speed)
 	:m_pTarget{target}
 	,m_Speed{speed}
@@ -35,6 +54,11 @@ void LockOnProjectile::Draw() const
 		m_Transform.Apply();
 		SetColor(Color4f{ 1,0.75f,0,0.8f });
 		FillTriangle(Point2f{ -m_Hitbox.width / 2,m_Hitbox.height / 2 }, Point2f{ m_Hitbox.width / 2,0 }, Point2f{ -m_Hitbox.width / 2,-m_Hitbox.height / 2 });
+		if (c_IsDrawingHitboxes)
+		{
+			SetColor(Color4f{ 1,1,0,1 });
+			DrawRect(m_Hitbox, 2);
+		}
 	}
 	m_Transform.Pop();
 }

@@ -9,10 +9,26 @@
 
 // STATICS
 std::vector<Unit*>* SkillShotProjectile::c_UnitVector{ nullptr };
+bool SkillShotProjectile::c_IsDrawingHitboxes{ false };
 
 void SkillShotProjectile::InitUnitVector(std::vector<Unit*>* unitVector)
 {
 	c_UnitVector = unitVector;
+}
+
+void SkillShotProjectile::SetDrawingHitboxes(bool state)
+{
+	c_IsDrawingHitboxes = state;
+}
+
+void SkillShotProjectile::SwitchDrawingHitboxes()
+{
+	c_IsDrawingHitboxes = !c_IsDrawingHitboxes;
+}
+
+bool SkillShotProjectile::IsDrawingHitboxes()
+{
+	return c_IsDrawingHitboxes;
 }
 
 
@@ -52,6 +68,11 @@ void SkillShotProjectile::Draw() const
 		m_Transform.Apply();
 		SetColor(Color4f{ 1,0,0,0.8f });
 		FillEllipse(Point2f{0,0}, m_Hitbox.width / 2, m_Hitbox.height / 2);
+		if (c_IsDrawingHitboxes)
+		{
+			SetColor(Color4f{ 1,1,0,1 });
+			DrawRect(m_Hitbox, 2);
+		}
 	}
 	m_Transform.Pop();
 }

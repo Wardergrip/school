@@ -6,6 +6,15 @@ class Unit;
 
 class LockOnProjectile
 {
+// STATICS
+public:
+	static void SetDrawingHitboxes(bool state);
+	static void SwitchDrawingHitboxes();
+	static bool IsDrawingHitboxes();
+protected:
+	static bool c_IsDrawingHitboxes;
+
+// NON STATICS
 public:
 	LockOnProjectile(const Point2f& startingPos, Unit* target, float damage = 10.f, float speed = 300.f);
 	LockOnProjectile(const LockOnProjectile& proj) = delete;
