@@ -12,12 +12,13 @@ std::ostream& operator<< (std::ostream& out, AbilityKey key);
 char KeyToChar(AbilityKey key);
 
 class Ability;
+class Champion;
 
 class AbilityInterface final : public UserInterfaceElement
 {
 public:
 
-	AbilityInterface(const Window& window, const Vector2f& scale = {});
+	AbilityInterface(const Window& window, Champion* owner, const Vector2f& scale = {});
 	AbilityInterface(const AbilityInterface& abilityinterface) = delete;
 	AbilityInterface& operator=(const AbilityInterface& abilityinterface) = delete;
 	AbilityInterface(AbilityInterface&& abilityinterface) = delete;
@@ -44,5 +45,6 @@ private:
 	Rectf m_Base;
 	Point2f m_Middle;
 	Vector2f m_Scale;
+	Champion* m_pOwnerRef;
 };
 

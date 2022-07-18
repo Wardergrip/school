@@ -14,9 +14,9 @@ public:
 
 	void Draw() const override;
 
-	void OnPress(const Point2f& mousePos) override;
-	void OnHolding(float elapsedSec, const Point2f& mousePos) override;
-	void OnRelease(const Point2f& mousePos) override;
+	bool OnPress(const Point2f& mousePos) override;
+	bool OnHolding(float elapsedSec, const Point2f& mousePos) override;
+	bool OnRelease(const Point2f& mousePos) override;
 
 	virtual void Update(float elapsedSec) override;
 

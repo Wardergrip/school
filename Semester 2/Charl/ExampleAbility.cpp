@@ -9,7 +9,7 @@
 #include "ProjectileManager.h"
 
 ExampleAbility::ExampleAbility(const std::string& key, const Point2f& championLocationRef)
-	:Ability(Type::skillshot,key,"ExampleAbility",3)
+	:Ability(Type::skillshot,key,"ExampleAbility",3,10)
 	,m_ChampionLocationRef{championLocationRef}
 	,m_IsHoldingDown{false}
 	,m_LastMousePos{}
@@ -33,18 +33,26 @@ void ExampleAbility::Draw() const
 	}
 }
 
-void ExampleAbility::OnPress(const Point2f& mousePos)
+bool ExampleAbility::OnPress(const Point2f& mousePos)
 {
-	if (m_IsHoldingDown) return;
-	else m_IsHoldingDown = true;
+	if (m_IsHoldingDown)
+	{
+
+	}
+	else
+	{
+		m_IsHoldingDown = true;
+	}
+	return false;
 }
 
-void ExampleAbility::OnHolding(float elapsedSec, const Point2f& mousePos)
+bool ExampleAbility::OnHolding(float elapsedSec, const Point2f& mousePos)
 {
 	m_LastMousePos = mousePos;
+	return false;
 }
 
-void ExampleAbility::OnRelease(const Point2f& mousePos)
+bool ExampleAbility::OnRelease(const Point2f& mousePos)
 {
 	m_IsHoldingDown = false;
 	if (m_Cooldown->IsDone())
@@ -54,7 +62,9 @@ void ExampleAbility::OnRelease(const Point2f& mousePos)
 		Point2f point{ m_ChampionLocationRef + direction * m_Range };
 		c_ProjectileManagerRef->PushBackSkillShot(m_ChampionLocationRef, point,20,100);
 		m_Cooldown->ResetTimer();
+		return true;
 	}
+	return false;
 }
 
 void ExampleAbility::Update(float elapsedSec)

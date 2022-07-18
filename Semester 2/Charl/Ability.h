@@ -19,7 +19,7 @@ public:
 		selfCast, enemyCast, skillshot
 	};
 
-	Ability(Type type, const std::string& key, const std::string& name = "Default name", float cooldown = 0);
+	Ability(Type type, const std::string& key, const std::string& name = "Default name", float cooldown = 0, int manaCost = 0);
 	Ability(const Ability& ability) = delete;
 	Ability& operator=(const Ability& ability) = delete;
 	Ability(Ability&& ability) = delete;
@@ -29,15 +29,21 @@ public:
 	virtual void Draw() const = 0;
 	void DrawUI() const;
 
-	virtual void OnPress(const Point2f& mousePos) = 0;
-	virtual void OnHolding(float elapsedSec, const Point2f& mousePos) = 0;
-	virtual void OnRelease(const Point2f& mousePos) = 0;
+	// Returns true if mana should be deducted from the using champion.
+	virtual bool OnPress(const Point2f& mousePos) = 0;
+	// Returns true if mana should be deducted from the using champion.
+	virtual bool OnHolding(float elapsedSec, const Point2f& mousePos) = 0;
+	// Returns true if mana should be deducted from the using champion.
+	virtual bool OnRelease(const Point2f& mousePos) = 0;
 
+	// Returns true if mana should be deducted from the using champion.
 	virtual void Update(float elapsedSec) = 0;
 
+	virtual int GetManaCost() const;
 protected:
 	const Type m_Type;
 
+	int m_Manacost;
 	bool m_ShowTelegraph;
 
 	std::string m_Name;

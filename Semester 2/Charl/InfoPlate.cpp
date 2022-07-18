@@ -34,6 +34,8 @@ InfoPlate::InfoPlate(const Unit* trackingUnit, const Vector2f& offset)
 	,m_Scale{1,1}
 	,m_HealthBar{0,0,130,10}
 	,m_HealthBarColor{ Color4f{1,0,0,1} }
+	,m_ManaBar{0,0,130,8}
+	,m_ManaBarColor{ Color4f{0.1f,0.5f,1,1} }
 	,m_pName{}
 {
 	m_Rect.left = -m_Rect.width / 2;
@@ -41,6 +43,9 @@ InfoPlate::InfoPlate(const Unit* trackingUnit, const Vector2f& offset)
 
 	m_HealthBar.left = -m_HealthBar.width / 2;
 	m_HealthBar.bottom = -m_HealthBar.height / 2;
+
+	m_ManaBar.left = -m_ManaBar.width / 2;
+	m_ManaBar.bottom = -m_ManaBar.height / 2;
 
 	m_AutomaticHUDDraw = false;
 }
@@ -74,16 +79,25 @@ void InfoPlate::Draw() const
 		SetColor(Color4f{ 0.5f,0.5f,0.5f,1 });
 		FillRect(m_Rect);
 		
+		float vertOffset{ 0 },border{2};
+		Color4f borderColor{ 0,0,0,1 };
 		// Healthbar and line around it
-		glTranslatef(0, -10, 0);
+		glTranslatef(0, vertOffset, 0);
 		SetColor(m_HealthBarColor);
 		FillRect(Rectf{m_HealthBar.left,m_HealthBar.bottom,m_HealthBar.width * m_TrackingUnit->GetBasicStats().GetPercentageHealth(),m_HealthBar.height});
-		SetColor(Color4f{ 0,0,0,1 });
-		DrawRect(m_HealthBar, 2);
+		SetColor(borderColor);
+		DrawRect(m_HealthBar, border);
+
+		// Manabar and line around it
+		glTranslatef(0, -m_HealthBar.height, 0);
+		SetColor(m_ManaBarColor);
+		FillRect(Rectf{ m_ManaBar.left,m_ManaBar.bottom,m_ManaBar.width * m_TrackingUnit->GetBasicStats().GetPercentageMana(),m_ManaBar.height });
+		SetColor(borderColor);
+		DrawRect(m_HealthBar, border);
 
 		if (m_pName)
 		{
-			m_pName->Draw(Point2f{ -m_pName->GetWidth() / 2,10 });
+			m_pName->Draw(Point2f{ -m_pName->GetWidth() / 2,14 });
 		}
 	}
 	glPopMatrix();

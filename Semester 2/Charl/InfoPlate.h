@@ -39,6 +39,8 @@ private:
 
 	Rectf m_HealthBar;
 	Color4f m_HealthBarColor;
+	Rectf m_ManaBar;
+	Color4f m_ManaBarColor;
 
 	Texture* m_pName;
 };

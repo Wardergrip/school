@@ -21,12 +21,13 @@ void Ability::InitProjManager(ProjectileManager* projMan)
 
 // NON STATICS
 
-Ability::Ability(Type type, const std::string& key, const std::string& name, float cooldown)
+Ability::Ability(Type type, const std::string& key, const std::string& name, float cooldown, int manaCost)
 	:m_Type{type}
 	,m_ShowTelegraph{false}
 	,m_Cooldown{ new Timer{cooldown} }
 	,m_Name{ name }
 	,m_pButtonKeyTexture{ new Texture{key,"Resources/consola.ttf",20,Color4f{1,0,0,1}} }
+	,m_Manacost{manaCost}
 {
 	m_pCircleProgression = new CircleProgression{ Point2f{25,25}, *m_Cooldown,true};
 	m_pCircleProgression->FlipX();
@@ -58,4 +59,9 @@ void Ability::DrawUI() const
 	if (this == nullptr) return;
 	m_pButtonKeyTexture->Draw(Point2f{2,1});
 	DrawIcon();
+}
+
+int Ability::GetManaCost() const
+{
+	return m_Manacost;
 }

@@ -54,6 +54,8 @@ public:
 	const BasicStats& GetBasicStats() const;
 	// Returns if the Unit is still in positive health amount
 	virtual bool TakeDamage(float damageAmount);
+	// Returns if it succeeded
+	virtual bool TakeMana(int manaAmount);
 	
 	Rectf GetHitbox() const;
 

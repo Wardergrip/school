@@ -8,6 +8,8 @@
 #include "utils.h"
 using namespace utils;
 
+#include "Champion.h"
+
 std::ostream& operator<<(std::ostream& out, AbilityKey key)
 {
 	out << "[";
@@ -76,12 +78,13 @@ char KeyToChar(AbilityKey key)
 
 // //////////////////////////////////////////////////////////////////////////////
 
-AbilityInterface::AbilityInterface(const Window& window, const Vector2f& scale)
+AbilityInterface::AbilityInterface(const Window& window, Champion* owner, const Vector2f& scale)
 	:UserInterfaceElement(m_Base)
 	,m_pAbilities{}
 	,m_Base{}
 	,m_Scale{scale}
 	,m_Middle{}
+	,m_pOwnerRef{owner}
 {
 	if (m_Scale.x == 0 && m_Scale.y == 0)
 	{
@@ -93,6 +96,13 @@ AbilityInterface::AbilityInterface(const Window& window, const Vector2f& scale)
 	for (int i{ 0 }; i < int(AbilityKey::undefined); ++i)
 	{
 		m_pAbilities.push_back(nullptr);
+	}
+
+	if (owner == nullptr)
+	{
+		std::cout << "Owner can't be nullptr! Deleting self\n";
+		delete this;
+		return;
 	}
 }
 
@@ -155,19 +165,37 @@ void AbilityInterface::AssignAbility(AbilityKey idx, Ability* ability)
 void AbilityInterface::OnPressAbility(AbilityKey key, const Point2f& mousePos)
 {
 	if (key == AbilityKey::undefined) return;
-	m_pAbilities[size_t(key)]->OnPress(mousePos);
+	if (m_pOwnerRef->GetBasicStats().currentMana >= m_pAbilities[size_t(key)]->GetManaCost())
+	{
+		if (m_pAbilities[size_t(key)]->OnPress(mousePos))
+		{
+			m_pOwnerRef->TakeMana(m_pAbilities[size_t(key)]->GetManaCost());
+		}
+	}
 }
 
 void AbilityInterface::OnHoldingAbility(AbilityKey key, const Point2f& mousePos, float elapsedSec)
 {
 	if (key == AbilityKey::undefined) return;
-	m_pAbilities[size_t(key)]->OnHolding(elapsedSec,mousePos);
+	if (m_pOwnerRef->GetBasicStats().currentMana >= m_pAbilities[size_t(key)]->GetManaCost())
+	{
+		if (m_pAbilities[size_t(key)]->OnHolding(elapsedSec, mousePos))
+		{
+			m_pOwnerRef->TakeMana(m_pAbilities[size_t(key)]->GetManaCost());
+		}
+	}
 }
 
 void AbilityInterface::OnReleaseAbility(AbilityKey key, const Point2f& mousePos)
 {
 	if (key == AbilityKey::undefined) return;
-	m_pAbilities[size_t(key)]->OnRelease(mousePos);
+	if (m_pOwnerRef->GetBasicStats().currentMana >= m_pAbilities[size_t(key)]->GetManaCost())
+	{
+		if (m_pAbilities[size_t(key)]->OnRelease(mousePos))
+		{
+			m_pOwnerRef->TakeMana(m_pAbilities[size_t(key)]->GetManaCost());
+		}
+	}
 }
 
 void AbilityInterface::ChangeScale(const Vector2f& scaleVector)

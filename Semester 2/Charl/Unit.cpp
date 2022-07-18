@@ -118,6 +118,16 @@ bool Unit::TakeDamage(float damageAmount)
 	return (m_BasicStats.currentHealth > 0);
 }
 
+bool Unit::TakeMana(int manaAmount)
+{
+	if (m_BasicStats.currentMana >= manaAmount)
+	{
+		m_BasicStats.currentMana -= manaAmount;
+		return true;
+	}
+	return false;
+}
+
 Rectf Unit::GetHitbox() const
 {
 	return Rectf{ m_Transform.location.x - m_Hitbox.width / 2, m_Transform.location.y - m_Hitbox.height / 2, m_Hitbox.width,m_Hitbox.height };
