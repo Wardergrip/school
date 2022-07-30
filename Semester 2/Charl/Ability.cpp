@@ -26,7 +26,8 @@ Ability::Ability(Type type, const std::string& key, const std::string& name, flo
 	,m_ShowTelegraph{false}
 	,m_Cooldown{ new Timer{cooldown} }
 	,m_Name{ name }
-	,m_pButtonKeyTexture{ new Texture{key,"Resources/consola.ttf",20,Color4f{1,0,0,1}} }
+	,m_pButtonKeyTexture{ new Texture{key,"Resources/consola.ttf",20,Color4f{1,1,1,1}} }
+	,m_pManaCostText{ new Texture{std::to_string(manaCost),"Resources/consola.ttf",20,Color4f{1,1,1,1}} }
 	,m_Manacost{manaCost}
 {
 	m_pCircleProgression = new CircleProgression{ Point2f{25,25}, *m_Cooldown,true};
@@ -38,6 +39,8 @@ Ability::~Ability()
 {
 	delete m_pButtonKeyTexture;
 	m_pButtonKeyTexture = nullptr;
+	delete m_pManaCostText;
+	m_pManaCostText = nullptr;
 	delete m_Cooldown;
 	m_Cooldown = nullptr;
 	delete m_pCircleProgression;
@@ -52,12 +55,13 @@ void Ability::DrawUI() const
 	{
 		if (!m_Cooldown->IsDone())
 		{
-			SetColor(Color4f{ 1,1,1,0.5f });
+			SetColor(Color4f{ 1,0.8f,0,0.5f });
 			m_pCircleProgression->Draw();
 		}
 	}
 	if (this == nullptr) return;
 	m_pButtonKeyTexture->Draw(Point2f{2,1});
+	m_pManaCostText->Draw(Point2f{ 50-m_pManaCostText->GetWidth() - 3, 1});
 	DrawIcon();
 }
 

@@ -51,6 +51,7 @@ protected:
 	CircleProgression* m_pCircleProgression;
 
 	Texture* m_pButtonKeyTexture;
+	Texture* m_pManaCostText;
 
 	virtual void DrawIcon() const = 0;
 };
