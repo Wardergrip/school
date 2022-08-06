@@ -168,6 +168,10 @@ std::string ResourceManager::KeyToStr(ResourceManager::Textures key)
 	case ResourceManager::Textures::missing:
 		return "missing";
 		break;
+	case ResourceManager::Textures::hoover:
+		return "hoover";
+	case ResourceManager::Textures::silverBullet:
+		return "silverBullet";
 	default:
 		break;
 	}

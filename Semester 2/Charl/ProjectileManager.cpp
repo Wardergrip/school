@@ -6,6 +6,8 @@
 
 #include "Champion.h"
 
+#include "OrientationManager.h"
+
 // STATICS
 
 std::vector<Unit*>* ProjectileManager::c_Units{nullptr};
@@ -27,8 +29,11 @@ ProjectileManager::ProjectileManager(std::vector<Unit*>* units, int reserveLockO
     ,m_pSkillShotProjs{ reserveSkillShot }
     ,m_LastMousePos{0,0}
     ,m_LastShooter{ nullptr }
+    ,m_pAutoAttackDefault{new AutoAttack(Point2f{0,0},nullptr)}
+    ,m_LastAutoAttackUsed{nullptr}
     ,m_IsShiftHeld{false}
 {
+    m_LastAutoAttackUsed = m_pAutoAttackDefault;
     SkillShotProjectile::InitUnitVector(units);
 }
 
@@ -44,6 +49,8 @@ ProjectileManager::~ProjectileManager()
         delete m_pSkillShotProjs[i];
         m_pSkillShotProjs[i] = nullptr;
     }
+    delete m_pAutoAttackDefault;
+    m_pAutoAttackDefault = nullptr;
 }
 
 LockOnProjectile* ProjectileManager::operator[](size_t idx)
@@ -74,6 +81,11 @@ void ProjectileManager::PushBackLockOn(const Point2f& startingPos, Unit* target,
 void ProjectileManager::PushBackAutoAttack(const Point2f& startingPos, Unit* target, float damage, float speed)
 {
     PushBack(new AutoAttack(startingPos, target, damage, speed));
+}
+
+void ProjectileManager::PushBackAutoAttack(AutoAttack* autoAttack)
+{
+    PushBack(autoAttack);
 }
 
 void ProjectileManager::PushBackSkillShot(const Point2f& startingPos, const Point2f& destination, float damage, float speed)
@@ -188,12 +200,12 @@ void ProjectileManager::TryAutoAttack(const Point2f& mousePos, Champion* shooter
         {
             Unit* closestUnit{ shooter->GetClosestUnit(c_Units) };
             if (closestUnit == nullptr) return;
-            ShooterLogic(shooter, closestUnit);
+            ShooterLogic(shooter, closestUnit,m_LastAutoAttackUsed);
             break;
         }
         else if (c_Units->at(i)->IsOverlapping(mousePos))
         {
-            ShooterLogic(shooter, c_Units->at(i));
+            ShooterLogic(shooter, c_Units->at(i),m_LastAutoAttackUsed);
             break;
         }
     }
@@ -207,16 +219,61 @@ void ProjectileManager::TryAutoAttack(const Point2f& mousePos, Champion* shooter
     }
 }
 
+void ProjectileManager::TryAutoAttack(const Point2f& mousePos, Champion* shooter, AutoAttack* autoAttack, bool isNewInput)
+{
+    if (shooter == nullptr)
+    {
+        return;
+    }
+
+    const Uint8* pStates = SDL_GetKeyboardState(nullptr);
+    if (isNewInput)
+    {
+        m_IsShiftHeld = pStates[SDL_SCANCODE_LSHIFT];
+    }
+
+    for (size_t i{ 0 }; i < c_Units->size(); ++i)
+    {
+        if (m_IsShiftHeld)
+        {
+            Unit* closestUnit{ shooter->GetClosestUnit(c_Units) };
+            if (closestUnit == nullptr) return;
+            ShooterLogic(shooter, closestUnit,autoAttack);
+            m_LastAutoAttackUsed = autoAttack;
+            break;
+        }
+        else if (c_Units->at(i)->IsOverlapping(OrientationManager::GetWorldLocation(mousePos)))
+        {
+            ShooterLogic(shooter, c_Units->at(i),autoAttack);
+            m_LastAutoAttackUsed = autoAttack;
+            break;
+        }
+    }
+    if ((mousePos.x != m_LastMousePos.x) || (mousePos.y != m_LastMousePos.y))
+    {
+        m_LastMousePos = OrientationManager::GetWorldLocation(mousePos);
+    }
+    if (shooter != m_LastShooter)
+    {
+        m_LastShooter = shooter;
+    }
+}
+
 void ProjectileManager::ShooterLogic(Champion* shooter, Unit* unit)
 {
-    float distance{ Vector2f{ shooter->GetTransform().location - unit->GetTransform().location }.Length() };
+    ShooterLogic(shooter, unit, m_pAutoAttackDefault);
+}
+
+void ProjectileManager::ShooterLogic(Champion* shooter, Unit* unit, AutoAttack* autoAttack)
+{
+    float distance{ Vector2f{shooter->GetTransform().location - unit->GetTransform().location}.Length() };
     if (shooter->GetAutoAttackRangeRadius() < distance)
     {
         return;
     }
     if (shooter->IsAAReadyAndReset())
     {
-        PushBackAutoAttack(shooter->GetTransform().location, unit);
+        PushBackAutoAttack(autoAttack->Clone(shooter->GetTransform().location, unit));
     }
     shooter->StopMovement();
     shooter->RotateTowards(unit->GetTransform().location);

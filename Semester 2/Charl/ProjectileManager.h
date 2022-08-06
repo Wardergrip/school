@@ -6,6 +6,7 @@ class LockOnProjectile;
 class SkillShotProjectile;
 class Unit;
 class Champion;
+class AutoAttack;
 
 class ProjectileManager final
 {
@@ -29,6 +30,7 @@ public:
 
 	void PushBackLockOn(const Point2f& startingPos, Unit* target, float damage = 10.f, float speed = 300.f);
 	void PushBackAutoAttack(const Point2f& startingPos, Unit* target, float damage = 10.f, float speed = 300.f);
+	void PushBackAutoAttack(AutoAttack* autoAttack);
 	void PushBackSkillShot(const Point2f& startingPos, const Point2f& destination, float damage = 10.f, float speed = 300.f);
 	void PushBack(LockOnProjectile* proj);
 	void PushBack(SkillShotProjectile* proj);
@@ -37,6 +39,7 @@ public:
 	void UpdateAll(float elapsedSec);
 
 	void TryAutoAttack(const Point2f& mousePos, Champion* shooter, bool isNewInput = true);
+	void TryAutoAttack(const Point2f& mousePos, Champion* shooter, AutoAttack* autoAttack, bool isNewInput = true);
 
 private:
 	std::vector<LockOnProjectile*> m_pLockOnProjs;
@@ -44,9 +47,12 @@ private:
 
 	Point2f m_LastMousePos;
 	Champion* m_LastShooter;
+	AutoAttack* m_pAutoAttackDefault;
+	AutoAttack* m_LastAutoAttackUsed;
 
 	bool m_IsShiftHeld;
 
 	void ShooterLogic(Champion* shooter, Unit* unit);
+	void ShooterLogic(Champion* shooter, Unit* unit, AutoAttack* autoAttack);
 };
 

@@ -1,6 +1,8 @@
 {
     "textures": {
-        "missing":"Resources/missingTexture.png"
+        "missing":"Resources/missingTexture.png",
+        "hoover":"Resources/survivor1_machine.png",
+        "silverBullet":"Resources/towerDefense_silverBullet.png"
     },
     "soundeffects": {
         "test" : "Resources/ShootTest.ogg"

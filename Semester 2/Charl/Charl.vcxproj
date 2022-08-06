@@ -164,6 +164,7 @@
     <ClCompile Include="Core.cpp" />
     <ClCompile Include="ExampleAbility.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="HooverChampion.cpp" />
     <ClCompile Include="HUD.cpp" />
     <ClCompile Include="InfoPlate.cpp" />
     <ClCompile Include="JsonFilehelper.cpp" />
@@ -210,6 +211,7 @@
     <ClInclude Include="Core.h" />
     <ClInclude Include="ExampleAbility.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="HooverChampion.h" />
     <ClInclude Include="HUD.h" />
     <ClInclude Include="InfoPlate.h" />
     <ClInclude Include="json.hpp" />

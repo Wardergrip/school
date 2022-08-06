@@ -6,11 +6,12 @@
 class InfoPlate;
 class Timer;
 class ProjectileManager;
+class AutoAttack;
 
 class Champion : public Unit
 {
 public:
-	Champion(const Window& window, ProjectileManager* projectilemanagerref);
+	Champion(const Window& window, ProjectileManager* projectilemanagerref, const std::string& champName = "Champion ZX", bool defaultConfigure = true);
 	Champion(const Champion& champ) = delete;
 	Champion& operator=(const Champion& champ) = delete;
 	Champion(Champion&& champ) = delete;
@@ -42,9 +43,11 @@ protected:
 	AbilityInterface* m_pAbilityInterface;
 	InfoPlate* m_pInfoPlate;
 	Timer* m_pAutoAttackTimer;
+	AutoAttack* m_pAutoAttack;
 	float m_AutoAttackRangeRadius;
 	bool m_DrawAARange;
 
 	AbilityKey GetAppropriateAbilityKey(const SDL_KeyboardEvent& e) const;
+	virtual void DrawUnit() const;
 };
 

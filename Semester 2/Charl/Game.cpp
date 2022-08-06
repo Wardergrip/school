@@ -4,6 +4,7 @@
 #include "Unit.h"
 #include "InfoPlate.h"
 #include "Champion.h"
+#include "HooverChampion.h"
 #include "ProjectileManager.h"
 #include "Ability.h"
 
@@ -42,7 +43,7 @@ void Game::Initialize( )
 	m_ProjectileManager = new ProjectileManager(&m_Units);
 	Ability::InitProjManager(m_ProjectileManager);
 	
-	m_TestingChamp = new Champion(m_Window, m_ProjectileManager);
+	m_TestingChamp = new HooverChampion(m_Window, m_ProjectileManager);
 	m_TestingChamp->TeleportTo(Point2f{ m_Window.width / 2,m_Window.height / 2 });
 
 	m_Units.push_back(new TargetDummy(Point2f{ 70,50 }));

@@ -9,3 +9,13 @@ AutoAttack::AutoAttack(const Point2f& startingPos, Unit* target, float damage, f
 AutoAttack::~AutoAttack()
 {
 }
+
+AutoAttack* AutoAttack::Clone() const
+{
+	return Clone(m_Transform.location, m_pTarget);
+}
+
+AutoAttack* AutoAttack::Clone(const Point2f& startingPos, Unit* target) const
+{
+	return new AutoAttack(startingPos,target,m_Damage,m_Speed);
+}

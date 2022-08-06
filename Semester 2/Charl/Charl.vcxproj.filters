@@ -31,6 +31,9 @@
     <Filter Include="ResourceManagement Files">
       <UniqueIdentifier>{363b542e-d772-4c29-87d6-92fd60245892}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Ability Files">
+      <UniqueIdentifier>{b60b7b43-f013-4b70-a2b3-99ecb9b5751a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core.cpp">
@@ -62,12 +65,6 @@
     </ClCompile>
     <ClCompile Include="Vector2f.cpp">
       <Filter>Framework Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Ability.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="AbilityInterface.cpp">
-      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Transform.cpp">
       <Filter>Source Files</Filter>
@@ -126,9 +123,6 @@
     <ClCompile Include="HUD.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CircleProgression.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="CameraManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -149,6 +143,18 @@
     </ClCompile>
     <ClCompile Include="SoundStreamManager.cpp">
       <Filter>ResourceManagement Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Ability.cpp">
+      <Filter>Ability Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AbilityInterface.cpp">
+      <Filter>Ability Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CircleProgression.cpp">
+      <Filter>Userinterface Files</Filter>
+    </ClCompile>
+    <ClCompile Include="HooverChampion.cpp">
+      <Filter>Unit Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -181,12 +187,6 @@
     </ClInclude>
     <ClInclude Include="utils.h">
       <Filter>Framework Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Ability.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="AbilityInterface.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Transform.h">
       <Filter>Header Files</Filter>
@@ -242,9 +242,6 @@
     <ClInclude Include="HUD.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CircleProgression.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="CameraManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -268,6 +265,18 @@
     </ClInclude>
     <ClInclude Include="SoundStreamManager.h">
       <Filter>ResourceManagement Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Ability.h">
+      <Filter>Ability Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AbilityInterface.h">
+      <Filter>Ability Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CircleProgression.h">
+      <Filter>Userinterface Files</Filter>
+    </ClInclude>
+    <ClInclude Include="HooverChampion.h">
+      <Filter>Unit Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -13,7 +13,9 @@ class ResourceManager final
 public:
 	enum class Textures
 	{
-		missing
+		missing,
+		hoover,
+		silverBullet
 	};
 	enum class SoundEffects
 	{

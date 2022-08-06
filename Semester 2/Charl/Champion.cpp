@@ -12,19 +12,26 @@
 
 #include "OrientationManager.h"
 
-Champion::Champion(const Window& window, ProjectileManager* projectilemanagerref)
+#include "AutoAttack.h"
+
+Champion::Champion(const Window& window, ProjectileManager* projectilemanagerref, const std::string& champName, bool defaultConfigure)
 	:m_ProjectileManagerRef{ projectilemanagerref }
 	,m_pAbilityInterface{new AbilityInterface(window,this)}
 	,m_pInfoPlate{ new InfoPlate{ this } }
 	,m_pAutoAttackTimer{ new Timer{1/2.f} }
+	,m_pAutoAttack{nullptr}
 	,m_AutoAttackRangeRadius{200.f}
 	,m_DrawAARange{false}
 {
+	if (defaultConfigure)
+	{
+		m_pAbilityInterface->AssignAbility(AbilityKey::Q, new ExampleAbility("Q", this->m_Transform.location));
+		m_pAutoAttack = new AutoAttack(m_Transform.location, nullptr);
+	}
 	m_Hitbox = Rectf{ 0,0,20,20 };
 	CenterHitboxToPosition();
 
-	m_pInfoPlate->SetName("Champion ZX");
-	m_pAbilityInterface->AssignAbility(AbilityKey::Q, new ExampleAbility("Q", this->m_Transform.location));
+	m_pInfoPlate->SetName(champName);
 }
 
 Champion::~Champion()
@@ -33,6 +40,8 @@ Champion::~Champion()
 	m_pAbilityInterface = nullptr;*/
 	delete m_pAutoAttackTimer;
 	m_pAutoAttackTimer = nullptr;
+	delete m_pAutoAttack;
+	m_pAutoAttack = nullptr;
 }
 
 void Champion::Draw() const
@@ -42,10 +51,7 @@ void Champion::Draw() const
 	m_Transform.Push();
 	m_Transform.Apply();
 	// Draw Unit
-	SetColor(Color4f{ 1,1,1,1 });
-	FillEllipse(Point2f{ 0,0 }, 10, 10);
-
-	FillRect(Point2f{ 0,-5 }, 15, 5);
+	DrawUnit();
 
 	// Draw hitbox
 	if (c_IsDrawingHitboxes)
@@ -79,7 +85,7 @@ void Champion::OnMouseDown(const SDL_MouseButtonEvent& e)
 	case SDL_BUTTON_LEFT:
 		break;
 	case SDL_BUTTON_RIGHT:
-		m_ProjectileManagerRef->TryAutoAttack(Point2f{ float(e.x),float(e.y) }, this);
+		m_ProjectileManagerRef->TryAutoAttack(Point2f{ float(e.x),float(e.y) }, this,m_pAutoAttack);
 		break;
 	case SDL_BUTTON_MIDDLE:
 		break;
@@ -206,4 +212,13 @@ AbilityKey Champion::GetAppropriateAbilityKey(const SDL_KeyboardEvent& e) const
 		break;
 	}
 	return key;
+}
+
+void Champion::DrawUnit() const
+{
+	using namespace utils;
+	SetColor(Color4f{ 1,1,1,1 });
+	FillEllipse(Point2f{ 0,0 }, 10, 10);
+
+	FillRect(Point2f{ 0,-5 }, 15, 5);
 }
